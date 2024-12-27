@@ -1,3 +1,6 @@
+const mongoose = require('mongoose')
+
+
 const certificateSchema = new mongoose.Schema({
   name: { type: String, required: true },
   issuingOrganization: { type: String, required: true },
