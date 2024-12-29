@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.navbar-item,.navbar-brand{
+    @apply text-lg font-semibold text-black hover:cursor-pointer;
+    text-decoration: none;
+    @apply hover:border-b-2 hover:border-black hover:rounded-full hover:shadow-md hover:shadow-white;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8,0,1,1);
+    }
+    50% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0,0,0.8,1);
+    }
+}
+.animate-bounce-2 {
+    animation: bounce 8s infinite;
+}
