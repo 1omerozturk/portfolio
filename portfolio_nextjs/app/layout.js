@@ -1,6 +1,7 @@
-import Navbar from './components/Navbar';
 import './globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "primeicons/primeicons.css";
+import Navbar from './components/Navbar';
 
 export const metadata = {
   title: 'Ömer Öztürk',
