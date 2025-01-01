@@ -2,14 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.navbar-item,
-.navbar-brand {
-  @apply text-lg font-semibold text-black hover:cursor-pointer;
+.nav-items>a {
+  @apply text-lg font-semibold text-white hover:cursor-pointer;
   text-decoration: none;
-  @apply hover:border-b-2 hover:border-black hover:rounded-full hover:shadow-md hover:shadow-white;
+  @apply hover:w-fit p-1  rounded-3xl hover:shadow-sm hover:shadow-white;
 }
+
+.nav-items>a>i{
+  @apply text-base p-1  rounded-full;
+}
+
 .active {
-    @apply border-black border-t-0 border-b-2 text-black shadow-md shadow-black rounded-full;
+    @apply w-fit px-1 border-b-white border-t-0 border-b-2 text-white shadow-sm shadow-white rounded-full;
 }
 
 @keyframes bounce {

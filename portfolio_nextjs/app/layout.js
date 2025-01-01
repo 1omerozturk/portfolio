@@ -1,14 +1,16 @@
-import './globals.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "primeicons/primeicons.css";
-import Navbar from './components/Navbar';
-
-export const metadata = {
-  title: 'Ömer Öztürk',
-  description: 'Ömer Öztürk Portfolio',
-}
+'use client'
+import './globals.css'
+import 'primeicons/primeicons.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import Navbar  from './components/Navbar'
 
 export default function RootLayout({ children }) {
+  const metadata = {
+    title: 'Ömer Öztürk',
+    description: 'Ömer Öztürk Portfolio',
+  }
+
   return (
     <html lang="en">
       <head>
@@ -18,9 +20,11 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
       </head>
       <body>
-        <Navbar />
-        <main className='content'>{children}</main>
+        <main className="content">
+          <Navbar />
 
+          {children}
+        </main>
       </body>
     </html>
   )
