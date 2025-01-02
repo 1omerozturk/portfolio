@@ -1,38 +1,106 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  FaHtml5,
+  FaNodeJs,
+  FaCss3Alt,
+  FaReact,
+  FaPython,
+  FaFigma,
+} from "react-icons/fa";
+import { SiDotnet, SiKotlin, SiNextdotjs, SiTailwindcss } from "react-icons/si";
+import SkillProgress from "./SkillProgress";
+import Link from "next/link";
 
-const SkillsBanner = () => {
+const SkillsBanner = ({ size }) => {
   const skills = [
-    { name: "HTML", level: "Intermediate", percentage: 60 },
-    { name: "CSS", level: "Intermediate", percentage: 60 },
-    { name: "JavaScript", level: "Advanced", percentage: 80 },
-    { name: "React", level: "Expert", percentage: 90 },
-    { name: "Node.js", level: "Expert", percentage: 90 },
-    { name: "Next.js", level: "Basic", percentage: 50 },
+    {
+      name: "HTML",
+      level: "Intermediate",
+      percentage: 60,
+      icon: <FaHtml5 />,
+      color: "#E34F26",
+    },
+    {
+      name: "Node.js",
+      level: "Expert",
+      percentage: 90,
+      icon: <FaNodeJs />,
+      color: "#339933",
+    },
+    {
+      name: "CSS",
+      level: "Intermediate",
+      percentage: 60,
+      icon: <FaCss3Alt />,
+      color: "#1572B6",
+    },
+    {
+      name: "Next.js",
+      level: "Basic",
+      percentage: 50,
+      icon: <SiNextdotjs />,
+      color: "#000000",
+    },
+    {
+      name: "React",
+      level: "Expert",
+      percentage: 90,
+      icon: <FaReact />,
+      color: "#61DAFB",
+    },
+    {
+      name: "Python",
+      level: "Advanced",
+      percentage: 80,
+      icon: <FaPython />,
+      color: "#3776AB",
+    },
+    {
+      name: "Figma",
+      level: "Advanced",
+      percentage: 70,
+      icon: <FaFigma />,
+      color: "#F24E1E",
+    },
+    {
+      name: ".NET",
+      level: "Intermadiate",
+      percentage: 30,
+      icon: <SiDotnet />,
+      color: "#512BD4",
+    },
+    {
+      name: "Tailwind CSS",
+      level: "Advanced",
+      percentage: 80,
+      icon: <SiTailwindcss />,
+      color: "#38B2AC",
+    },
+    {
+      name: "Kotlin",
+      level: "Intermediate",
+      percentage: 20,
+      icon: <SiKotlin />,
+      color: "#7F52FF",
+    },
   ];
 
-  const getColor = (percentage) => {
-    if (percentage >= 80) return "bg-green-600";
-    if (percentage >= 60) return "bg-yellow-600";
-    return "bg-red-600";
-  };
-
   return (
-    <div className="skills-banner">
-      <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4">My Skills</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {skills.map((skill, index) => (
-            <div key={index} className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold mb-2">{skill.name}</h3>
-              <div className="w-full bg-gray-200 rounded-full h-4 mb-2">
-                <div
-                  className={`${getColor(skill.percentage)} h-4 rounded-full`}
-                  style={{ width: `${skill.percentage}%` }}
-                ></div>
-              </div>
-              <p className="text-sm text-gray-600">{skill.level}</p>
+    <div id="skillsBanner" className="skills-banner">
+      <div className="px-5 bg-slate-300 mx-auto p-4">
+        <div className="space-y-2 gap-4">
+          <SkillProgress skills={size ? skills.slice(0, 4) : skills} />
+          {size && (
+            <div className="flex justify-center mt-3">
+              <Link
+                href="/skills"
+                style={{ textDecoration: "none" }}
+                className="bg-gradient-to-r from-white to-slate-500 p-1 border-blue-500 border-2 rounded-lg hover:bg-black hover:text-white"
+              >
+                View More Skills
+              </Link>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

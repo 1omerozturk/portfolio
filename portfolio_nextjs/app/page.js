@@ -1,9 +1,11 @@
 'use client'
 import React from 'react'
 import Typing from './components/Typing'
-import ProjectsBanner from './components/ProjectsBanner'
 import SkillsBanner from './components/SkillsBanner'
 import AboutBanner from './components/AboutBanner'
+import ContentsBanner from './components/ContentsBanner'
+import SocialBanner from './components/SocialBanner'
+import Projects from './projects/page'
 
 export default function Home() {
   return (
@@ -16,11 +18,12 @@ export default function Home() {
             2 p-2  rounded my-3"
             >
               Download CV{' '}
-              <i className="pi pi-download hover:text-white text-2xl text-black ml-2 ">
-                
-              </i>
+              <i className="pi pi-download hover:text-white text-2xl text-black ml-2 "></i>
             </button>
             <Typing />
+            <div className='w-1/2 mx-auto my-3  p-2 rounded-lg drop-shadow-2xl'>
+            <SocialBanner />
+            </div>
           </div>
         </div>
 
@@ -29,8 +32,9 @@ export default function Home() {
           src="00.jpg"
         ></img>
       </div>
-      <ProjectsBanner />
-      <SkillsBanner />
+      <SkillsBanner size={5} />
+      <Projects size={4} />
+      <ContentsBanner size={2} />
       <AboutBanner />
     </div>
   )

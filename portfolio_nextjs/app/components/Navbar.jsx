@@ -12,7 +12,8 @@ const Navbar = () => {
   return (
     <nav className="bg-gradient-to-bl min-h-16 to-black from-indigo-600 px-3 py-2">
       <div className="mx-auto nav-items flex justify-between items-center">
-        <a className={`${pathName=="/"?'active':''}`} href="/">
+        <a className={`flex items-center justify-center ${pathName=="/"?'active':''}`} href="/">
+          <img src="00.jpg" className="h-10 w-10 object-cover rounded-full mr-2" alt="" />
           Ömer Öztürk
         </a>
         <div className="hidden nav-items  md:flex space-x-10">
