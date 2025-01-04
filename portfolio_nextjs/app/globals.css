@@ -2,18 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.nav-items>a {
+.nav-items > a {
   @apply text-lg font-semibold text-white hover:cursor-pointer;
   text-decoration: none;
   @apply hover:w-fit p-1  rounded-3xl hover:shadow-sm hover:shadow-white;
 }
 
-.nav-items>a>i{
+.nav-items > a > i {
   @apply text-base p-1  rounded-full;
 }
 
 .active {
-    @apply w-fit px-1 border-b-white border-t-0 border-b-2 text-white shadow-sm shadow-white rounded-full;
+  @apply w-fit px-1 border-b-white border-t-0 border-b-2 text-white shadow-sm shadow-white rounded-full;
 }
 
 @keyframes bounce {
@@ -29,4 +29,96 @@
 }
 .animate-bounce-2 {
   animation: bounce 8s infinite;
+}
+
+@keyframes colorChange {
+  0% {
+    background-color: rgb(210, 202, 202);
+  }
+
+  50% {
+    background-color: rgb(184, 174, 174);
+  }
+  100% {
+    background-color: rgb(210, 202, 202);
+  }
+}
+.animate-colorChange {
+  animation: colorChange 5s infinite;
+}
+.animate-colorChange:hover {
+  background-color: black;
+}
+
+@keyframes borderSlide {
+  0% {
+    border-color: red;
+    top: 0;
+    left: 0;
+  }
+  25% {
+    border-color: blue;
+    top: 0;
+    left: 100px;
+  }
+  50% {
+    border-color: green;
+    top: 100px;
+    left: 100px;
+  }
+  75% {
+    border-color: yellow;
+    top: 100px;
+    left: 0;
+  }
+  100% {
+    border-color: red;
+    top: 0;
+    left: 0;
+  }
+}
+
+@keyframes rotateBorder {
+  0% {
+    border-color: #7734fe;
+  }
+  25% {
+    border-color: #5600ff #7734fe #5600ff #7734fe;
+  }
+  50% {
+    border-color: #330099 #5600ff #330099 #5600ff;
+  }
+  75% {
+    border-color: #003cb4 #330099 #003cb4 #330099;
+  }
+  100% {
+    border-color: #7734fe #003cb4 #7734fe #003cb4;
+  }
+}
+
+.animate-border {
+  border: 3px solid black;
+  border-radius: 5%;
+  animation: rotateBorder 5s infinite;
+}
+
+.smooth-border {
+  border: 3px solid transparent;
+  border-radius: 5%;
+  background: linear-gradient(90deg, #60D7C3FF, #3DA7C4FF, #8D61E5FF, #E05F5FFF);
+  background-size: 400% 400%;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  animation: gradientAnimation 10s infinite;
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

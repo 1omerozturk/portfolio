@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+"use client"
+import React from "react";
 import {
   FaHtml5,
   FaNodeJs,

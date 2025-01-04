@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { FaTwitter,FaFacebook,FaInstagram,FaYoutube,FaGithub,FaLinkedin } from "react-icons/fa";
 
@@ -27,7 +28,7 @@ const SocialBanner = () => {
     <div className="grid grid-flow-col auto-cols-auto space-x-4 ">
       {socials.map((social, index) => (
         <div key={index}>
-          <button className="font-bold text-2xl border-2 border-indigo-500 hover:bg-black p-2 rounded-xl hover:drop-shadow-lg hover:shadow-white">
+          <button className="animate-colorChange font-bold text-2xl border-2 border-indigo-500 hover:bg-black p-2 rounded-xl hover:drop-shadow-lg hover:shadow-white">
             {social.icon}
           </button>
         </div>

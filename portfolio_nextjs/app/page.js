@@ -4,6 +4,7 @@ import Typing from './components/Typing'
 import SkillsBanner from './components/SkillsBanner'
 import AboutBanner from './components/AboutBanner'
 import ContentsBanner from './components/ContentsBanner'
+import Footer from './components/Footer'
 import SocialBanner from './components/SocialBanner'
 import Projects from './projects/page'
 
@@ -34,8 +35,9 @@ export default function Home() {
       </div>
       <SkillsBanner size={5} />
       <Projects size={4} />
-      <ContentsBanner size={2} />
+      <ContentsBanner size={4} />
       <AboutBanner />
+      <Footer/>
     </div>
   )
 }

@@ -44,7 +44,7 @@ const Projects = ({ size }) => {
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
         {size &&
           projects.slice(0,size).map((project) => (
-            <div key={project.id} className="card bg-gradient-to-b cursor-pointer p-2">
+            <div key={project.id} className="smooth-border text-center cursor-pointer p-2">
               <img
                 className="h-[300px] w-full rounded-lg drop-shadow-xl"
                 src={project.image}

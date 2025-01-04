@@ -1,8 +1,28 @@
-import React from 'react'
+'use client'
+import Login from './login'
+import React, { useEffect, useState } from 'react'
+import { AdminAuth } from './auth'
 
 const Admin = () => {
+  const [isLogin, setIsLogin] = useState(false)
+
+  useEffect(() => {
+    setIsLogin(AdminAuth.isLoggedIn())
+  }, [])
   return (
-    <div>Admin</div>
+    // Admin login page
+    <div>
+      {isLogin ? (
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p>Admin content</p>
+        </div>
+      ) : (
+        <div>
+          <Login />
+        </div>
+      )}
+    </div>
   )
 }
 
