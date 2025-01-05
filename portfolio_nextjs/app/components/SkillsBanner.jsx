@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import {
   FaHtml5,
@@ -7,6 +7,7 @@ import {
   FaReact,
   FaPython,
   FaFigma,
+  FaCode,
 } from "react-icons/fa";
 import { SiDotnet, SiKotlin, SiNextdotjs, SiTailwindcss } from "react-icons/si";
 import SkillProgress from "./SkillProgress";
@@ -89,6 +90,7 @@ const SkillsBanner = ({ size }) => {
   return (
     <div id="skillsBanner" className="skills-banner">
       <div className="px-5 bg-slate-300 mx-auto p-4">
+        <FaCode className="text-4xl mx-auto mb-3 text-slate-700" />
         <div className="space-y-2 gap-4">
           <SkillProgress skills={size ? skills.slice(0, 4) : skills} />
           {size && (

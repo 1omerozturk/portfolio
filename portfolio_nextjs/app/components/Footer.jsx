@@ -1,23 +1,26 @@
-"use client"
+"use client";
 import React, { useState } from "react";
+import { IoShareSocialSharp } from "react-icons/io5";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Takvim stillendirmesi için gerekli
-import { FaCalendar, FaCalendarDay } from "react-icons/fa";
-import { MdOutlineContactPhone } from "react-icons/md";
+import { FaCalendarDay } from "react-icons/fa";
+import Links from "./Links";
+import Contact from "./Contact";
+import SocialBanner from "./SocialBanner";
 
 const Footer = () => {
   const [value, onChange] = useState(new Date());
 
   return (
-    <footer className="grid md:grid-cols-2 grid-rows-2 h-fit  items-center space-x-3 justify-center p-6 bg-gray-500">
-      <div className="text-center">
-        <div className="bg-indigo-500 rounded-full w-fit h-fit p-2 flex items-center justify-center mx-auto mb-3">
-          <FaCalendarDay className="text-black text-3xl" />
+    <footer className="grid md:grid-cols-2 grid-flow-row md:max-h-min space-x-3 p-6 bg-gray-500">
+      <div className="grid grid-flow-row border-b-2 border-b-black md:border-b-0 py-5">
+        <div className="bg-slate-300 rounded-full w-fit h-fit mx-auto p-2 mb-3">
+          <FaCalendarDay className="text-indigo-500 text-3xl " />
         </div>
         <Calendar
           value={value}
           locale="en-US"
-          className="border shadow-md w-full text-slate-500 border-gray-300 rounded-lg mx-auto"
+          className="border shadow-md w-fit h-fit mx-auto text-slate-500 border-gray-300 rounded-lg"
           onChange={onChange}
           calendarType="iso8601"
           tileClassName={({ date, view }) =>
@@ -25,53 +28,16 @@ const Footer = () => {
           }
         />
       </div>
-        <div className="grid grid-rows-2 text-center space-y-4">
-          <div className="text-center mt-1">
-
-        <div className="bg-indigo-500 rounded-full w-fit h-fit p-2 flex items-center justify-center mx-auto ">
-          <MdOutlineContactPhone className="text-black text-3xl" />
-          </div>
+      <div className="grid grid-flow-col items-start justify-around pt-5 pb-5">
+        <Links />
+        <Contact />
+      </div>
+      <div className="col-span-2 place-self-center">
+      <div className="bg-slate-300 rounded-full w-fit h-fit mx-auto p-2 mb-3">
+        <IoShareSocialSharp className="text-3xl text-fuchsia-500"/>
         </div>
-            <ul>
-              <li className="mb-1">
-                <a href="#link1" className="text-blue-600 hover:text-blue-800">
-                  Link 1
-                </a>
-              </li>
-              <li className="mb-1">
-                <a href="#link2" className="text-blue-600 hover:text-blue-800">
-                  Link 2
-                </a>
-              </li>
-              <li className="mb-1">
-                <a href="#link3" className="text-blue-600 hover:text-blue-800">
-                  Link 3
-                </a>
-              </li>
-            </ul>
-     
-            <h4 className="text-lg font-semibold mb-2">İletişim Bilgileri</h4>
-            <address className="not-italic">
-              <p>
-                Email:{" "}
-                <a
-                  href="mailto:info@example.com"
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  info@example.com
-                </a>
-              </p>
-              <p>
-                Telefon:{" "}
-                <a
-                  href="tel:+123456789"
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  +123456789
-                </a>
-              </p>
-            </address>
-          </div>
+      <SocialBanner />
+      </div>
     </footer>
   );
 };
