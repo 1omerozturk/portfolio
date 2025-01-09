@@ -8,6 +8,7 @@ const Certifications = require('../models/certifications')
 const Languages = require('../models/languages')
 const References = require('../models/references')
 const Hobbies = require('../models/hobbies')
+const user = require('../models/user')
 
 // Admin Controller for post update and delete
 // Post
@@ -20,6 +21,7 @@ exports.createPersonalInfo = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
 
 exports.createSocialLinks = async (req, res) => {
   try {

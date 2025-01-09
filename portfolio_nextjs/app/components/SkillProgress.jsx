@@ -17,7 +17,7 @@ const SkillProgress = ({ skills }) => {
           return p; // Eğer hedef değere ulaşılmışsa olduğu gibi bırak
         })
       );
-    }, 30); // Hızını ayarlamak için burayı değiştirebilirsiniz
+    }, 50); // Hızını ayarlamak için burayı değiştirebilirsiniz
     return () => clearInterval(interval); // Cleanup
   }, [skills]);
 

@@ -4,9 +4,10 @@ import { login } from "../api/api";
 
 export class AdminAuth {
   static async login(username: string, password: string) {
-    const admin = await login(username, password);
+    const admin = await login(username, password).then((data)=>{return data.data});
     if (admin) {
       localStorage.setItem("admin", admin);
+      console.log(admin)
       return admin;
     }
     return null;

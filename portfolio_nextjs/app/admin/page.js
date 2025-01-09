@@ -10,7 +10,6 @@ const Admin = () => {
     setIsLogin(AdminAuth.isLoggedIn())
   }, [])
   return (
-    // Admin login page
     <div>
       {isLogin ? (
         <div>

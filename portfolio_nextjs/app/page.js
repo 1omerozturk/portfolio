@@ -21,7 +21,7 @@ export default function Home() {
               <i className="pi pi-download hover:text-white text-2xl text-black ml-2 "></i>
             </button>
             <Typing />
-            <hr className='border-none h-1 bg-black mx-5 rounded-full'/>
+            <hr className='border-none h-1 w-2/3 mx-auto my-5 bg-black rounded-full'/>
             <SocialBanner />
           </div>
           <img

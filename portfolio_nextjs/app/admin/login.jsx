@@ -2,19 +2,40 @@
 
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AdminAuth } from "./auth";
+import { getAdmin } from "../api/api";
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const [type, setType] = useState("password");
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const loginHandle = () => {
+    AdminAuth.login(formData.username,formData.username);
+  };
+
+  const createUser=()=>{
+    getAdmin();
+  }
+
   return (
     <div className="min-h-max mt-5 w-2/3 md:w-2/5 mx-auto flex justify-center items-center">
       <div className="bg-white border-2 border-indigo-300 p-10 rounded-md w-full shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-center select-none">Login - (Admin) </h2>
-        <form>
+        <h2 className="text-2xl font-bold mb-4 text-center select-none">
+          Login - (Admin){" "}
+        </h2>
+        <form method={"post"} onSubmit={loginHandle}>
           <div className="mb-4">
             <label
               className="block select-none text-gray-700 text-sm font-bold mb-2"
-              for="username"
+              htmlFor="username"
             >
               Username
             </label>
@@ -22,6 +43,7 @@ const Login = () => {
               className="border rounded-md px-3 py-2 w-full"
               type="text"
               autoFocus
+              onChange={(e) => handleChange(e)}
               id="username"
               name="username"
             />
@@ -29,7 +51,7 @@ const Login = () => {
           <div className="mb-4">
             <label
               className="block select-none text-gray-700 text-sm font-bold mb-2"
-              for="password"
+              htmlFor="password"
             >
               Password
             </label>
@@ -39,6 +61,7 @@ const Login = () => {
                 type={type}
                 id="password"
                 name="password"
+                onChange={(e) => handleChange(e)}
               />
               {/* hide show password icon  */}
               <div title="Show/Hide" className="cursor-pointer w-fit">
@@ -62,10 +85,18 @@ const Login = () => {
               </div>
             </div>
           </div>
-          <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mx-auto block select-none">
+          <button
+            type="submit"
+            className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mx-auto block select-none"
+          >
             Login
           </button>
         </form>
+        <div>
+          <button className="btn btn-outline-dark"onClick={createUser}>
+            Create User
+          </button>
+        </div>
       </div>
     </div>
   );

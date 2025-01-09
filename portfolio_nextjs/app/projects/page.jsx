@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { FaProjectDiagram, FaRProject } from "react-icons/fa";
 
 const Projects = ({ size }) => {
   const projects = [
@@ -41,7 +42,8 @@ const Projects = ({ size }) => {
   ];
   return (
     <div>
-      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
+       <FaProjectDiagram className="text-4xl mx-auto mt-4 text-amber-500" />
+      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
         {size &&
           projects.slice(0,size).map((project) => (
             <div key={project.id} className="smooth-border text-center cursor-pointer p-2">

@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .nav-items > a {
-  @apply text-lg font-semibold text-white hover:cursor-pointer;
+  @apply text-lg font-semibold  text-white hover:cursor-pointer;
   text-decoration: none;
   @apply hover:w-fit p-1  rounded-3xl hover:shadow-sm hover:shadow-white;
 }
 
 .nav-items > a > i {
-  @apply text-base p-1  rounded-full;
+  @apply text-base p-1 rounded-full;
 }
 
 .active {

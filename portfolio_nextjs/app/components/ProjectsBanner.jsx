@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link";
 import React from "react";
+import { FaProjectDiagram } from "react-icons/fa";
 
 const ProjectsBanner = () => {
   const projects = [
@@ -24,6 +25,7 @@ const ProjectsBanner = () => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4  gap-4 p-4 bg-slate-200 rounded-lg">
+     
       {projects.map((project, index) => (
         <div key={index} className="animate-border">
           <h2 className="text-lg font-bold">{project.title}</h2>
