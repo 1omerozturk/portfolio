@@ -1,22 +1,24 @@
-'use client'
-import './globals.css'
-import 'primeicons/primeicons.css'
-import 'bootstrap/dist/css/bootstrap.css'
-import Navbar  from './components/Navbar'
+"use client";
+import type { Metadata } from "next";
+import "./globals.css";
+import "primeicons/primeicons.css";
+import "bootstrap/dist/css/bootstrap.css";
+import Navbar from "./components/Navbar";
 export default function RootLayout({ children }) {
   const metadata = {
-    title: 'Ömer Öztürk',
-    description: 'Ömer Öztürk Portfolio',
-    keywords: 'Ömer Öztürk, "Ömer", Yazılım" ,"Ömer Yazılım", "Software", portfolio, Software Devleoper, projects',
-    author: 'Ömer Öztürk',
-    ogTitle: 'Ömer Öztürk Portfolio',
-    ogDescription: 'Showcasing the projects and skills of Ömer Öztürk',
-    ogImage: '00.jpg', // Update with the actual path to your image
-    ogUrl: 'https://omerozturk.com.tr', // Update with your actual website URL
-    twitterCard: 'summary_large_image',
-    twitterSite: '@yourTwitterHandle', // Update with your actual Twitter handle
-    twitterCreator: '@yourTwitterHandle', // Update with your actual Twitter handle
-  }
+    title: "Ömer Öztürk",
+    description: "Ömer Öztürk Portfolio",
+    keywords:
+      'Ömer Öztürk, "Ömer", Yazılım" ,"Ömer Yazılım", "Software", portfolio, Software Devleoper, projects',
+    author: "Ömer Öztürk",
+    ogTitle: "Ömer Öztürk Portfolio",
+    ogDescription: "Showcasing the projects and skills of Ömer Öztürk",
+    ogImage: "00.jpg", // Update with the actual path to your image
+    ogUrl: "https://omerozturk.com.tr", // Update with your actual website URL
+    twitterCard: "summary_large_image",
+    twitterSite: "@yourTwitterHandle", // Update with your actual Twitter handle
+    twitterCreator: "@yourTwitterHandle", // Update with your actual Twitter handle
+  };
 
   return (
     <html lang="en">
@@ -42,5 +44,5 @@ export default function RootLayout({ children }) {
         </main>
       </body>
     </html>
-  )
+  );
 }

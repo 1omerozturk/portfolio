@@ -3,7 +3,11 @@ import Link from "next/link";
 import React from "react";
 import { FaMedium } from "react-icons/fa";
 
-const ContentsBanner = ({ size }) => {
+interface PageProps{
+  size?:number;
+}
+
+const ContentsBanner:React.FC<PageProps> = ({ size }) => {
   const contents = [
     {
       title: "Title",
@@ -53,7 +57,6 @@ const ContentsBanner = ({ size }) => {
             </div>
           ))}
         {!size &&
-        
           contents.map((content, index) => (
             <div
               className="text-center border-2 border-black rounded-lg my-2"

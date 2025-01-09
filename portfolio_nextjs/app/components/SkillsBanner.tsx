@@ -13,12 +13,11 @@ import { SiDotnet, SiKotlin, SiNextdotjs, SiTailwindcss } from "react-icons/si";
 import SkillProgress from "./SkillProgress";
 import Link from "next/link";
 
-type SkillsBannerProps={
-  size:number;
-};
+interface PageProps{
+  size?:number;
+}
 
-
-const SkillsBanner:React.FC<SkillsBannerProps> = ({ size }) => {
+const SkillsBanner:React.FC<PageProps>= ({ size }) => {
 
   const skills = [
     {
