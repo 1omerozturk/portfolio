@@ -13,7 +13,13 @@ import { SiDotnet, SiKotlin, SiNextdotjs, SiTailwindcss } from "react-icons/si";
 import SkillProgress from "./SkillProgress";
 import Link from "next/link";
 
-const SkillsBanner = ({ size }) => {
+type SkillsBannerProps={
+  size:number;
+};
+
+
+const SkillsBanner:React.FC<SkillsBannerProps> = ({ size }) => {
+
   const skills = [
     {
       name: "HTML",
@@ -109,5 +115,7 @@ const SkillsBanner = ({ size }) => {
     </div>
   );
 };
+
+
 
 export default SkillsBanner;

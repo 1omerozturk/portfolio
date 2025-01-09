@@ -2,7 +2,10 @@ import Link from "next/link";
 import React from "react";
 import { FaProjectDiagram, FaRProject } from "react-icons/fa";
 
-const Projects = ({ size }) => {
+type ProjectsProps = {
+  size: number;
+};
+const Projects: React.FC<ProjectsProps> = ({ size }) => {
   const projects = [
     {
       id: 1,
@@ -42,11 +45,14 @@ const Projects = ({ size }) => {
   ];
   return (
     <div>
-       <FaProjectDiagram className="text-4xl mx-auto mt-4 text-amber-500" />
+      <FaProjectDiagram className="text-4xl mx-auto mt-4 text-amber-500" />
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
         {size &&
-          projects.slice(0,size).map((project) => (
-            <div key={project.id} className="smooth-border text-center cursor-pointer p-2">
+          projects.slice(0, size).map((project) => (
+            <div
+              key={project.id}
+              className="smooth-border text-center cursor-pointer p-2"
+            >
               <img
                 className="h-[300px] w-full rounded-lg drop-shadow-xl"
                 src={project.image}
@@ -67,7 +73,7 @@ const Projects = ({ size }) => {
                 className="h-[300px] w-full"
                 src={project.image}
                 alt={project.title}
-                />
+              />
               <h2>{project.title}</h2>
               <p>{project.description}</p>
               <a href={project.link} target="_blank" rel="noopener noreferrer">
@@ -76,17 +82,17 @@ const Projects = ({ size }) => {
             </div>
           ))}
       </div>
-          {size && (
-            <div className="text-center mt-5">
-            <Link
-              href="/projects"
-              style={{ textDecoration: "none" }}
-              className="bg-gradient-to-r from-indigo-400 to-white p-1 text-indigo-800 border-indigo-800 border-2 rounded-lg hover:text-white"
-            >
-              View More Projects
-            </Link>
-          </div>
-          )}
+      {size && (
+        <div className="text-center mt-5">
+          <Link
+            href="/projects"
+            style={{ textDecoration: "none" }}
+            className="bg-gradient-to-r from-indigo-400 to-white p-1 text-indigo-800 border-indigo-800 border-2 rounded-lg hover:text-white"
+          >
+            View More Projects
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
