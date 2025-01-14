@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { FaProjectDiagram, FaRProject } from "react-icons/fa";
+import { FaProjectDiagram } from "react-icons/fa";
 interface ProjectsProps {
   size?: number; // İhtiyaca göre uygun türü belirleyin
 }

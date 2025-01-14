@@ -1,5 +1,4 @@
 "use client";
-import type { Metadata } from "next";
 import "./globals.css";
 import "primeicons/primeicons.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -11,7 +10,6 @@ export default function RootLayout({ children }) {
     keywords:
       'Ömer Öztürk, "Ömer", Yazılım" ,"Ömer Yazılım", "Software", portfolio, Software Devleoper, projects',
     author: "Ömer Öztürk",
-    ogTitle: "Ömer Öztürk Portfolio",
     ogDescription: "Showcasing the projects and skills of Ömer Öztürk",
     ogImage: "00.jpg", // Update with the actual path to your image
     ogUrl: "https://omerozturk.com.tr", // Update with your actual website URL
@@ -21,14 +19,13 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en">
+    <html lang="tr">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={metadata.description} />
         <meta name="keywords" content={metadata.keywords} />
         <meta name="author" content={metadata.author} />
-        <meta property="og:title" content={metadata.ogTitle} />
         <meta property="og:description" content={metadata.ogDescription} />
         <meta property="og:image" content={metadata.ogImage} />
         <meta property="og:url" content={metadata.ogUrl} />

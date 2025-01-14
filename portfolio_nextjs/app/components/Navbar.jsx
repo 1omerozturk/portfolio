@@ -14,7 +14,7 @@ const Navbar = () => {
     <nav className="bg-gradient-to-bl to-black from-indigo-600 px-3 py-2">
       <div className="mx-auto nav-items flex justify-between items-center">
         <a className={`flex items-center justify-center ${pathName=="/"?'active':''}`} href="/">
-          <img src="00.jpg" className="h-10 w-10 object-cover rounded-full mr-2" alt="" />
+          <img src="00.jpg" alt="Ömer Öztürk" className="h-10 w-10 object-cover rounded-full mr-2" />
           Ömer Öztürk
         </a>
         <div className="hidden nav-items  md:flex space-x-10">
@@ -40,6 +40,7 @@ const Navbar = () => {
         </div>
         <div className="md:hidden">
           <button
+          name="toggle"
             onClick={toggleMenu}
             className="text-gray-300 hover:text-white focus:outline-none"
           >
