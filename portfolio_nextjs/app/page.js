@@ -27,7 +27,7 @@ export default function Home() {
           <img
           alt='Ömer Öztürk'
           className="ring-4 drop-shadow-2xl w-24 h-24 md:w-40 md:h-40 animate-bounce-2 bg-red-500 rounded-full mt-16"
-          src="00.jpg"
+          src="ömeröztürk.jpg"
         ></img>
         </div>
       <SkillsBanner size={5} />

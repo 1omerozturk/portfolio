@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+
 const PersonalInfos = require('../models/personalInfo')
 const SocialLinks = require('../models/socialLinks')
 const Educations = require('../models/education')
@@ -8,7 +10,44 @@ const Certifications = require('../models/certifications')
 const Languages = require('../models/languages')
 const References = require('../models/references')
 const Hobbies = require('../models/hobbies')
-const user = require('../models/user')
+const User = require('../models/user')
+
+// Admin login
+exports.login = async (req, res) => {
+  try {
+    const { username, password } = req.body
+    const user = await User.findOne({ username })
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid email or password' })
+    }
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid email or password' })
+    }
+    const token = await user.generateAuthToken()
+    res.status(200).json({ token })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
+// admin update
+// exports.updatePassword = async (req, res) => {
+//   try {
+//     const { username, password, newpassword } = req.body
+//     const user = await User.findOne({ username })
+//     if (!user) {
+//       return res.status(400).json({ message: 'Invalid email or password' })
+//     }
+//     console.log(user.password)
+//     user.password = newpassword
+//     await user.save()
+//     console.log(user.password)
+//     res.status(200).json({ message: 'Password updated successfully' })
+//   } catch (err) {
+//     res.status(500).json({ message: err.message })
+//   }
+// }
 
 // Admin Controller for post update and delete
 // Post
@@ -21,7 +60,6 @@ exports.createPersonalInfo = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
-
 
 exports.createSocialLinks = async (req, res) => {
   try {

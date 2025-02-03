@@ -11,6 +11,7 @@ const app = express()
 connectDb()
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/uploads', express.static(path.join(__dirname, './uploads')))
 app.use('/api/user', require('./routes/userRoutes'))
