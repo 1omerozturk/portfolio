@@ -37,7 +37,7 @@ export default function Home() {
           </div>
           <img
           alt='Ömer Öztürk'
-          className="ring-4 drop-shadow-2xl w-24 h-24 md:w-40 md:h-40 animate-bounce-2 bg-red-500 rounded-full mt-16"
+          className="ring-4 drop-shadow-2xl w-32 h-32 md:w-52 md:h-52 animate-bounce-2 bg-red-500 rounded-full mt-16"
           src="ömeröztürk.jpg"
         ></img>
         </div>
