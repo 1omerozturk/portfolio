@@ -23,13 +23,14 @@ const {
   createHobbies,
   createLanguages,
   login,
+  getAdmin
   // updatePassword
 } = require('../controller/adminController')
 
 const router = express.Router()
 
 // admin login
-
+router.get('/admin', admin, getAdmin)
 
 // put routes
 // router.put('/update-password',updatePassword)
@@ -50,10 +51,9 @@ router.delete('/skills/:id', admin, deleteSkills)
 router.delete('/hobbies/:id', admin, deleteHobbies)
 router.delete('/languages/:id', admin, deleteLanguages)
 
-
 // post routes
 
-router.post('/login',login)
+router.post('/login', login)
 router.post('/personal-info', admin, createPersonalInfo)
 router.post('/social-links', admin, createSocialLinks)
 router.post('/educations', admin, createEducations)

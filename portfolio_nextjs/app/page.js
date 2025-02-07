@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import 'react-toastify/dist/ReactToastify.css';
 import Typing from './components/Typing'
 import SkillsBanner from './components/SkillsBanner'
 import AboutBanner from './components/AboutBanner'
@@ -9,11 +10,21 @@ import SocialBanner from './components/SocialBanner'
 import Projects from './projects/page'
 
 export default function Home() {
+
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = 'cv.pdf'; // PDF dosyanızın yolu
+    link.download = 'omer_ozturk.pdf';
+    link.click();
+  };
+
   return (
     <div className="min-h-dvh bg-gradient-to-tl from-slate-600 to-slate-200">
        <div className="w-full flex flex-row items-center shadow-sm shadow-indigo-400 rounded-xl pb-5">
           <div className="w-full">
             <button
+            title='Download CV'
+            onClick={handleDownload}
               className=" bg-indigo-500 hover:bg-indigo-700  text-white  font-extrabold py-
             2 p-2  rounded my-3"
             >

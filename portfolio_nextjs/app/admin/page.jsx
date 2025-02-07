@@ -1,33 +1,42 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AdminAuth } from "./auth";
-import { useRouter } from "next/navigation";
+import Loading from "./components/Loading";
 
-const Admin = () => {
-  const router = useRouter();
-  const [auth, setAuth] = useState(false);
+const page = () => {
+  const [admin, setAdmin] = useState(null);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const auth = await AdminAuth.checkAuth();
-      setAuth(auth);
-    };
-
-    checkAuth();
+  const getAdmin = useCallback(async () => {
+    const admin = await AdminAuth.getAdmin();
+    setAdmin(admin);
   }, []);
 
-  return auth ? (
-    <div>Dashboard</div>
-  ) : (
-    <div className="flex justify-center items-center pt-5">
-      <div
-        className="btn btn-outline-dark"
-        onClick={() => router.push("/admin/login")}
-      >
-        Login
-      </div>
+  useEffect(() => {
+    getAdmin();
+  }, [getAdmin]);
+
+  useEffect(() => {}, [admin]);
+
+  return (
+    <div>
+      {admin === null && <Loading />}
+
+      {admin && (
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-8">
+              <div className="card">
+                <div className="card-header">Dashboard</div>
+                <div className="card-body">
+                  <h5 className="card-title">Welcome {admin?.fullName}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Admin;
+export default page;

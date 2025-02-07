@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AdminAuth } from "../auth";
 import { login } from "../../api/api";
+import Message from "../../components/Message";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -18,19 +19,15 @@ const Login = () => {
 
   const loginHandle = async (e) => {
     e.preventDefault();
-    console.log("Form data:", formData);
     await AdminAuth.login(formData.username, formData.password)
       .then((res) => {
-        if(res){
-          // navigate to dashboard
-          window.location.href = "/admin/dashboard";
+        if (res) {
+          window.location.href = "/admin";
         }
       })
       .catch((err) => {
         console.log(err);
       });
-
-    
   };
 
   return (

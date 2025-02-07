@@ -7,7 +7,7 @@ const personalInfoSchema = new mongoose.Schema({
   phone: String,
   address: String,
   about: String,
-  profilePicture: String, // URL to the profile picture
+  profilePicture: String, 
 })
 
 module.exports = mongoose.model('PersonalInfo', personalInfoSchema)

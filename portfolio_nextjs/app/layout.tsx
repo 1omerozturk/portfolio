@@ -2,6 +2,8 @@
 import "./globals.css";
 import "primeicons/primeicons.css";
 import "bootstrap/dist/css/bootstrap.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 export default function RootLayout({ children }) {
   const metadata = {
@@ -36,8 +38,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <main className="content">
-          <Navbar />
-          {children}
+            <ToastContainer />
+            <Navbar />
+            {children}
         </main>
       </body>
     </html>

@@ -18,16 +18,29 @@ exports.login = async (req, res) => {
     const { username, password } = req.body
     const user = await User.findOne({ username })
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' })
+      return res.status(400).json({ message: 'Invalid email' })
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' })
+      return res.status(400).json({ message: 'Invalid password' })
     }
     const token = await user.generateAuthToken()
     res.status(200).json({ token })
   } catch (err) {
     res.status(500).json({ message: err.message })
+  }
+}
+
+// Admin get
+exports.getAdmin = async (req, res) => {
+  try {
+    const admin = await User.findOne({ role: 'admin' }); // Admini role veya başka bir kritere göre bulabilirsiniz
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin bulunamadı' });
+    }
+    res.status(200).json(admin);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 }
 
