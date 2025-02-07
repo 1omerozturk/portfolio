@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AdminAuth } from "../auth";
-import { login } from "../../api/api";
-import Message from "../../components/Message";
 
 const Login = () => {
   const [show, setShow] = useState(false);

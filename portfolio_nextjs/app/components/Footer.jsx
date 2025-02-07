@@ -22,7 +22,7 @@ const Footer = () => {
             value={value}
             locale="en-US"
             className="border shadow-md text-slate-500 mx-auto border-gray-300 rounded-lg"
-            onChange={onChange}
+            onChange={setValue}
             calendarType="iso8601"
             tileClassName={({ date, view }) =>
               date?.getDay() === 0 || date?.getDay() === 6 ? "bg-red-100" : ""

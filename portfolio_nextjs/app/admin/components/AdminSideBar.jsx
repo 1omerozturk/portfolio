@@ -1,25 +1,17 @@
 "use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { AdminAuth } from "../auth";
 import {
   FaHome,
   FaUser,
-  FaInfoCircle,
-  FaUserFriends,
   FaGraduationCap,
   FaBriefcase,
-  FaShare,
   FaShareAlt,
-  FaFolder,
   FaCode,
   FaAward,
-  FaProjectDiagram,
-  FaSchool,
   FaSpaceShuttle,
 } from "react-icons/fa";
-import path from "path";
 
 const AdminSideBar = ({ onLogout }) => {
   const [active, setActive] = useState("Dashboard");
