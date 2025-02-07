@@ -1,5 +1,6 @@
 import axios from "axios";
-const api: string = "http://localhost:5050/api";
+// const api: string = "http://localhost:5050/api";
+const api: string = "https://portfolio-m5zz.onrender.com/api";
 
 // User Log check function
 export const getToken = () => {

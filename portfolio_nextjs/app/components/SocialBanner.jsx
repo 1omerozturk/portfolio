@@ -7,38 +7,38 @@ const SocialBanner = () => {
   const socials = [
     {
       name: "Facebook",
-      icon: <FaFacebook className="text-2xl"/>,
+      icon: <FaFacebook className="text-xl"/>,
       link: "https://www.facebook.com",
     },
     {
       name: "Twitter",
-      icon: <FaTwitter className="text-2xl"/>,
+      icon: <FaTwitter className="text-xl"/>,
       link: "https://www.twitter.com",
     },
     {
       name: "Instagram",
-      icon: <FaInstagram className="text-2xl"/>,
+      icon: <FaInstagram className="text-xl"/>,
       link: "https://www.instagram.com",
     },
     {
       name: "LinkedIn",
-      icon: <FaLinkedin className="text-2xl"/>,
+      icon: <FaLinkedin className="text-xl"/>,
       link: "https://www.linkedin.com",
     },
     {
       name: "GitHub",
-      icon: <FaGithub className="text-2xl"/>,
+      icon: <FaGithub className="text-xl"/>,
       link: "https://www.github.com",
     },
     {
       name: "YouTube",
-      icon: <FaYoutube className="text-2xl"/>,
+      icon: <FaYoutube className="text-xl"/>,
       link: "https://www.youtube.com",
     },
   ];
 
   return (
-    <div className="flex justify-center items-center space-x-4 my-4">
+    <div className="grid grid-flow-col text-center auto-cols-auto space-x-1 ">
       {socials.map((social, index) => (
         <a 
           key={index} 
