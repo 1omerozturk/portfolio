@@ -35,11 +35,15 @@ export default function Home() {
             <hr className='border-none h-1 w-2/3 mx-auto my-5 bg-black rounded-full'/>
             <SocialBanner />
           </div>
+          <div className='size-24 sm:size-48 md:size-60'>
           <img
+          height={200}
+          width={200}
           alt='Ömer Öztürk'
-          className="ring-4 drop-shadow-2xl w-32 h-32 md:w-52 md:h-52 animate-bounce-2 bg-red-500 rounded-full mt-16"
-          src="ömeröztürk.jpg"
-        ></img>
+          className="ring-4 drop-shadow-2xl animate-bounce-2 bg-red-500 rounded-full mt-16"
+          src="omer ozturk.webp"
+          ></img>
+          </div>
         </div>
       <SkillsBanner size={5} />
       <Projects size={4} />

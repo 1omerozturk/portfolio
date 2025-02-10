@@ -2,7 +2,7 @@ import React from 'react'
 import { ReactTyped } from "react-typed";
 const Typing = () => {
   return (
-       <h1 className='font-serif lg:text-5xl md:text-4xl sm:text-3xl text-2xl font-bold text-center pl-10 bg-clip-text bg-gradient-to-l text-transparent from-black to-indigo-500 mt-5 drop-shadow-2xl'>
+       <div className='block font-serif lg:text-5xl md:text-4xl sm:text-3xl text-lg font-bold md:text-center pl-10 bg-clip-text bg-gradient-to-l text-transparent from-black to-indigo-500 mt-5 drop-shadow-2xl'>
       <ReactTyped
         strings={[
           "<span class='text-blue-400'>Hi👋</span>",
@@ -16,7 +16,7 @@ const Typing = () => {
         loop
       >
       </ReactTyped>
-    </h1>
+    </div>
   )
 }
 

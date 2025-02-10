@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
       'Ömer Öztürk, "Ömer", Yazılım" ,"Ömer Yazılım", "Software", portfolio, Software Devleoper, projects',
     author: "Ömer Öztürk",
     ogDescription: "Showcasing the projects and skills of Ömer Öztürk",
-    ogImage: "00.jpg", // Update with the actual path to your image
+    ogImage: "omer ozturk.webp", // Update with the actual path to your image
     ogUrl: "https://omerozturk.com.tr", // Update with your actual website URL
     twitterCard: "summary_large_image",
     twitterSite: "@yourTwitterHandle", // Update with your actual Twitter handle
