@@ -98,3 +98,105 @@ exports.getHobbies = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
+// one data return functions
+
+exports.getOnePersonalInfo = async (req, res) => {
+  try {
+    const id = req.params.id
+    const personalInfo = await PersonalInfos.findById(id)
+    res.status(200).json(personalInfo)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneSocialLinks = async (req, res) => {
+  try {
+    const id = req.params.id
+    const socialLinks = await SocialLinks.findById(id)
+    res.status(200).json(socialLinks)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneEducations = async (req, res) => {
+  try {
+    const id = req.params.id
+    const educations = await Educations.findById(id)
+    res.status(200).json(educations)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneExperiences = async (req, res) => {
+  try {
+    const id = req.params.id
+    const experiences = await Experiences.findById(id)
+    res.status(200).json(experiences)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneSkills = async (req, res) => {
+  try {
+    const id = req.params.id
+    const skills = await Skills.findById(id)
+    res.status(200).json(skills)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneProjects = async (req, res) => {
+  try {
+    const id = req.params.id
+    const projects = await Projects.findById(id)
+    res.status(200).json(projects)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneCertifications = async (req, res) => {
+  try {
+    const id = req.params.id
+    const certifications = await Certifications.findById(id)
+    res.status(200).json(certifications)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneLanguages = async (req, res) => {
+  try {
+    const id = req.params.id
+    const languages = await Languages.findById(id)
+    res.status(200).json(languages)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneReferences = async (req, res) => {
+  try {
+    const id = req.params.id
+    const references = await References.findById(id)
+    res.status(200).json(references)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneHobbies = async (req, res) => {
+  try {
+    const id = req.params.id
+    const hobbies = await Hobbies.findById(id)
+    res.status(200).json(hobbies)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}

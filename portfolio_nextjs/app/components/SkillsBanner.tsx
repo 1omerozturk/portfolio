@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   FaHtml5,
   FaNodeJs,
@@ -12,14 +12,15 @@ import {
 import { SiDotnet, SiKotlin, SiNextdotjs, SiTailwindcss } from "react-icons/si";
 import SkillProgress from "./SkillProgress";
 import Link from "next/link";
+import { SkillService } from "../admin/service/skillService";
 
 interface PageProps{
   size?:number;
 }
 
 const SkillsBanner:React.FC<PageProps>= ({ size }) => {
-
-  const skills = [
+// const [skills,setSkills]=useState([])
+   const skills = [
     {
       name: "HTML",
       level: "Intermediate",
@@ -35,7 +36,7 @@ const SkillsBanner:React.FC<PageProps>= ({ size }) => {
       color: "#339933",
     },
     {
-      name: "CSS",
+      name: "CSS & TailwindCSS",
       level: "Intermediate",
       percentage: 60,
       icon: <FaCss3Alt />,
@@ -90,7 +91,11 @@ const SkillsBanner:React.FC<PageProps>= ({ size }) => {
       icon: <SiKotlin />,
       color: "#7F52FF",
     },
-  ];
+  ]; 
+
+
+
+
 
   return (
     <div id="skillsBanner" className="skills-banner">

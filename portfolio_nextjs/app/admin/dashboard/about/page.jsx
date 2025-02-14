@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { AdminAuth } from "../../auth";
-import Router from "next/router";
 import { useRouter } from "next/navigation";
 
 const AboutDashboard = () => {

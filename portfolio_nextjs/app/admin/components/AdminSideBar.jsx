@@ -60,7 +60,7 @@ const AdminSideBar = ({ onLogout }) => {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <h6 className="text-center font-bold">Admin Panel</h6>
+      <h6 className="text-center font-bold">Admin</h6>
       <nav className="mt-5">
         {links.map((link, index) => (
           <Link

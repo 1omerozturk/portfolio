@@ -1,6 +1,6 @@
 import axios from "axios";
-// const api: string = "http://localhost:5050/api";
-const api: string = "https://portfolio-m5zz.onrender.com/api";
+const api: string = "http://localhost:5050/api";
+// const api: string = "https://portfolio-m5zz.onrender.com/api";
 
 // User Log check function
 export const getToken = () => {
@@ -84,109 +84,159 @@ export const getReferences = async () => {
   return await axios.get(`${api}/user/references`);
 };
 
+// One Data return 
+
+export const getOnePersonalInfo = async (id:any) => {
+  return await axios.get(`${api}/user/personal-info/${id}`);
+};
+
+export const getOneSocialLinks = async (id:any) => {
+  return await axios.get(`${api}/user/social-links/${id}`);
+};
+
+export const getOneEducations = async (id:any) => {
+  return await axios.get(`${api}/user/educations/${id}`);
+};
+
+export const getOneExperiences = async (id:any) => {
+  return await axios.get(`${api}/user/experiences/${id}`);
+};
+
+export const getOneSkills = async (id:any) => {
+  return await axios.get(`${api}/user/skills/${id}`);
+};
+
+export const getOneProjects = async (id:any) => {
+  return await axios.get(`${api}/user/projects/${id}`);
+};
+
+export const getOneCertifications = async (id:any) => {
+  return await axios.get(`${api}/user/certifications/${id}`);
+};
+
+export const getOneHobbies = async (id:any) => {
+  return await axios.get(`${api}/user/hobbies/${id}`);
+};
+
+export const getOneReferences = async (id:any) => {
+  return await axios.get(`${api}/user/references/${id}`);
+};
+
 // admin create functions
 export const createPersonalInfo = async (data: any) => {
-  return await axios.post(`${api}/user/personal-info`, getAdminConfig(), data);
+  return await axios.post(`${api}/admin/personal-info`, data, getAdminConfig());
 };
 
 export const createSocialLinks = async (data: any) => {
-  return await axios.post(`${api}/user/social-links`, getAdminConfig(), data);
+  return await axios.post(`${api}/admin/social-links`, data, getAdminConfig());
 };
 
 export const createEducations = async (data: any) => {
-  return await axios.post(`${api}/user/educations`, getAdminConfig(), data);
+  return await axios.post(`${api}/admin/educations`, data, getAdminConfig());
 };
 
 export const createExperiences = async (data: any) => {
-  return await axios.post(`${api}/user/experiences`, getAdminConfig(), data);
+  return await axios.post(`${api}/admin/experiences`, data, getAdminConfig());
 };
 
 export const createSkills = async (data: any) => {
-  return await axios.post(`${api}/user/skills`, getAdminConfig(), data);
+  try {
+    return await axios.post(`${api}/admin/skills`,data, getAdminConfig());
+  } catch (error) {
+    return error;
+  }
 };
 
 export const createHobbies = async (data: any) => {
-  return await axios.post(`${api}/user/hobbies`, getAdminConfig(), data);
+  return await axios.post(`${api}/admin/hobbies`, data, getAdminConfig());
 };
 
 export const createLanguages = async (data: any) => {
-  return await axios.post(`${api}/user/languages`, getAdminConfig(), data);
+  return await axios.post(`${api}/admin/languages`, data, getAdminConfig());
 };
 
 // admin put functions
 
-export const updatePersonalInfo = async (id: string, data: any) => {
+export const updatePersonalInfo = async (id:any, data: any) => {
   return await axios.put(
-    `${api}/user/personal-info/${id}`,
+    `${api}/admin/personal-info/${id}`,
     getAdminConfig(),
     data
   );
 };
 
-export const updateSocialLinks = async (id: string, data: any) => {
+export const updateSocialLinks = async (id:any, data: any) => {
   return await axios.put(
-    `${api}/user/social-links/${id}`,
+    `${api}/admin/social-links/${id}`,
     getAdminConfig(),
     data
   );
 };
 
-export const updateEducations = async (id: string, data: any) => {
+export const updateEducations = async (id:any, data: any) => {
   return await axios.put(
-    `${api}/user/educations/${id}`,
+    `${api}/admin/educations/${id}`,
     getAdminConfig(),
     data
   );
 };
 
-export const updateExperiences = async (id: string, data: any) => {
+export const updateExperiences = async (id:any, data: any) => {
   return await axios.put(
-    `${api}/user/experiences/${id}`,
+    `${api}/admin/experiences/${id}`,
     getAdminConfig(),
     data
   );
 };
 
-export const updateSkills = async (id: string, data: any) => {
-  return await axios.put(`${api}/user/skills/${id}`, getAdminConfig(), data);
+export const updateSkills = async (id:any, data: any) => {
+  console.log(id)
+  return await axios.put(`${api}/admin/skills/${id}`, data, getAdminConfig());
 };
 
-export const updateHobbies = async (id: string, data: any) => {
-  return await axios.put(`${api}/user/hobbies/${id}`, getAdminConfig(), data);
+export const updateHobbies = async (id:any, data: any) => {
+  return await axios.put(`${api}/admin/hobbies/${id}`, data, getAdminConfig());
 };
 
-export const updateLanguages = async (id: string, data: any) => {
-  return await axios.put(`${api}/user/languages/${id}`, getAdminConfig(), data);
+export const updateLanguages = async (id:any, data: any) => {
+  return await axios.put(
+    `${api}/admin/languages/${id}`,
+    getAdminConfig(),
+    data
+  );
 };
 
 // admin delete functions
-export const deletePersonalInfo = async (id: string) => {
+export const deletePersonalInfo = async (id:any) => {
   return await axios.delete(
-    `${api}/user/personal-info/${id}`,
+    `${api}/admin/personal-info/${id}`,
     getAdminConfig()
   );
 };
 
-export const deleteSocialLinks = async (id: string) => {
-  return await axios.delete(`${api}/user/social-links/${id}`, getAdminConfig());
+export const deleteSocialLinks = async (id:any) => {
+  return await axios.delete(
+    `${api}/admin/social-links/${id}`,
+    getAdminConfig()
+  );
 };
 
-export const deleteEducations = async (id: string) => {
-  return await axios.delete(`${api}/user/educations/${id}`, getAdminConfig());
+export const deleteEducations = async (id:any) => {
+  return await axios.delete(`${api}/admin/educations/${id}`, getAdminConfig());
 };
 
-export const deleteExperiences = async (id: string) => {
-  return await axios.delete(`${api}/user/experiences/${id}`, getAdminConfig());
+export const deleteExperiences = async (id:any) => {
+  return await axios.delete(`${api}/admin/experiences/${id}`, getAdminConfig());
 };
 
-export const deleteSkills = async (id: string) => {
-  return await axios.delete(`${api}/user/skills/${id}`, getAdminConfig());
+export const deleteSkills = async (id:any) => {
+  return await axios.delete(`${api}/admin/skills/${id}`, getAdminConfig());
 };
 
-export const deleteHobbies = async (id: string) => {
-  return await axios.delete(`${api}/user/hobbies/${id}`, getAdminConfig());
+export const deleteHobbies = async (id:any) => {
+  return await axios.delete(`${api}/admin/hobbies/${id}`, getAdminConfig());
 };
 
-export const deleteLanguages = async (id: string) => {
-  return await axios.delete(`${api}/user/languages/${id}`, getAdminConfig());
+export const deleteLanguages = async (id:any) => {
+  return await axios.delete(`${api}/admin/languages/${id}`, getAdminConfig());
 };

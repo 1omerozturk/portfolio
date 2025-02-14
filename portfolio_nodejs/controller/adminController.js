@@ -34,13 +34,13 @@ exports.login = async (req, res) => {
 // Admin get
 exports.getAdmin = async (req, res) => {
   try {
-    const admin = await User.findOne({ role: 'admin' }); // Admini role veya başka bir kritere göre bulabilirsiniz
+    const admin = await User.findOne({ role: 'admin' }) // Admini role veya başka bir kritere göre bulabilirsiniz
     if (!admin) {
-      return res.status(404).json({ message: 'Admin bulunamadı' });
+      return res.status(404).json({ message: 'Admin bulunamadı' })
     }
-    res.status(200).json(admin);
+    res.status(200).json(admin)
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message })
   }
 }
 
@@ -110,6 +110,7 @@ exports.createSkills = async (req, res) => {
     await skills.save()
     res.status(201).json(skills)
   } catch (error) {
+    console.error(error) // Hata detaylarını loglayın
     res.status(500).json({ message: error.message })
   }
 }
@@ -219,11 +220,14 @@ exports.updateExperiences = async (req, res) => {
 
 exports.updateSkills = async (req, res) => {
   try {
-    const skills = await Skills.findByIdAndUpdate(req.params.id, req.body, {
+    const id = req.params.id
+    const data = req.body
+    const skills = await Skills.findByIdAndUpdate(id, data, {
       new: true,
     })
     res.status(200).json(skills)
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message })
   }
 }

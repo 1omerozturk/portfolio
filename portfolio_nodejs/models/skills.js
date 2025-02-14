@@ -2,12 +2,14 @@ const mongoose = require('mongoose')
 
 const skillSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  proficiency: {
+  level: {
     type: String,
     enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
     required: true,
   },
-  icon: String, // URL to the skill icon
+  percentage: Number,
+  icon: String,
+  color: String,
 })
 
 module.exports = mongoose.model('Skill', skillSchema)
