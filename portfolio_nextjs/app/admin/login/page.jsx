@@ -2,9 +2,12 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AdminAuth } from "../auth";
+import Message from "../../components/Message";
+import Loading from "../components/Loading";
 
 const Login = () => {
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [type, setType] = useState("password");
   const [formData, setFormData] = useState({
     username: "",
@@ -16,14 +19,17 @@ const Login = () => {
   };
 
   const loginHandle = async (e) => {
+    setLoading(true);
     e.preventDefault();
     await AdminAuth.login(formData.username, formData.password)
       .then((res) => {
-        if (res) {
+        if (res.status === 200) {
+          setLoading(false);
           window.location.href = "/admin";
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
@@ -89,10 +95,11 @@ const Login = () => {
             </div>
           </div>
           <button
+          disabled={loading}
             type="submit"
             className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mx-auto block select-none"
           >
-            Login
+            {loading ? <i className="pi pi-spin pi-spinner"></i> : "Login"}
           </button>
         </form>
       </div>

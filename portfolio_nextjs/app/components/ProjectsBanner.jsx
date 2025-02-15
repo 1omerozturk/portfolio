@@ -1,7 +1,6 @@
 "use client"
 import Link from "next/link";
 import React from "react";
-import { FaProjectDiagram } from "react-icons/fa";
 
 const ProjectsBanner = () => {
   const projects = [

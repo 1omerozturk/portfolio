@@ -2,22 +2,20 @@
 import "./globals.css";
 import "primeicons/primeicons.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 export default function RootLayout({ children }) {
   const metadata = {
     title: "Ömer Öztürk",
-    description: "Ömer Öztürk Portfolio",
+    description: "Ömer Öztürk",
     keywords:
       'Ömer Öztürk, "Ömer", Yazılım" ,"Ömer Yazılım", "Software", portfolio, Software Devleoper, projects',
     author: "Ömer Öztürk",
     ogDescription: "Showcasing the projects and skills of Ömer Öztürk",
-    ogImage: "omer ozturk.webp", // Update with the actual path to your image
-    ogUrl: "https://omerozturk.com.tr", // Update with your actual website URL
-    twitterCard: "summary_large_image",
-    twitterSite: "@yourTwitterHandle", // Update with your actual Twitter handle
-    twitterCreator: "@yourTwitterHandle", // Update with your actual Twitter handle
+    ogImage: "omer ozturk.webp",
+    ogUrl: "https://omerozturk.com.tr",
+    
   };
 
   return (
@@ -32,9 +30,6 @@ export default function RootLayout({ children }) {
         <meta property="og:description" content={metadata.ogDescription} />
         <meta property="og:image" content={metadata.ogImage} />
         <meta property="og:url" content={metadata.ogUrl} />
-        <meta name="twitter:card" content={metadata.twitterCard} />
-        <meta name="twitter:site" content={metadata.twitterSite} />
-        <meta name="twitter:creator" content={metadata.twitterCreator} />
         <title>{metadata.title}</title>
       </head>
       <body>

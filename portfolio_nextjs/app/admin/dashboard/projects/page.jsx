@@ -8,14 +8,15 @@ import { useRouter } from "next/navigation";
 const ProjectsDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate=useRouter()
+  const navigate = useRouter();
 
   const fetchProjects = useCallback(() => {
     try {
       setLoading(true);
       ProjectService.getProjects()
         .then((res) => {
-          setSkills(res.data);
+          setProjects(res.data);
+          console.log(res);
         })
         .finally(() => {
           setLoading(false);
@@ -27,20 +28,24 @@ const ProjectsDashboard = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [projects.length]);
+  }, []);
 
-  const onAdd=()=>{
+  const onAdd = () => {
     navigate.push("/admin/dashboard/projects/add");
-  }
-
+  };
 
   return (
-    <div>
-      <button onClick={onAdd} className="btn btn-outline-light flex items-center justify-center float-right">
-        Ekle
-          <FaPlusCircle />
-      </button>
-      <ProjectComponent projects={projects} />
+    <div className="grid grid-flow-row">
+      <div className="text-end">
+        <button
+          onClick={onAdd}
+          className="btn btn-outline-light w-fit text-center"
+        >
+          <FaPlusCircle className="md:text-2xl" />
+          <div>Ekle</div>
+        </button>
+      </div>
+      <ProjectComponent projects={projects} setProjects={setProjects} />
     </div>
   );
 };

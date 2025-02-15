@@ -60,7 +60,11 @@ const AdminSideBar = ({ onLogout }) => {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <h6 className="text-center font-bold">Admin</h6>
+      <h6 className="text-center font-bold mt-2">Admin</h6>
+      <img
+      src="/omer ozturk.webp"
+      className="bg-cover h-16 w-16 rounded-full mx-auto"
+      />
       <nav className="mt-5">
         {links.map((link, index) => (
           <Link

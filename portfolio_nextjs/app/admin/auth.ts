@@ -13,7 +13,7 @@ export class AdminAuth {
         localStorage.setItem("token", admin.token);
         localStorage.setItem("admin", JSON.stringify(admin));
         console.log(admin);
-        return admin;
+        return response;
       }
       return null;
     } catch (error) {

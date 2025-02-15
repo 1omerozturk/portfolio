@@ -12,8 +12,8 @@ export class ProjectService {
     try {
       const response = await createProject(data).then((res) => {
         if (res?.status == 201) {
-          Message.ToastMessage("success", data.name + " başarıyla eklendi.");
-          return res?.status;
+          Message.ToastMessage("success", data.title + " başarıyla eklendi.");
+          return res;
         } else {
           Message.ToastMessage("warning", "Bir hata oluştu tekrar deneyin.");
         }
@@ -50,7 +50,7 @@ export class ProjectService {
     }
   }
 
-  static async updateSkill(id: any, data: any) {
+  static async updateProject(id: any, data: any) {
     try {
       return await updateProject(id, data).then((res) => {
         return res;
@@ -59,7 +59,7 @@ export class ProjectService {
       Message.ToastMessage("error", error.response.data.message);
     }
   }
-  static async deleteSkill(id: any) {
+  static async deleteProject(id: any) {
     try {
       return await deleteProjects(id).then((res) => {
         return res;
