@@ -3,8 +3,9 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as SiIcons from "react-icons/si";
+import { SkillService } from "../service/skillService";
 
-const AdminSkillProgress = ({ skills }) => {
+const AdminSkillProgress = ({ skills, setSkills }) => {
   const navigate = useRouter();
 
   const [progress, setProgress] = useState(
@@ -38,6 +39,16 @@ const AdminSkillProgress = ({ skills }) => {
     navigate.push(`skills/edit/${id}`);
   };
 
+  const onDelete = async (id) => {
+    await SkillService.deleteSkill(id).then((res) => {
+
+      console.log(res)
+      const updatedSkills = skills.filter(skill => skill._id !== id);
+      setSkills(updatedSkills);
+    }
+  );
+  };
+
   const DynamicIcon = ({ iconName }) => {
     if (!iconName) return null;
 
@@ -45,28 +56,41 @@ const AdminSkillProgress = ({ skills }) => {
     const iconLib = lib === "Fa" ? FaIcons : SiIcons;
     const IconComponent = iconLib[iconName];
 
-    return IconComponent ? <IconComponent size={24} /> : null;
+    return IconComponent ? <IconComponent/> : null;
   };
 
-
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 space-y-2 gap-4">
+    <>
+    <h2 className="text-center">Skills</h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 space-x-2 space-y-2">
       {skills.map((skill, index) => (
         <div
-          key={index}
-          className="bg-gradient-to-t from-indigo-400 to-white p-4 rounded-lg shadow-md"
+        key={index}
+        className="bg-gradient-to-t from-indigo-400 to-white p-4 rounded-lg shadow-md space-y-6"
         >
-          <div className="float-right">
-            <button
-              onClick={() => onEdit(skill._id)}
-              className="btn btn-outline-warning"
-            >
-              <FaIcons.FaEdit />
-            </button>
+          <div className=" float-right flex items-center justify-between space-x-2">
+            <div className="text-sm">
+              <button
+                title="Düzenle"
+                onClick={() => onEdit(skill._id)}
+                className="btn btn-outline-warning"
+              >
+                <FaIcons.FaEdit />
+              </button>
+            </div>
+            <div className="">
+              <button
+                title="Sil"
+                onClick={() => onDelete(skill._id)}
+                className="btn btn-outline-danger"
+                >
+                <FaIcons.FaMinusCircle />
+              </button>
+            </div>
           </div>
-          <div className="text-2xl flex items-center justify-center gap-x-3 font-semibold my-3">
+          <div className="md:text-2xl text-sm sm:text-xl flex text-center mt-5 gap-x-3 font-semibold">
             {skill.name}
-            <div style={{ color: skill.color, fontSize:"2rem"}}>
+            <div className="bg-gradient-to-b from-white to-slate-500 flex items-center justify-center text-3xl rounded-full h-10 w-10" style={{ color: skill.color}}>
               <DynamicIcon iconName={skill.icon} />
             </div>
           </div>
@@ -81,6 +105,7 @@ const AdminSkillProgress = ({ skills }) => {
         </div>
       ))}
     </div>
+      </>
   );
 };
 

@@ -1,6 +1,6 @@
 import axios from "axios";
-const api: string = "http://localhost:5050/api";
-// const api: string = "https://portfolio-m5zz.onrender.com/api";
+// const api: string = "http://localhost:5050/api";
+const api: string = "https://portfolio-m5zz.onrender.com/api";
 
 // User Log check function
 export const getToken = () => {
@@ -84,41 +84,41 @@ export const getReferences = async () => {
   return await axios.get(`${api}/user/references`);
 };
 
-// One Data return 
+// One Data return
 
-export const getOnePersonalInfo = async (id:any) => {
+export const getOnePersonalInfo = async (id: any) => {
   return await axios.get(`${api}/user/personal-info/${id}`);
 };
 
-export const getOneSocialLinks = async (id:any) => {
+export const getOneSocialLinks = async (id: any) => {
   return await axios.get(`${api}/user/social-links/${id}`);
 };
 
-export const getOneEducations = async (id:any) => {
+export const getOneEducations = async (id: any) => {
   return await axios.get(`${api}/user/educations/${id}`);
 };
 
-export const getOneExperiences = async (id:any) => {
+export const getOneExperiences = async (id: any) => {
   return await axios.get(`${api}/user/experiences/${id}`);
 };
 
-export const getOneSkills = async (id:any) => {
+export const getOneSkills = async (id: any) => {
   return await axios.get(`${api}/user/skills/${id}`);
 };
 
-export const getOneProjects = async (id:any) => {
+export const getOneProjects = async (id: any) => {
   return await axios.get(`${api}/user/projects/${id}`);
 };
 
-export const getOneCertifications = async (id:any) => {
+export const getOneCertifications = async (id: any) => {
   return await axios.get(`${api}/user/certifications/${id}`);
 };
 
-export const getOneHobbies = async (id:any) => {
+export const getOneHobbies = async (id: any) => {
   return await axios.get(`${api}/user/hobbies/${id}`);
 };
 
-export const getOneReferences = async (id:any) => {
+export const getOneReferences = async (id: any) => {
   return await axios.get(`${api}/user/references/${id}`);
 };
 
@@ -141,7 +141,15 @@ export const createExperiences = async (data: any) => {
 
 export const createSkills = async (data: any) => {
   try {
-    return await axios.post(`${api}/admin/skills`,data, getAdminConfig());
+    return await axios.post(`${api}/admin/skills`, data, getAdminConfig());
+  } catch (error) {
+    return error;
+  }
+};
+
+export const createProject = async (data: any) => {
+  try {
+    return await axios.post(`${api}/admin/projects`, data, getAdminConfig());
   } catch (error) {
     return error;
   }
@@ -157,7 +165,7 @@ export const createLanguages = async (data: any) => {
 
 // admin put functions
 
-export const updatePersonalInfo = async (id:any, data: any) => {
+export const updatePersonalInfo = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/personal-info/${id}`,
     getAdminConfig(),
@@ -165,7 +173,7 @@ export const updatePersonalInfo = async (id:any, data: any) => {
   );
 };
 
-export const updateSocialLinks = async (id:any, data: any) => {
+export const updateSocialLinks = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/social-links/${id}`,
     getAdminConfig(),
@@ -173,7 +181,7 @@ export const updateSocialLinks = async (id:any, data: any) => {
   );
 };
 
-export const updateEducations = async (id:any, data: any) => {
+export const updateEducations = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/educations/${id}`,
     getAdminConfig(),
@@ -181,7 +189,7 @@ export const updateEducations = async (id:any, data: any) => {
   );
 };
 
-export const updateExperiences = async (id:any, data: any) => {
+export const updateExperiences = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/experiences/${id}`,
     getAdminConfig(),
@@ -189,16 +197,19 @@ export const updateExperiences = async (id:any, data: any) => {
   );
 };
 
-export const updateSkills = async (id:any, data: any) => {
-  console.log(id)
+export const updateProject = async (id: any, data: any) => {
+  return await axios.put(`${api}/admin/projects/${id}`, data, getAdminConfig());
+};
+
+export const updateSkills = async (id: any, data: any) => {
   return await axios.put(`${api}/admin/skills/${id}`, data, getAdminConfig());
 };
 
-export const updateHobbies = async (id:any, data: any) => {
+export const updateHobbies = async (id: any, data: any) => {
   return await axios.put(`${api}/admin/hobbies/${id}`, data, getAdminConfig());
 };
 
-export const updateLanguages = async (id:any, data: any) => {
+export const updateLanguages = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/languages/${id}`,
     getAdminConfig(),
@@ -207,36 +218,40 @@ export const updateLanguages = async (id:any, data: any) => {
 };
 
 // admin delete functions
-export const deletePersonalInfo = async (id:any) => {
+export const deletePersonalInfo = async (id: any) => {
   return await axios.delete(
     `${api}/admin/personal-info/${id}`,
     getAdminConfig()
   );
 };
 
-export const deleteSocialLinks = async (id:any) => {
+export const deleteSocialLinks = async (id: any) => {
   return await axios.delete(
     `${api}/admin/social-links/${id}`,
     getAdminConfig()
   );
 };
 
-export const deleteEducations = async (id:any) => {
+export const deleteEducations = async (id: any) => {
   return await axios.delete(`${api}/admin/educations/${id}`, getAdminConfig());
 };
 
-export const deleteExperiences = async (id:any) => {
+export const deleteExperiences = async (id: any) => {
   return await axios.delete(`${api}/admin/experiences/${id}`, getAdminConfig());
 };
 
-export const deleteSkills = async (id:any) => {
+export const deleteProjects = async (id: any) => {
+  return await axios.delete(`${api}/admin/projects/${id}`, getAdminConfig());
+};
+
+export const deleteSkills = async (id: any) => {
   return await axios.delete(`${api}/admin/skills/${id}`, getAdminConfig());
 };
 
-export const deleteHobbies = async (id:any) => {
+export const deleteHobbies = async (id: any) => {
   return await axios.delete(`${api}/admin/hobbies/${id}`, getAdminConfig());
 };
 
-export const deleteLanguages = async (id:any) => {
+export const deleteLanguages = async (id: any) => {
   return await axios.delete(`${api}/admin/languages/${id}`, getAdminConfig());
 };

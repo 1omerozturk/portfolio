@@ -1,9 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { getSkills } from "../../../api/api";
 import Loading from "../../components/Loading";
 import * as FaIcons from "react-icons/fa";
-import * as SiIcons from "react-icons/si";
 import { useRouter } from "next/navigation";
 import { SkillService } from "../../service/skillService";
 import AdminSkillProgress from "../../components/AdminSkillProgress"
@@ -34,7 +32,7 @@ const SkillsDashboard = () => {
 
   useEffect(() => {
     fetchSkills();
-  }, []);
+  }, [skills.length]);
 
   return (
     <div>
@@ -48,7 +46,7 @@ const SkillsDashboard = () => {
               Ekle
             </div>
           </div>
-          <div>{<AdminSkillProgress skills={skills} />}</div>
+          <div>{<AdminSkillProgress skills={skills} setSkills={setSkills} />}</div>
         </div>
       )}
     </div>

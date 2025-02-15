@@ -1,18 +1,18 @@
 import {
-  createSkills,
-  deleteSkills,
-  getOneSkills,
-  getSkills,
-  updateSkills,
+  createProject,
+  deleteProjects,
+  getOneProjects,
+  getProjects,
+  updateProject,
 } from "../../api/api";
 import Message from "../../components/Message";
 
-export class SkillService {
-  static async addSkill(data: any) {
+export class ProjectService {
+  static async addProject(data: any) {
     try {
-      const response = await createSkills(data).then((res) => {
+      const response = await createProject(data).then((res) => {
         if (res?.status == 201) {
-          Message.ToastMessage("success", data.name + " eklendi.");
+          Message.ToastMessage("success", data.name + " başarıyla eklendi.");
           return res?.status;
         } else {
           Message.ToastMessage("warning", "Bir hata oluştu tekrar deneyin.");
@@ -25,9 +25,9 @@ export class SkillService {
     }
   }
 
-  static async getSkills() {
+  static async getProjects() {
     try {
-      const response = await getSkills().then((res) => {
+      const response = await getProjects().then((res) => {
         return res;
       });
       if (response) {
@@ -40,9 +40,9 @@ export class SkillService {
     }
   }
 
-  static async getSkill(id: any) {
+  static async getProject(id: any) {
     try {
-      return await getOneSkills(id).then((res) => {
+      return await getOneProjects(id).then((res) => {
         return res;
       });
     } catch (error) {
@@ -52,7 +52,7 @@ export class SkillService {
 
   static async updateSkill(id: any, data: any) {
     try {
-      return await updateSkills(id, data).then((res) => {
+      return await updateProject(id, data).then((res) => {
         return res;
       });
     } catch (error) {
@@ -61,7 +61,7 @@ export class SkillService {
   }
   static async deleteSkill(id: any) {
     try {
-      return await deleteSkills(id).then((res) => {
+      return await deleteProjects(id).then((res) => {
         return res;
       });
     } catch (error) {

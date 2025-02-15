@@ -36,7 +36,7 @@ const SkillProgress = ({ skills }) => {
         key={index}
         className="bg-gradient-to-t from-indigo-400 to-white p-4 rounded-lg shadow-md"
       >
-        <div className="text-2xl flex items-center justify-center gap-x-3 font-semibold mb-2">
+        <div className="md:text-2xl text-md text-center flex items-center justify-center gap-x-3 font-semibold mb-2">
           {skill.name}
           <div
           style={{ color: skill.color, fontSize: "2rem" }}>

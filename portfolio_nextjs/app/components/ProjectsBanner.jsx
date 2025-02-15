@@ -28,7 +28,7 @@ const ProjectsBanner = () => {
      
       {projects.map((project, index) => (
         <div key={index} className="animate-border">
-          <h2 className="text-lg font-bold">{project.title}</h2>
+          <div className="md:text-lg text-sm font-bold">{project.title}</div>
           <img
             className="w-full h-32 object-cover"
             src="https://via.placeholder.com/300"
