@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import {
   FaHtml5,
   FaNodeJs,
@@ -12,7 +12,6 @@ import {
 import { SiDotnet, SiKotlin, SiNextdotjs, SiTailwindcss } from "react-icons/si";
 import SkillProgress from "./SkillProgress";
 import Link from "next/link";
-import { SkillService } from "../admin/service/skillService";
 
 interface PageProps{
   size?:number;

@@ -9,11 +9,6 @@ const Edit = () => {
   const [data, setData] = useState(null);
   const { id } = useParams();
 
-  /*   const getData = useCallback( async() => {
-    await SkillService.getSkill(id).then((res) => {
-      setData(res.data)
-    });
-  }); */
   const getData = async () => {
     const response = await SkillService.getSkill(id).then((res) => {
       return res.data;
@@ -29,7 +24,7 @@ const Edit = () => {
     <div>
       {data ? (
         <div>
-          <p>{data.name}</p>
+          <h3 className="text-center">{data.name}</h3>
           <Add skill={data} />
         </div>
       ) : (

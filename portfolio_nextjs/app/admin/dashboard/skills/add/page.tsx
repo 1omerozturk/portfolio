@@ -4,7 +4,11 @@ import { SkillService } from "../../../service/skillService";
 import { useRouter } from "next/navigation";
 import Message from "../../../../components/Message";
 
-const SkillAdd = ({ skill }) => {
+interface SkillAddProps{
+  skill?:any
+}
+
+const SkillAdd:React.FC<SkillAddProps>= ({ skill }) => {
   const navigate = useRouter();
   const [data, setData] = useState(
     skill
@@ -55,7 +59,7 @@ const SkillAdd = ({ skill }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-1 gap-6 p-6 bg-gray-900 text-white rounded-lg shadow-md"
+      className="grid grid-cols-1 gap-6 p-6 md:w-1/2 mx-auto bg-gray-900 text-white rounded-lg shadow-md"
     >
       <div className="flex flex-col">
         <label className="mb-2 text-sm font-medium text-gray-300">Name:</label>

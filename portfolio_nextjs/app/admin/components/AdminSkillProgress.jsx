@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { FaAlignJustify, FaEdit } from "react-icons/fa";
+import * as FaIcons from "react-icons/fa";
+import * as SiIcons from "react-icons/si";
 
 const AdminSkillProgress = ({ skills }) => {
   const navigate = useRouter();
@@ -37,6 +38,17 @@ const AdminSkillProgress = ({ skills }) => {
     navigate.push(`skills/edit/${id}`);
   };
 
+  const DynamicIcon = ({ iconName }) => {
+    if (!iconName) return null;
+
+    const [lib, icon] = iconName.match(/[A-Z][a-z]+|[0-9]+/g);
+    const iconLib = lib === "Fa" ? FaIcons : SiIcons;
+    const IconComponent = iconLib[iconName];
+
+    return IconComponent ? <IconComponent size={24} /> : null;
+  };
+
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 space-y-2 gap-4">
       {skills.map((skill, index) => (
@@ -49,12 +61,14 @@ const AdminSkillProgress = ({ skills }) => {
               onClick={() => onEdit(skill._id)}
               className="btn btn-outline-warning"
             >
-              <FaEdit />
+              <FaIcons.FaEdit />
             </button>
           </div>
           <div className="text-2xl flex items-center justify-center gap-x-3 font-semibold my-3">
             {skill.name}
-            <div style={{ color: skill.color, fontSize: "1rem" }}></div>
+            <div style={{ color: skill.color, fontSize:"2rem"}}>
+              <DynamicIcon iconName={skill.icon} />
+            </div>
           </div>
           <div className="w-full bg-gray-400 rounded-full h-4 mb-2">
             <div
