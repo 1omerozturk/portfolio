@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as SiIcons from "react-icons/si";
 import { SkillService } from "../service/skillService";
-import Message from "@/app/components/Message";
+import Message from "../../components/Message";
 
 const AdminSkillProgress = ({ skills, setSkills }) => {
   const navigate = useRouter();
