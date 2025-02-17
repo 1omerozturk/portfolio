@@ -1,25 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import { SkillService } from "../../../service/skillService";
 import { useRouter } from "next/navigation";
+import { SocialService } from "../../../service/socialService";
 import Message from "../../../../components/Message";
 import BackIcon from "../../../components/BackIcon";
 
-interface SkillAddProps {
-  skill?: any;
+interface SocialAddProps {
+  social?: any;
 }
-
-const SkillAdd: React.FC<SkillAddProps> = ({ skill }) => {
+const SocialAdd: React.FC<SocialAddProps> = ({ social }) => {
   const navigate = useRouter();
   const [data, setData] = useState(
-    skill
-      ? skill
+    social
+      ? social
       : {
           name: "",
-          level: "",
-          percentage: 0,
+          url: "",
           icon: "",
-          color: "",
         }
   );
 
@@ -33,8 +30,8 @@ const SkillAdd: React.FC<SkillAddProps> = ({ skill }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (skill) {
-      await SkillService.updateSkill(skill._id, data).then((res) => {
+    if (social) {
+      await SocialService.updateSkill(social._id, data).then((res) => {
         if (Number(res.status) == 200) {
           Message.ToastMessage(
             "success",
@@ -47,9 +44,10 @@ const SkillAdd: React.FC<SkillAddProps> = ({ skill }) => {
         }
       });
     } else {
-      await SkillService.addSkill(data).then((res) => {
-        if (Number(res) === 201) {
-          navigate.back();
+      await SocialService.addSocialLink(data).then((res) => {
+        if (Number(res.status) === 201) {
+          console.log(res.data);
+          navigate.refresh();
         } else {
           navigate.refresh();
         }
@@ -61,10 +59,10 @@ const SkillAdd: React.FC<SkillAddProps> = ({ skill }) => {
     <>
       <BackIcon />
       <div className="container mx-auto md:w-1/2 p-4">
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 gap-6 p-6 md:w-1/2 mx-auto bg-gray-900 text-white rounded-lg shadow-md"
-        >
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          {!social && "Add Social Link"}
+        </h2>
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label className="mb-2 text-sm font-medium text-gray-300">
               Name:
@@ -73,37 +71,6 @@ const SkillAdd: React.FC<SkillAddProps> = ({ skill }) => {
               type="text"
               name="name"
               value={data.name}
-              onChange={handleChange}
-              required
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Level:
-            </label>
-            <select
-              name="level"
-              value={data.level}
-              onChange={handleChange}
-              required
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">Select Level</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
-              <option value="Expert">Expert</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Percentage:
-            </label>
-            <input
-              type="number"
-              name="percentage"
-              value={data.percentage}
               onChange={handleChange}
               className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
             />
@@ -122,26 +89,24 @@ const SkillAdd: React.FC<SkillAddProps> = ({ skill }) => {
           </div>
           <div className="flex flex-col">
             <label className="mb-2 text-sm font-medium text-gray-300">
-              Color:
+              Url:
             </label>
             <input
               type="text"
-              name="color"
-              value={data.color}
+              name="url"
+              value={data.url}
               onChange={handleChange}
               className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
             />
           </div>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold"
-          >
-            {skill ? "Update Skill" : "Add Skill"}
-          </button>
+          <div className="flex items-center justify-center mt-2">
+            <button type="submit" className="btn btn-outline-light">
+              {social ? "Update" : "Save"}
+            </button>
+          </div>
         </form>
       </div>
     </>
   );
 };
-
-export default SkillAdd;
+export default SocialAdd;

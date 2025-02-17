@@ -8,7 +8,7 @@ import {
   FaGlobe,
   FaMinusCircle,
 } from "react-icons/fa"; 
-import { ProjectService } from "../service/projectService";
+import { AdminProjectService } from "../service/projectService";
 import { useRouter } from "next/navigation";
 
 const ProjectComponent = ({ projects, setProjects }) => {
@@ -25,7 +25,7 @@ const ProjectComponent = ({ projects, setProjects }) => {
   };
 
   const onDelete = (id: any) => {
-    ProjectService.deleteProject(id).then((res) => {
+    AdminProjectService.deleteProject(id).then((res) => {
       if (res.status === 200) {
         const updatedProjects = projects.filter(
           (project) => project._id !== id
@@ -74,7 +74,7 @@ const ProjectComponent = ({ projects, setProjects }) => {
               {project.images.map((image: any, imgIndex: any) => (
                 <img
                   key={imgIndex}
-                  className="h-[450px] w-full object-cover rounded mb-2"
+                  className="w-full h-[300px]  object-cover rounded mb-2"
                   src={image}
                   alt={`${project.title} image ${imgIndex + 1}`}
                 />

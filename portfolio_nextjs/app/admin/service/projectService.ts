@@ -7,7 +7,7 @@ import {
 } from "../../api/api";
 import Message from "../../components/Message";
 
-export class ProjectService {
+export class AdminProjectService {
   static async addProject(data: any) {
     try {
       const response = await createProject(data).then((res) => {

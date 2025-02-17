@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import ProjectComponent from "../../components/ProjectComponent";
-import { ProjectService } from "../../service/projectService";
+import { AdminProjectService } from "../../service/projectService";
 import { FaPlusCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
@@ -9,11 +9,12 @@ const ProjectsDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useRouter();
+  
 
   const fetchProjects = useCallback(() => {
     try {
       setLoading(true);
-      ProjectService.getProjects()
+      AdminProjectService.getProjects()
         .then((res) => {
           setProjects(res.data);
           console.log(res);

@@ -54,7 +54,7 @@ const AdminSideBar = ({ onLogout }) => {
 
   return (
     <div
-      className={`h-screen bg-gray-900 pr-3  text-white transition-all duration-300 
+      className={`h-auto bg-gray-900 pr-3  text-white transition-all duration-300 
        ${open ? "w-36" : "w-16"}
         md:${open ? "w-40" : "w-16"}`}
       onMouseEnter={() => setOpen(true)}

@@ -45,7 +45,7 @@ export default function Home() {
           ></img>
           </div>
         </div>
-      <SkillsBanner size={5} />
+      <SkillsBanner size={8} />
       <Projects size={4} />
       <ContentsBanner size={4} />
       <AboutBanner />

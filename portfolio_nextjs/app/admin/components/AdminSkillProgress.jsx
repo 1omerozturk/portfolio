@@ -63,14 +63,15 @@ const AdminSkillProgress = ({ skills, setSkills }) => {
 
   return (
     <>
-      <h2 className="text-center">Skills</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 space-x-2 space-y-2">
+      {/* <h2 className="text-center">Skills</h2> */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pt-5">
         {skills.map((skill, index) => (
           <div
             key={index}
             className="bg-gradient-to-t from-indigo-400 to-white p-4 rounded-lg shadow-md space-y-6"
+            style={{ margin: 0, padding: '1rem' }}
           >
-            <div className=" float-right flex items-center justify-between space-x-2">
+            <div className="flex items-center justify-between md:justify-end space-x-2">
               <div className="text-sm">
                 <button
                   title="Düzenle"
@@ -101,9 +102,7 @@ const AdminSkillProgress = ({ skills, setSkills }) => {
             </div>
             <div className="w-full bg-gray-400 rounded-full h-4 mb-2">
               <div
-                className={`${getColor(
-                  progress[index].value
-                )} h-4 rounded-full transition-all duration-200`}
+                className={`${getColor(progress[index].value)} h-4 rounded-full transition-all duration-200`}
                 style={{ width: `${progress[index].value}%` }}
               ></div>
             </div>
@@ -112,6 +111,7 @@ const AdminSkillProgress = ({ skills, setSkills }) => {
       </div>
     </>
   );
+  
 };
 
 export default AdminSkillProgress;

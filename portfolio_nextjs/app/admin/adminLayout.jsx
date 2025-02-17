@@ -39,10 +39,10 @@ const AdminLayout = ({ children }) => {
   }
 
   return auth ? (
-    <div className="flex h-screen text-white">
+    <div className="flex h-auto min-h-screen text-white">
       <AdminSideBar onLogout={handleLogout} />
       {/* Logout fonksiyonunu Sidebar'a geç */}
-      <div className="flex-1 p-6 bg-indigo-800 overflow-auto">{children}</div>
+      <div className="flex-1 p-2 bg-indigo-800">{children}</div>
     </div>
   ) : (
     <Login />

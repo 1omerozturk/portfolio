@@ -78,6 +78,7 @@ exports.createSocialLinks = async (req, res) => {
   try {
     const socialLinks = new SocialLinks(req.body)
     await socialLinks.save()
+    console.log(socialLinks)
     res.status(201).json(socialLinks)
   } catch (error) {
     res.status(500).json({ message: error.message })
