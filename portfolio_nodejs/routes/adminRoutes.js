@@ -2,7 +2,6 @@ const express = require('express')
 const admin = require('../middleware/admin')
 const {
   updatePersonalInfo,
-  updateSocialLinks,
   updateEducations,
   updateExperiences,
   updateSkills,
@@ -27,6 +26,7 @@ const {
   createProjects,
   updateProjects,
   deleteProjects,
+  updateSocialLinks,
   // updatePassword
 } = require('../controller/adminController')
 
@@ -38,13 +38,13 @@ router.get('/admin', admin, getAdmin)
 // put routes
 // router.put('/update-password',updatePassword)
 router.put('/personal-info/:id', admin, updatePersonalInfo)
-router.put('/social-links/:id', admin, updateSocialLinks)
 router.put('/educations/:id', admin, updateEducations)
 router.put('/experiences/:id', admin, updateExperiences)
 router.put('/skills/:id', admin, updateSkills)
 router.put('/projects/:id', admin, updateProjects)
 router.put('/hobbies/:id', admin, updateHobbies)
 router.put('/languages/:id', admin, updateLanguages)
+router.put('/social-links/:id', admin, updateSocialLinks)
 
 // delete routes
 router.delete('/personal-info/:id', admin, deletePersonalInfo)

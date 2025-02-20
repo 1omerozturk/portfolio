@@ -1,13 +1,6 @@
 "use client";
 
 import {
-  FaTwitter,
-  FaFacebook,
-  FaInstagram,
-  FaYoutube,
-  FaGithub,
-  FaLinkedin,
-  FaShareAlt,
   FaPlusCircle,
   FaEdit,
   FaTrash,
@@ -18,6 +11,7 @@ import Loading from "../../components/Loading";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Message from "../../../components/Message";
+import { DynamicIcon } from "../../../components/DynamicIcon";
 
 const AdminSocialLinks = () => {
   const navigate = useRouter();
@@ -33,7 +27,6 @@ const AdminSocialLinks = () => {
     try {
       const response = await SocialService.getSocials()
         .then((res) => {
-          console.log(res.data);
           return res.data;
         })
         .finally(() => {
@@ -63,103 +56,83 @@ const AdminSocialLinks = () => {
     }
   };
 
-  const DynamicIcon = ({ iconName }) => {
-    if (!iconName) return null;
-
-    const lib = iconName.trim();
-    const iconLib = {
-      Twitter: <FaTwitter className="text-2xl text-sky-500" />,
-      Facebook: <FaFacebook className="text-2xl text-blue-500" />,
-      Instagram: <FaInstagram className="text-2xl text-rose-500" />,
-      YouTube: <FaYoutube className="text-2xl text-red-500" />,
-      GitHub: <FaGithub className="text-2xl text-slate-600" />,
-      LinkedIn: <FaLinkedin className="text-2xl text-blue-500" />,
-    };
-    const IconComponent = iconLib[lib];
-
-    return IconComponent ? IconComponent : null;
-  };
-
   return (
-    
-        <div className="flex flex-col">
-      <Link href={"social/add"} className="text-end">
+    <div className="flex flex-col">
+      <Link title="Add" href={"social/add"} className="text-end">
         <button className="btn btn-outline-light mb-2">
           <FaPlusCircle className="text-xl" />
         </button>
       </Link>
-        {loading ? (
-          <Loading />
-        ) : (
-          <>
-            {/* <div className="flex items-center justify-center text-6xl mb-3 font-extrabold bg-gradient-to-r from-blue-500 via-lime-500 to-orange-500 bg-clip-text text-transparent">
-              Social
-            </div> */}
-            <div className="flex items-center justify-center">
-              <table className="table w-fit table-dark table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      <button disabled className="btn  btn-sm btn-success">
-                        Name
-                      </button>
-                    </th>
-                    <th>
-                      <button disabled className="btn btn-sm btn-info">
-                        Icon
-                      </button>
-                    </th>
-                    <th>
-                      <button disabled className="btn btn-sm btn-warning">
-                        Edit
-                      </button>
-                    </th>
-                    <th>
-                      <button disabled className="btn btn-sm btn-danger">
-                        Delete
-                      </button>
-                    </th>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex items-center justify-center">
+            <table className="table w-fit table-dark table-striped table-hover text-center">
+              <thead>
+                <tr>
+                  <th>
+                    <button disabled className="btn  btn-sm btn-success">
+                      Name
+                    </button>
+                  </th>
+                  <th>
+                    <button disabled className="btn btn-sm btn-info">
+                      Icon
+                    </button>
+                  </th>
+                  <th>
+                    <button disabled className="btn btn-sm btn-warning">
+                      Edit
+                    </button>
+                  </th>
+                  <th>
+                    <button disabled className="btn btn-sm btn-danger">
+                      Delete
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {socialLinks?.map((link, index) => (
+                  <tr key={index}>
+                    <td>{link.name}</td>
+                    <td>
+                      <Link
+                        className="flex items-center justify-center"
+                        href={link.url}
+                        target="_blank"
+                      >
+                        <DynamicIcon iconName={link.icon} />
+                      </Link>
+                    </td>
+                    
+                    <td>
+                      {" "}
+                      <button
+                        onClick={() => onEdit(link._id)}
+                        className="btn btn-outline-warning"
+                      >
+                        <FaEdit />
+                      </button>{" "}
+                    </td>
+                    <td>
+                      {" "}
+                      <button
+                        onClick={() => onDelete(link._id)}
+                        className="btn btn-outline-danger"
+                      >
+                        <FaTrash />
+                      </button>{" "}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="">
-                  {socialLinks?.map((link, index) => (
-                    <tr key={index}>
-                      <td>{link.name}</td>
-                      <td>
-                        <a
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <DynamicIcon iconName={link.name} />
-                        </a>
-                      </td>
-                      <td>
-                        {" "}
-                        <button
-                          onClick={() => onEdit(link._id)}
-                          className="btn btn-outline-warning"
-                        >
-                          <FaEdit />
-                        </button>{" "}
-                      </td>
-                      <td>
-                        {" "}
-                        <button
-                          onClick={() => onDelete(link._id)}
-                          className="btn btn-outline-danger"
-                        >
-                          <FaTrash />
-                        </button>{" "}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        )}
-      </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

@@ -1,8 +1,6 @@
 import axios from "axios";
-const api: string = "http://localhost:5050/api";
-// const api: string = "https://portfolio-m5zz.onrender.com/api";
-
-
+// const api: string = "http://localhost:5050/api";
+const api: string = "https://portfolio-m5zz.onrender.com/api";
 
 // User Log check function
 export const getToken = () => {
@@ -170,32 +168,32 @@ export const createLanguages = async (data: any) => {
 export const updatePersonalInfo = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/personal-info/${id}`,
-    getAdminConfig(),
-    data
+    data,
+    getAdminConfig()
   );
 };
 
 export const updateSocialLinks = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/social-links/${id}`,
-    getAdminConfig(),
-    data
+    data,
+    getAdminConfig()
   );
 };
 
 export const updateEducations = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/educations/${id}`,
-    getAdminConfig(),
-    data
+    data,
+    getAdminConfig()
   );
 };
 
 export const updateExperiences = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/experiences/${id}`,
-    getAdminConfig(),
-    data
+    data,
+    getAdminConfig()
   );
 };
 
@@ -214,8 +212,8 @@ export const updateHobbies = async (id: any, data: any) => {
 export const updateLanguages = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/languages/${id}`,
-    getAdminConfig(),
-    data
+    data,
+    getAdminConfig()
   );
 };
 

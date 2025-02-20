@@ -13,10 +13,10 @@ export class SocialService {
       const response = await createSocialLinks(data).then((res) => {
         if (res?.status == 201) {
           Message.ToastMessage("success", data.name + " eklendi.");
-          return response;
+          return res;
         } else {
           Message.ToastMessage("warning", "Bir hata oluştu tekrar deneyin.");
-          return response;
+          return res;
         }
       });
       return response;
@@ -53,7 +53,7 @@ export class SocialService {
       Message.ToastMessage("error", error.response.data.message);
     }
   }
-  static async updateSkill(data: any, id: any) {
+  static async updateSocialLink(id:any, data:any) {
     try {
       return await updateSocialLinks(id, data).then((res) => {
         return res;

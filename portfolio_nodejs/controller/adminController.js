@@ -182,12 +182,13 @@ exports.updatePersonalInfo = async (req, res) => {
 
 exports.updateSocialLinks = async (req, res) => {
   try {
-    const socialLinks = await SocialLinks.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true },
-    )
-    res.status(200).json(socialLinks)
+    const id = req.params.id
+    const data = req.body
+    const socialLink = await SocialLinks.findByIdAndUpdate(id, data, {
+      new: true,
+    })
+    res.status(200).json(socialLink)
+    console.log(socialLink)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

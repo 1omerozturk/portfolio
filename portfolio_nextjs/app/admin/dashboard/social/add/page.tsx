@@ -31,27 +31,52 @@ const SocialAdd: React.FC<SocialAddProps> = ({ social }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (social) {
-      await SocialService.updateSkill(social._id, data).then((res) => {
-        if (Number(res.status) == 200) {
-          Message.ToastMessage(
-            "success",
-            data.name + " başarıyla güncellendi."
-          );
-          navigate.back();
-        } else {
-          Message.ToastMessage("error", "Bir hata oluştu");
-          navigate.refresh();
-        }
-      });
+      console.log(social);
+      try {
+        await SocialService.updateSocialLink(social._id, data).then((res) => {
+          if (res.status == 200) {
+            Message.ToastMessage(
+              "success",
+              data.name + " updated successfully."
+            );
+            navigate.back();
+          } else {
+            Message.ToastMessage(
+              "error",
+              data.name + " An error occured. Try again."
+            );
+            navigate.refresh();
+          }
+        });
+      } catch (error) {
+        Message.ToastMessage(
+          "error",
+          data.name + " An error occured. Try again."
+        );
+        console.error(error.message);
+      }
     } else {
-      await SocialService.addSocialLink(data).then((res) => {
-        if (Number(res.status) === 201) {
-          console.log(res.data);
-          navigate.refresh();
-        } else {
-          navigate.refresh();
-        }
-      });
+      try {
+        await SocialService.addSocialLink(data).then((res) => {
+          console.log(res);
+          if (Number(res.status) === 201) {
+            Message.ToastMessage(
+              "success",
+              data.name + " created successfully."
+            );
+            navigate.back();
+          } else {
+            Message.ToastMessage("error", "Bir hata oluştu");
+            navigate.refresh();
+          }
+        });
+      } catch (error) {
+        Message.ToastMessage(
+          "error",
+          data.name + " An error occured. Try again."
+        );
+        console.error(error.message);
+      }
     }
   };
 
