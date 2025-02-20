@@ -42,7 +42,7 @@ const ProjectComponent = ({ projects, setProjects }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:p-6 p-1 rounded-lg shadow-sm">
       {projects.map((project:any, index:any) => (
-        <div key={index} className="p-4 bg-white rounded-lg shadow-lg">
+        <div key={index} className="p-4 bg-slate-500 rounded-lg shadow-lg">
           <div className="flex float-right space-x-1 text-xl">
             <button
               title="Düzenle"

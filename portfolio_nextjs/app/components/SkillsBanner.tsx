@@ -5,6 +5,7 @@ import SkillProgress from "./SkillProgress";
 import Link from "next/link";
 import { SkillService } from "../service/skillService";
 import Loading from "../admin/components/Loading";
+import { skillsData } from "../models/skills";
 
 interface PageProps {
   size?: number;
@@ -20,17 +21,23 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
       await SkillService.getSkills()
         .then((res) => {
           setSkills(res.data);
+          console.log(res.data);
         })
         .finally(() => {
           setLoading(false);
         });
+      console.log(skillsData);
     } catch (error) {
       console.error(error?.message);
     }
   };
 
   useEffect(() => {
-    fetchSkills();
+    if (loading) {
+      setSkills(skillsData);
+    } else {
+      fetchSkills();
+    }
   }, [skills.length]);
 
   return (

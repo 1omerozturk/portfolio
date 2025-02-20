@@ -43,7 +43,7 @@ const ProjectsDashboard = () => {
           className="btn btn-outline-light w-fit text-center"
         >
           <FaPlusCircle className="md:text-2xl" />
-          <div>Ekle</div>
+          <div>Add</div>
         </button>
       </div>
       <ProjectComponent projects={projects} setProjects={setProjects} />

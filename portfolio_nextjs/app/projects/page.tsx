@@ -7,6 +7,7 @@ import Loading from "../admin/components/Loading";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import defaultProjects from "../models/projects.json";
 
 interface ProjectsProps {
   size?: number; // İhtiyaca göre uygun türü belirleyin
@@ -43,7 +44,11 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
   };
 
   useEffect(() => {
-    fetchProjects();
+    if (loading) {
+      setProjects(defaultProjects);
+    } else {
+      fetchProjects();
+    }
   }, []);
 
   /*   const projects = [
@@ -93,7 +98,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
         ) : (
           <>
             {size &&
-              projects.slice(0, size).map((project,key:any) => (
+              projects.slice(0, size).map((project, key: any) => (
                 <div
                   key={key}
                   className="smooth-border text-center cursor-pointer p-2"

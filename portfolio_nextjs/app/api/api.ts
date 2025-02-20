@@ -1,20 +1,8 @@
 import axios from "axios";
-// const api: string = "http://localhost:5050/api";
-const api: string = "https://portfolio-m5zz.onrender.com/api";
+const api: string = "http://localhost:5050/api";
+// const api: string = "https://portfolio-m5zz.onrender.com/api";
 
-// Serverı canlı tutma:
-const pingServer = async () => {
-  try {
-    await axios.get(`${api}/user/skills`);
-    console.log("Sunucu canlı tutuluyor...");
-  } catch (error) {
-    console.error("Ping hatası: ", error);
-  }
-};
 
-// 10 dakikada bir ping atma
-
-setInterval(pingServer, 10 * 60 * 1000);
 
 // User Log check function
 export const getToken = () => {

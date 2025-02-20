@@ -39,13 +39,16 @@ const SkillsDashboard = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="grid grid-flow-row" >
-            <div onClick={newSkill} className="flex items-center justify-end gap-x-2">
-              <button className="btn btn-outline-light flex items-center justify-center">
-              <FaIcons.FaPlusCircle />
-              Ekle
-              </button>
-            </div>
+        <div className="" >
+             <div className="text-end">
+                    <button
+                      onClick={newSkill}
+                      className="btn btn-outline-light w-fit text-center"
+                    >
+                      <FaIcons.FaPlusCircle className="md:text-2xl" />
+                      <div>Add</div>
+                    </button>
+                  </div>
          <AdminSkillProgress skills={skills} setSkills={setSkills} />
         </div>
       )}
