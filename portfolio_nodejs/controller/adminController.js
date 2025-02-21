@@ -4,6 +4,7 @@ const PersonalInfos = require('../models/personalInfo')
 const SocialLinks = require('../models/socialLinks')
 const Educations = require('../models/education')
 const Experiences = require('../models/experiences')
+const Contents = require('../models/contents')
 const Skills = require('../models/skills')
 const Projects = require('../models/projects')
 const Certifications = require('../models/certifications')
@@ -100,6 +101,16 @@ exports.createExperiences = async (req, res) => {
     const experiences = new Experiences(req.body)
     await experiences.save()
     res.status(201).json(experiences)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.createContents = async (req, res) => {
+  try {
+    const contents = new Contents(req.body)
+    await contents.save()
+    res.status(201).json(contents)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
@@ -220,6 +231,17 @@ exports.updateExperiences = async (req, res) => {
   }
 }
 
+exports.updateContents = async (req, res) => {
+  try {
+    const content = await Contents.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    })
+    res.status(200).json(content)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 exports.updateSkills = async (req, res) => {
   try {
     const id = req.params.id
@@ -326,6 +348,15 @@ exports.deleteEducations = async (req, res) => {
 exports.deleteExperiences = async (req, res) => {
   try {
     await Experiences.findByIdAndDelete(req.params.id)
+    res.status(200).json({ message: 'Experiences deleted successfully' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.deleteContents = async (req, res) => {
+  try {
+    await Contents.findByIdAndDelete(req.params.id)
     res.status(200).json({ message: 'Experiences deleted successfully' })
   } catch (error) {
     res.status(500).json({ message: error.message })

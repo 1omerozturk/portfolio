@@ -36,13 +36,13 @@ export default function Home() {
             <SocialBanner />
           </div>
           <div className='size-24 sm:size-48 md:size-60'>
-          <img
+          {/* <img
           height={200}
           width={200}
           alt='Ömer Öztürk'
           className="ring-4 drop-shadow-2xl animate-bounce-2 bg-red-500 rounded-full mt-16"
           src="omer ozturk.webp"
-          ></img>
+          ></img> */}
           </div>
         </div>
       <AboutBanner />

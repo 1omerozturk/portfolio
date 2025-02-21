@@ -27,7 +27,6 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
         .finally(() => {
           setLoading(false);
         });
-      console.log(defaultSkillsData);
     } catch (error) {
       console.error(error?.message);
     }

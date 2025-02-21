@@ -23,7 +23,7 @@ const Navbar = () => {
               <i className="ml-2 pi pi-folder-open text-orange-400"></i>          
           </a>
           <a className={`${pathName=="/contents"?'active':''}`} href="/contents">Contents
-              <i className="ml-2 pi pi-folder-open text-fuchsia-400"></i>          
+              <i className="ml-2 pi pi-comment text-slate-400"></i>          
           </a>
           <a className={`${pathName=="/experiences"?'active':''}`} href="/experiences">Experiences
             <i className="ml-2 pi pi-slack text-sky-400"></i>
@@ -43,7 +43,7 @@ const Navbar = () => {
           name="toggle"
             onClick={toggleMenu}
             className="text-gray-300 hover:text-white focus:outline-none"
-          >
+          >{" "}
             <i className={`pi ${isOpen?'pi-times':'pi-bars'} text-2xl`}></i>
           </button>
         </div>

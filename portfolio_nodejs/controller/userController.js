@@ -8,6 +8,7 @@ const Certifications = require('../models/certifications')
 const Languages = require('../models/languages')
 const References = require('../models/references')
 const Hobbies = require('../models/hobbies')
+const Contents = require('../models/contents')
 
 exports.getPersonalInfo = async (req, res) => {
   try {
@@ -40,6 +41,14 @@ exports.getExperiences = async (req, res) => {
   try {
     const experiences = await Experiences.find()
     res.status(200).json(experiences)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+exports.getContents = async (req, res) => {
+  try {
+    const contents = await Contents.find()
+    res.status(200).json(contents)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
@@ -136,6 +145,16 @@ exports.getOneExperiences = async (req, res) => {
     const id = req.params.id
     const experiences = await Experiences.findById(id)
     res.status(200).json(experiences)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getOneContents = async (req, res) => {
+  try {
+    const id = req.params.id
+    const contents = await Contents.findById(id)
+    res.status(200).json(contents)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

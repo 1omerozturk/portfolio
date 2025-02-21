@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import DefaultData from "../models/socialLinks";
+
 import { SocialService } from "../service/SocialService";
 import { DynamicIcon } from "./DynamicIcon";
 import Loading from "../components/Loading";
+import { defaultSocialLinks } from "../models/socialLinks";
 
 const SocialBanner = () => {
   const [socialLinks, setSocialLinks] = useState(null);
@@ -17,16 +18,15 @@ const SocialBanner = () => {
   const fetchSocialLinks = async () => {
     setLoading(false);
     try {
-      setSocialLinks(DefaultData);
-      const response = await SocialService.getSocials()
+      setSocialLinks(defaultSocialLinks);
+      await SocialService.getSocials()
         .then((res) => {
           console.log(res.data);
-          return res.data;
+          setSocialLinks(res.data);
         })
         .finally(() => {
           setLoading(false);
         });
-      setSocialLinks(response);
     } catch (error) {
       console.error("Error fetching social links", error);
       setLoading(false);

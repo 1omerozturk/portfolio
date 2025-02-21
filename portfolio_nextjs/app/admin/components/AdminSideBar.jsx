@@ -11,6 +11,7 @@ import {
   FaCode,
   FaAward,
   FaSpaceShuttle,
+  FaMediumM,
 } from "react-icons/fa";
 
 const AdminSideBar = ({ onLogout }) => {
@@ -44,6 +45,11 @@ const AdminSideBar = ({ onLogout }) => {
       name: "Skills",
       path: "/admin/dashboard/skills",
       icon: <FaCode className="text-lime-500" />,
+    },
+    {
+      name: "Contents",
+      path: "/admin/dashboard/contents",
+      icon: <FaMediumM className="text-slate-300" />,
     },
     {
       name: "Certificates",

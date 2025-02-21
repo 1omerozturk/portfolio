@@ -64,6 +64,10 @@ export const getExperiences = async () => {
   return await axios.get(`${api}/user/experiences`);
 };
 
+export const getContents = async () => {
+  return await axios.get(`${api}/user/contents`);
+};
+
 export const getSkills = async () => {
   return await axios.get(`${api}/user/skills`);
 };
@@ -102,6 +106,10 @@ export const getOneExperiences = async (id: any) => {
   return await axios.get(`${api}/user/experiences/${id}`);
 };
 
+export const getOneContent = async (id: any) => {
+  return await axios.get(`${api}/user/contents/${id}`);
+};
+
 export const getOneSkills = async (id: any) => {
   return await axios.get(`${api}/user/skills/${id}`);
 };
@@ -137,6 +145,10 @@ export const createEducations = async (data: any) => {
 
 export const createExperiences = async (data: any) => {
   return await axios.post(`${api}/admin/experiences`, data, getAdminConfig());
+};
+
+export const createContents = async (data: any) => {
+  return await axios.post(`${api}/admin/contents`, data, getAdminConfig());
 };
 
 export const createSkills = async (data: any) => {
@@ -197,6 +209,10 @@ export const updateExperiences = async (id: any, data: any) => {
   );
 };
 
+export const updateContents = async (id: any, data: any) => {
+  return await axios.put(`${api}/admin/contents/${id}`, data, getAdminConfig());
+};
+
 export const updateProject = async (id: any, data: any) => {
   return await axios.put(`${api}/admin/projects/${id}`, data, getAdminConfig());
 };
@@ -238,6 +254,10 @@ export const deleteEducations = async (id: any) => {
 
 export const deleteExperiences = async (id: any) => {
   return await axios.delete(`${api}/admin/experiences/${id}`, getAdminConfig());
+};
+
+export const deleteContents = async (id: any) => {
+  return await axios.delete(`${api}/admin/contents/${id}`, getAdminConfig());
 };
 
 export const deleteProjects = async (id: any) => {

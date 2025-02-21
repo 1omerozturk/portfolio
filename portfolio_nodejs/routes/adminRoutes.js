@@ -4,6 +4,7 @@ const {
   updatePersonalInfo,
   updateEducations,
   updateExperiences,
+  updateContents,
   updateSkills,
   updateHobbies,
   updateLanguages,
@@ -11,6 +12,7 @@ const {
   deleteSocialLinks,
   deleteEducations,
   deleteExperiences,
+  deleteContents,
   deleteSkills,
   deleteHobbies,
   deleteLanguages,
@@ -18,6 +20,7 @@ const {
   createSocialLinks,
   createEducations,
   createExperiences,
+  createContents,
   createSkills,
   createHobbies,
   createLanguages,
@@ -40,6 +43,7 @@ router.get('/admin', admin, getAdmin)
 router.put('/personal-info/:id', admin, updatePersonalInfo)
 router.put('/educations/:id', admin, updateEducations)
 router.put('/experiences/:id', admin, updateExperiences)
+router.put('/contents/:id', admin, updateContents)
 router.put('/skills/:id', admin, updateSkills)
 router.put('/projects/:id', admin, updateProjects)
 router.put('/hobbies/:id', admin, updateHobbies)
@@ -51,6 +55,7 @@ router.delete('/personal-info/:id', admin, deletePersonalInfo)
 router.delete('/social-links/:id', admin, deleteSocialLinks)
 router.delete('/educations/:id', admin, deleteEducations)
 router.delete('/experiences/:id', admin, deleteExperiences)
+router.delete('/contents/:id', admin, deleteContents)
 router.delete('/skills/:id', admin, deleteSkills)
 router.delete('/projects/:id', admin, deleteProjects)
 router.delete('/hobbies/:id', admin, deleteHobbies)
@@ -63,6 +68,7 @@ router.post('/personal-info', admin, createPersonalInfo)
 router.post('/social-links', admin, createSocialLinks)
 router.post('/educations', admin, createEducations)
 router.post('/experiences', admin, createExperiences)
+router.post('/contents', admin, createContents)
 router.post('/skills', admin, createSkills)
 router.post('/hobbies', admin, createHobbies)
 router.post('/languages', admin, createLanguages)
