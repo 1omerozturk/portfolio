@@ -1,8 +1,6 @@
-[
+export const defaultProjects=[
   {
-  "_id": {
-    "$oid": "67b0e22eedaaa56ce9d27771"
-  },
+  "_id": "67b0e22eedaaa56ce9d27771",
   "title": "Maçtopik",
   "description": "Türkiye Futbol Süper Lig hakkında bilgi sağlayan Nodejs ve Kotlin, Jetpack Compose ile geliştirdiğim bir mobil uygulama.",
   "technologies": [
@@ -23,9 +21,7 @@
   "type": "mobile"
 },
 {
-  "_id": {
-    "$oid": "67b0e94ee6cafe020609d6a4"
-  },
+  "_id": "67b0e94ee6cafe020609d6a4",
   "title": "Wordyy",
   "description": "İngilizce öğrenme uygulaması, içerisinde Quiz, Çeviri, Kelime kartları kişiye özel Kelime listeleri olan ve kullanıcı girişi, kayıt ve yapay zeka ile sürekli güncellenen kartlar mevcuttur.",
   "type": "web",
@@ -62,9 +58,7 @@
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67b2f7595fc8998a38ae9b66"
-  },
+  "_id": "67b2f7595fc8998a38ae9b66",
   "title": "Pomemetre",
   "description": "#Pomemetre 📱 adını verdiğim Polislik 👮‍♂️ mesleği için sınavlara hazırlık sürecinde yardımcı olacak bir uygulama geliştirdim. ",
   "type": "mobile",
@@ -86,9 +80,7 @@
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67b746da77cc87e140798a5d"
-  },
+  "_id":  "67b746da77cc87e140798a5d",
   "title": "Filmss",
   "description": "The film website for responsive design for mobile and Desktop. ",
   "type": "web",

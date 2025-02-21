@@ -1,7 +1,5 @@
-export const skillsData=[{
-  "_id": {
-    "$oid": "67adffd61bd9adef0c3c19e9"
-  },
+export const defaultSkillsData=[{
+  "_id":"67adffd61bd9adef0c3c19e9",
   "name": "HTML",
   "level": "Intermediate",
   "percentage": 60,
@@ -10,9 +8,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67ae00781bd9adef0c3c1a09"
-  },
+  "_id":"67ae00781bd9adef0c3c1a09",
   "name": "Node.js",
   "level": "Expert",
   "percentage": 90,
@@ -21,9 +17,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67ae00a41bd9adef0c3c1a21"
-  },
+  "_id": "67ae00a41bd9adef0c3c1a21",
   "name": "CSS & TailwindCSS",
   "level": "Intermediate",
   "percentage": 60,
@@ -32,9 +26,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67ae00fc1bd9adef0c3c1a39"
-  },
+  "_id": "67ae00fc1bd9adef0c3c1a39",
   "name": "Next.js",
   "level": "Intermediate",
   "percentage": 60,
@@ -43,9 +35,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67ae01231bd9adef0c3c1a51"
-  },
+  "_id": "67ae01231bd9adef0c3c1a51",
   "name": "React",
   "level": "Advanced",
   "percentage": 90,
@@ -54,9 +44,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67ae01401bd9adef0c3c1a69"
-  },
+  "_id": "67ae01401bd9adef0c3c1a69",
   "name": "Python",
   "level": "Advanced",
   "percentage": 80,
@@ -65,9 +53,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67ae01641bd9adef0c3c1a81"
-  },
+  "_id":"67ae01641bd9adef0c3c1a81",
   "name": ".NET",
   "level": "Advanced",
   "percentage": 85,
@@ -76,9 +62,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67ae01861bd9adef0c3c1a99"
-  },
+  "_id":"67ae01861bd9adef0c3c1a99",
   "name": "Kotlin",
   "level": "Advanced",
   "percentage": 80,
@@ -87,9 +71,7 @@ export const skillsData=[{
   "__v": 0
 },
 {
-  "_id": {
-    "$oid": "67b60b7f03ffff84c0eb7038"
-  },
+  "_id":  "67b60b7f03ffff84c0eb7038",
   "name": "PHP",
   "level": "Beginner",
   "percentage": 10,

@@ -45,10 +45,10 @@ export default function Home() {
           ></img>
           </div>
         </div>
-      <SkillsBanner size={8} />
+      <AboutBanner />
+      <SkillsBanner size={4} />
       <Projects size={4} />
       <ContentsBanner size={4} />
-      <AboutBanner />
       <Footer/>
     </div>
   )

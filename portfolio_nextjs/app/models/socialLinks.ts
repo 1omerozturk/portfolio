@@ -1,4 +1,4 @@
-[
+export const defaultSocialLinks=[
     {
         "_id": "67b3a19c080ada78504dfa53",
         "name": "LinkedIn",

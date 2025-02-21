@@ -4,8 +4,8 @@ import { FaCode } from "react-icons/fa";
 import SkillProgress from "./SkillProgress";
 import Link from "next/link";
 import { SkillService } from "../service/skillService";
-import Loading from "../admin/components/Loading";
-import { skillsData } from "../models/skills";
+import { defaultSkillsData } from "../models/skills";
+import Loading from "./Loading";
 
 interface PageProps {
   size?: number;
@@ -13,11 +13,12 @@ interface PageProps {
 
 const SkillsBanner: React.FC<PageProps> = ({ size }) => {
   const [skills, setSkills] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchSkills = async () => {
+    setLoading(false);
     try {
-      setLoading(true);
+      setSkills(defaultSkillsData);
       await SkillService.getSkills()
         .then((res) => {
           setSkills(res.data);
@@ -26,18 +27,14 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
         .finally(() => {
           setLoading(false);
         });
-      console.log(skillsData);
+      console.log(defaultSkillsData);
     } catch (error) {
       console.error(error?.message);
     }
   };
 
   useEffect(() => {
-    if (loading) {
-      setSkills(skillsData);
-    } else {
-      fetchSkills();
-    }
+    fetchSkills();
   }, [skills.length]);
 
   return (
@@ -46,7 +43,7 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
         <FaCode className="text-4xl mx-auto mb-3 text-slate-700" />
         <div className="space-y-2 gap-4">
           {loading ? (
-            <Loading />
+            <Loading color={"pink"} />
           ) : (
             <SkillProgress skills={size ? skills.slice(0, size) : skills} />
           )}

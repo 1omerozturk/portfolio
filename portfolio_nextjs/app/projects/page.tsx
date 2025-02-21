@@ -3,11 +3,12 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaGithub, FaGlobe, FaProjectDiagram } from "react-icons/fa";
 import { ProjectService } from "../service/projectService";
-import Loading from "../admin/components/Loading";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import defaultProjects from "../models/projects.json";
+
+import Loading from "../components/Loading";
+import { defaultProjects } from "../models/projects";
 
 interface ProjectsProps {
   size?: number; // İhtiyaca göre uygun türü belirleyin
@@ -15,7 +16,7 @@ interface ProjectsProps {
 
 const Projects: React.FC<ProjectsProps> = ({ size }) => {
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const settings = {
     dots: true,
@@ -29,8 +30,9 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
   };
 
   const fetchProjects = async () => {
+    setLoading(false);
     try {
-      setLoading(true);
+      setProjects(defaultProjects);
       await ProjectService.getProjects()
         .then((res) => {
           setProjects(res.data);
@@ -44,11 +46,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
   };
 
   useEffect(() => {
-    if (loading) {
-      setProjects(defaultProjects);
-    } else {
-      fetchProjects();
-    }
+    fetchProjects();
   }, []);
 
   /*   const projects = [
@@ -94,7 +92,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
       <FaProjectDiagram className="text-4xl mx-auto mt-4 text-amber-500" />
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
         {loading ? (
-          <Loading />
+          <Loading color={"orange"} />
         ) : (
           <>
             {size &&
@@ -132,7 +130,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                     <div className="flex items-center justify-between space-x-4">
                       {project.repoLink && (
                         <a
-                          href={project.repoLink}
+                          href={project?.repoLink}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center text-gray-700 hover:text-gray-900 text-sm"
@@ -142,7 +140,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                       )}
                       {project.liveDemoLink && (
                         <a
-                          href={project.liveDemoLink}
+                          href={project?.liveDemoLink}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center text-sky-500 hover:text-sky-700 text-sm"
@@ -173,7 +171,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                   <h2>{project.title}</h2>
                   <p>{project.description}</p>
                   <a
-                    href={project.link}
+                    href={project?.link}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

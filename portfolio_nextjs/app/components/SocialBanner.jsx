@@ -1,25 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import DefaultData from "../models/socialLinks.json";
+import DefaultData from "../models/socialLinks";
 import { SocialService } from "../service/SocialService";
 import { DynamicIcon } from "./DynamicIcon";
+import Loading from "../components/Loading";
 
 const SocialBanner = () => {
   const [socialLinks, setSocialLinks] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (loading) {
-      setSocialLinks(DefaultData);
-    } else {
-      fetchSocialLinks();
-    }
+    fetchSocialLinks();
   }, []);
 
   const fetchSocialLinks = async () => {
+    setLoading(false);
     try {
-      setLoading(true);
+      setSocialLinks(DefaultData);
       const response = await SocialService.getSocials()
         .then((res) => {
           console.log(res.data);
@@ -36,23 +34,29 @@ const SocialBanner = () => {
   };
 
   return (
-    <div
-      className={`grid grid-flow-col w-fit sm:space-x-4 space-x-1 text-center mx-auto`}
-    >
-      {socialLinks?.map((social, index) => (
-        <a
-          key={index}
-          href={social.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-slate-200 transition duration-100 ease-in-out transform hover:scale-95 hover:text-black"
+    <>
+      {loading ? (
+        <Loading color={"green"} />
+      ) : (
+        <div
+          className={`grid grid-flow-col w-fit sm:space-x-4 space-x-1 text-center mx-auto`}
         >
-          <div className="p-2 w-fit rounded-full bg-indigo-200 hover:bg-indigo-700 shadow-md hover:shadow-lg transition duration-100 ease-in-out transform hover:scale-95">
-            <DynamicIcon iconName={social.icon} />
-          </div>
-        </a>
-      ))}
-    </div>
+          {socialLinks?.map((social, index) => (
+            <a
+              key={index}
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-200 transition duration-100 ease-in-out transform hover:scale-95 hover:text-black"
+            >
+              <div className="p-2 w-fit rounded-full bg-indigo-200 hover:bg-indigo-700 shadow-md hover:shadow-lg transition duration-100 ease-in-out transform hover:scale-95">
+                <DynamicIcon iconName={social.icon} />
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </>
   );
 };
 
