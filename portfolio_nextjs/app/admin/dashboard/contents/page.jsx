@@ -50,11 +50,13 @@ const ContentsDashboard = () => {
 
   return (
     <div className="flex flex-col">
-      <Link title="Add" href={"contents/add"} className="text-end">
-        <button className="btn btn-outline-light mb-2">
-          <FaPlusCircle className="text-xl" />
-        </button>
-      </Link>
+      <div className="flex justify-end">
+        <Link title="Add" href={"contents/add"} className="text-end">
+          <button className="btn btn-outline-light mb-2">
+            <FaPlusCircle className="text-xl" />
+          </button>
+        </Link>
+      </div>
       {loading ? (
         <Loading />
       ) : (

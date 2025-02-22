@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/admin/dashboard/social/edit/[id]/page.jsx"  ],
+, "app/admin/dashboard/social/edit/[id]/page.jsx", "app/admin/dashboard/educations/edit/[id]/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,10 +1,12 @@
-"use client";
+'use client'
 import React from 'react'
 import SkillsBanner from '../components/SkillsBanner'
 
 const Skills = () => {
   return (
-    <SkillsBanner />
+    <div>
+      <SkillsBanner />
+    </div>
   )
 }
 

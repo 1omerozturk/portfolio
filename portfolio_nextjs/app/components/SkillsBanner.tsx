@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaCode } from "react-icons/fa";
 import SkillProgress from "./SkillProgress";
 import Link from "next/link";
@@ -12,29 +12,23 @@ interface PageProps {
 }
 
 const SkillsBanner: React.FC<PageProps> = ({ size }) => {
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState(defaultSkillsData);
   const [loading, setLoading] = useState(true);
 
   const fetchSkills = async () => {
-    setLoading(false);
     try {
-      setSkills(defaultSkillsData);
-      await SkillService.getSkills()
-        .then((res) => {
-          setSkills(res.data);
-          console.log(res.data);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      const res = await SkillService.getSkills();
+      setSkills(res.data);
     } catch (error) {
       console.error(error?.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchSkills();
-  }, [skills.length]);
+  }, []);
 
   return (
     <div id="skillsBanner" className="skills-banner">

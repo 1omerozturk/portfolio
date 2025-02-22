@@ -18,7 +18,6 @@ export class SkillService {
           Message.ToastMessage("warning", "Bir hata oluştu tekrar deneyin.");
         }
       });
-      console.log(response);
       return response;
     } catch (error) {
       Message.ToastMessage("error", error.response.data.message);

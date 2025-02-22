@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  FaPlusCircle,
-  FaEdit,
-  FaTrash,
-} from "react-icons/fa";
+import { FaPlusCircle, FaEdit, FaTrash } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import { SocialService } from "../../service/socialService";
 import Loading from "../../components/Loading";
@@ -58,11 +54,13 @@ const AdminSocialLinks = () => {
 
   return (
     <div className="flex flex-col">
-      <Link title="Add" href={"social/add"} className="text-end">
-        <button className="btn btn-outline-light mb-2">
-          <FaPlusCircle className="text-xl" />
-        </button>
-      </Link>
+      <div className="flex justify-end">
+        <Link title="Add" href={"social/add"} className="text-end">
+          <button className="btn btn-outline-light mb-2">
+            <FaPlusCircle className="text-xl" />
+          </button>
+        </Link>
+      </div>
       {loading ? (
         <Loading />
       ) : (
@@ -106,7 +104,7 @@ const AdminSocialLinks = () => {
                         <DynamicIcon iconName={link.icon} />
                       </Link>
                     </td>
-                    
+
                     <td>
                       {" "}
                       <button
