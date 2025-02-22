@@ -13,7 +13,6 @@ interface PageProps {
 
 const SkillsBanner: React.FC<PageProps> = ({ size }) => {
   const [skills, setSkills] = useState(defaultSkillsData);
-  const [loading, setLoading] = useState(true);
 
   const fetchSkills = async () => {
     try {
@@ -21,8 +20,6 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
       setSkills(res.data);
     } catch (error) {
       console.error(error?.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -35,11 +32,7 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
       <div className="px-5 bg-slate-300 mx-auto p-4">
         <FaCode className="text-4xl mx-auto mb-3 text-slate-700" />
         <div className="space-y-2 gap-4">
-          {loading ? (
-            <Loading color={"pink"} />
-          ) : (
-            <SkillProgress skills={size ? skills.slice(0, size) : skills} />
-          )}
+          <SkillProgress skills={size ? skills.slice(0, size) : skills} />
           {size && (
             <div className="flex justify-center mt-3">
               <Link
