@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { EducationService } from "../service/educationService";
 import { FaDotCircle, FaGraduationCap, FaRegDotCircle } from "react-icons/fa";
 
@@ -42,13 +43,14 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
             key={index}
             className="flex flex-col md:flex-row rounded-lg drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6"
           >
-            {/* Institution Logo */}
-            <div className="md:w-1/4 flex items-center justify-center mb-6 md:mb-0">
-              <img
-                src={education.institutionLogo}
-                alt={education.institution}
-                className="w-32 h-32 md:w-40 md:h-40 object-contain rounded-full border-4 border-gray-100"
-              />
+           <div className="md:w-1/4 flex items-center justify-center mb-6 md:mb-0">
+           <Image
+                src={education?.institutionLogo}
+                alt={education?.institution}
+                width={200}
+                height={200}
+                className="object-contain rounded-full border-4 border-gray-900"/>
+            
             </div>
 
             {/* Education Details */}

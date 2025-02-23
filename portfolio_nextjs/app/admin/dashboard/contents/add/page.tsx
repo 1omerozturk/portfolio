@@ -31,9 +31,9 @@ const ContentAdd: React.FC<ContentAddProps> = ({ content }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (content) {
-      console.log(content);
       try {
         await ContentService.updateContents(content._id, data).then((res) => {
+          console.log(res)
           if (res.status == 200) {
             Message.ToastMessage(
               "success",

@@ -233,7 +233,9 @@ exports.updateExperiences = async (req, res) => {
 
 exports.updateContents = async (req, res) => {
   try {
-    const content = await Contents.findByIdAndUpdate(req.params.id, req.body, {
+    const id = req.params.id
+    const data = req.body
+    const content = await Contents.findByIdAndUpdate(id, data, {
       new: true,
     })
     res.status(200).json(content)

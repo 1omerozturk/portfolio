@@ -1,5 +1,6 @@
 "use client"
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -14,7 +15,8 @@ const Navbar = () => {
     <nav className="bg-gradient-to-bl to-black from-indigo-600 px-3 py-2">
       <div className="mx-auto nav-items flex justify-between items-center">
         <a id="#top" className={`flex items-center justify-center ${pathName=="/"?'active':''}`} href="/">
-          <img src="/omer ozturk.webp" alt="Ömer Öztürk" className="h-10 w-10 object-cover rounded-full mr-2" />
+        <Image src="/omer ozturk.webp" alt="Ömer Öztürk" width={40} height={40} className="object-cover rounded-full mr-2" />
+          {/* <img src="/omer ozturk.webp" alt="Ömer Öztürk" className="h-10 w-10 object-cover rounded-full mr-2" /> */}
           Ömer Öztürk
         </a>
         <div className="hidden nav-items  md:flex space-x-10">
