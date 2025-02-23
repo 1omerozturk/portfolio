@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FaMedium } from "react-icons/fa";
 import { ContentService } from "../service/contentService";
 import Loading from "./Loading";
+import Image from "next/image";
 
 interface ContentSizeProps {
   size?: number;
@@ -28,39 +29,6 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
     fetchData();
   }, []);
 
-  /*   const contents = [
-    {
-      title: "Title",
-      text: "Text",
-      image: "https://picsum.photos/200/300",
-      link: "https://www.example.com",
-    },
-    {
-      title: "Title",
-      text: "Text",
-      image: "https://picsum.photos/200/301",
-      link: "https://www.example.com",
-    },
-    {
-      title: "Title",
-      text: "Text",
-      image: "https://picsum.photos/200/302",
-      link: "https://www.example.com",
-    },
-    {
-      title: "Title",
-      text: "Text",
-      image: "https://picsum.photos/200/302",
-      link: "https://www.example.com",
-    },
-    {
-      title: "Title",
-      text: "Text",
-      image: "https://picsum.photos/200/302",
-      link: "https://www.example.com",
-    },
-  ]; */
-
   return (
     <>
       {loading ? (
@@ -75,12 +43,23 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
                   <div className="text-4xl" title={content.name}>
                     {content.name.slice(0, 15)}
                   </div>
-                  <img
-                    className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px]"
+
+                  <Image
                     src={content.image}
                     alt={content.name}
+                    width={300}
+                    height={300}
+                    className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px]"
                   />
-                  <Link href={content.link}>Read More</Link>
+                  <a
+                    title={content.name}
+                    key={index}
+                    href={content.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Read..
+                  </a>
                 </div>
               ))}
             {!size &&
@@ -92,12 +71,22 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
                   <div title={content.name} className="text-4xl">
                     {content.name.slice(0, 15)}
                   </div>
-                  <img
-                    className="bg-cover"
+
+                  <Image
                     src={content.image}
                     alt={content.name}
+                    width={300}
+                    height={300}
                   />
-                  <Link href={content.link}>Read More</Link>
+                  <a
+                    title={content.name}
+                    key={index}
+                    href={content.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Read..
+                  </a>
                 </div>
               ))}
           </div>

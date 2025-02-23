@@ -45,17 +45,18 @@ export class ContentService {
         return res;
       });
     } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+      Message.ToastMessage("error", error);
     }
   }
 
   static async updateContents(id: any, data: any) {
     try {
       return await updateContents(id, data).then((res) => {
+        console.log(res)
         return res;
       });
     } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+      Message.ToastMessage("error", error);
     }
   }
 

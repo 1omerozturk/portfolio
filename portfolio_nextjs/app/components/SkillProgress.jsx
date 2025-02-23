@@ -111,7 +111,7 @@ const SkillProgress = ({ skills }) => {
             <div className="md:text-2xl text-sm sm:text-xl flex items-center justify-between my-2 gap-x-3 font-semibold">
               {skill.name.split(" ")[0]}
               <div
-                className="bg-gradient-to-b from-white to-slate-500 flex items-center justify-center text-3xl rounded-full h-10 w-10"
+                className="bg-gradient-to-b from-white to-slate-500 flex items-center justify-center text-3xl rounded-full p-3"
                 style={{ color: skill.color }}
               >
                 <DynamicIcon iconName={skill.icon} />

@@ -34,7 +34,6 @@ const ContentsDashboard = () => {
       await ContentService.getContents()
         .then((res) => {
           setContents(res.data);
-          console.log(res);
         })
         .finally(() => {
           setLoading(false);
