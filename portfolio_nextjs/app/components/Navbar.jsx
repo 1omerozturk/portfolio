@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <nav className="bg-gradient-to-bl to-black from-indigo-600 px-3 py-2">
       <div className="mx-auto nav-items flex justify-between items-center">
-        <a className={`flex items-center justify-center ${pathName=="/"?'active':''}`} href="/">
+        <a id="#top" className={`flex items-center justify-center ${pathName=="/"?'active':''}`} href="/">
           <img src="/omer ozturk.webp" alt="Ömer Öztürk" className="h-10 w-10 object-cover rounded-full mr-2" />
           Ömer Öztürk
         </a>
@@ -22,8 +22,8 @@ const Navbar = () => {
           <a className={`${pathName=="/projects"?'active':''}`} href="/projects">Projects
               <i className="ml-2 pi pi-folder-open text-orange-400"></i>          
           </a>
-          <a className={`${pathName=="/contents"?'active':''}`} href="/contents">Contents
-              <i className="ml-2 pi pi-comment text-slate-400"></i>          
+          <a className={`block ${pathName=="/educations"?'active':''}`}  href="/educations">
+            Educations <i className="ml-2 pi pi-graduation-cap text-slate-100"></i>
           </a>
           <a className={`${pathName=="/experiences"?'active':''}`} href="/experiences">Experiences
             <i className="ml-2 pi pi-slack text-sky-400"></i>
@@ -54,10 +54,10 @@ const Navbar = () => {
             Skills <i className="ml-2 pi pi-code text-lime-400"></i>
           </a>
           <a className={`block ${pathName=="/projects"?'active':''}`}  href="/projects">
-            Projects <i className="ml-2 pi pi-folder-open text-orange-400"></i>
+            Projects <i className="ml-2 pi pi-microchip text-yellow-400"></i>
           </a>
-          <a className={`block ${pathName=="/contents"?'active':''}`}  href="/contents">
-            Contents <i className="ml-2 pi pi-medium text-orange-400"></i>
+          <a className={`block ${pathName=="/educations"?'active':''}`}  href="/educations">
+            Educations <i className="ml-2 pi pi-graduation-cap text-slate-100"></i>
           </a>
           <a className={`block ${pathName=="/experiences"?'active':''}`} href="/experiences">Experiences
             <i className="ml-2 pi pi-slack text-sky-400"></i>

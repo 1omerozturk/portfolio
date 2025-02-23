@@ -89,7 +89,9 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
 
   return (
     <div>
-      <FaProjectDiagram className="text-4xl mx-auto mt-4 text-amber-500" />
+      <div className="flex items-center justify-center text-4xl text-gray-800 mb-8 mt-2">
+        <i className="ml-2 pi pi-microchip text-yellow-400"></i>
+      </div>
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
         {loading ? (
           <Loading color={"orange"} />

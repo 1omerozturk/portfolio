@@ -5,7 +5,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
+import ScrollToTopButton from "./components/ScrollToTopButton";
+
 export default function RootLayout({ children }) {
+
   const metadata = {
     title: "Ömer Öztürk",
     description: "Ömer Öztürk",
@@ -33,12 +36,14 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
       </head>
       <body>
-        <main className="content">
-            <ToastContainer />
-            <Navbar />
-            {children}
-        </main>
-      </body>
+  <div id="top" /> {/* Buraya yeni anchor ekliyoruz */}
+  <main className="content">
+    <ToastContainer />
+    <Navbar/>
+    {children}
+    <ScrollToTopButton />
+  </main>
+</body>
     </html>
   );
 }

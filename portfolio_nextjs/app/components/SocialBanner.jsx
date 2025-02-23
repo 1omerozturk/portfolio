@@ -43,6 +43,7 @@ const SocialBanner = () => {
         >
           {socialLinks?.map((social, index) => (
             <a
+              title={social.name}
               key={index}
               href={social.url}
               target="_blank"

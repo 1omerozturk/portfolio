@@ -6,7 +6,10 @@ import * as SiIcons from "react-icons/si";
 const CircularProgressBar = ({ value }) => {
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (value / 100) * circumference;
+  const offset = circumference - (Number(value) / 100) * circumference;
+
+  // Eğer value undefined ise 0 kullan
+  const displayValue = value !== undefined ? value : 0;
 
   return (
     <div className="flex items-center justify-center">
@@ -24,7 +27,7 @@ const CircularProgressBar = ({ value }) => {
           cy="60"
           r={radius}
           strokeWidth="10"
-          stroke={getColor(value)}
+          stroke={getColor(displayValue)}
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -38,7 +41,7 @@ const CircularProgressBar = ({ value }) => {
           fontSize="20"
           fontWeight="bold"
         >
-          {`${value} `}
+          {`${displayValue} `}
         </text>
       </svg>
     </div>
@@ -46,24 +49,45 @@ const CircularProgressBar = ({ value }) => {
 };
 
 const SkillProgress = ({ skills }) => {
-  const [progress, setProgress] = useState(
-    skills.map((skill) => ({ name: skill.name, value: 0 }))
-  );
+  const [progress, setProgress] = useState([]);
+
+  // Skills değiştiğinde progress'i sıfırla
+  useEffect(() => {
+    setProgress(
+      skills?.map((skill) => ({
+        name: skill.name,
+        value: 0,
+      }))
+    );
+  }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress.map((p, index) => {
-          const targetPercentage = skills[index].percentage;
-          if (p.value < targetPercentage) {
+    let intervalId;
+
+    intervalId = setInterval(() => {
+      setProgress((prevProgress) => {
+        let allDone = true;
+        const newProgress = prevProgress.map((p, index) => {
+          const targetPercentage = Number(skills[index].percentage);
+          if (Number(p.value) < targetPercentage) {
+            allDone = false;
             return { ...p, value: Math.min(p.value + 1, targetPercentage) };
           }
-          return p; // Eğer hedef değere ulaşılmışsa olduğu gibi bırak
-        })
-      );
-    }, 50); // Hızını ayarlamak için burayı değiştirebilirsiniz
-    return () => clearInterval(interval); // Cleanup
+          return p;
+        });
+
+        if (allDone && intervalId) {
+          clearInterval(intervalId);
+        }
+        return newProgress;
+      });
+    }, 50);
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [skills]);
+  
 
   const DynamicIcon = ({ iconName }) => {
     if (!iconName) return null;
@@ -93,7 +117,9 @@ const SkillProgress = ({ skills }) => {
                 <DynamicIcon iconName={skill.icon} />
               </div>
             </div>
-            <CircularProgressBar value={progress[index]?.value} />
+            <CircularProgressBar
+              value={progress[index] ? progress[index].value : 0}
+            />
           </div>
         ))}
       </div>

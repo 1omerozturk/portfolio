@@ -5,11 +5,11 @@ import { FaMedium } from "react-icons/fa";
 import { ContentService } from "../service/contentService";
 import Loading from "./Loading";
 
-interface PageProps {
+interface ContentSizeProps {
   size?: number;
 }
 
-const ContentsBanner: React.FC<PageProps> = ({ size }) => {
+const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
   const [contents, setContents] = useState([]);
   const [loading, setLoading] = useState(true);
 
