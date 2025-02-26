@@ -20,6 +20,18 @@ const nextConfig = {
       },
       {
           protocol: 'https',
+          hostname: 'www.toyayazilim.com.tr',
+          port: '',
+          pathname: '**',
+      },
+      {
+          protocol: 'https',
+          hostname: 'pbs.twimg.com',
+          port: '',
+          pathname: '**',
+      },
+      {
+          protocol: 'https',
           hostname: 'img.notionusercontent.com',
           port: '',
           pathname: '**',

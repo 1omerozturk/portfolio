@@ -8,6 +8,7 @@ import Footer from './components/Footer'
 import SocialBanner from './components/SocialBanner'
 import Projects from './projects/page'
 import EducationsBanner from './components/EducationsBanner'
+import ExperiencesBanner from './components/ExperiencesBanner'
 
 export default function Home() {
   const handleDownload = () => {
@@ -36,6 +37,7 @@ export default function Home() {
         </div>
       </div>
       <EducationsBanner />
+      <ExperiencesBanner size={2} />
       <SkillsBanner size={4} />
       <Projects size={4} />
       <ContentsBanner size={4} />

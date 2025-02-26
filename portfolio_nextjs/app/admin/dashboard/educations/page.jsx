@@ -1,6 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { FaDotCircle, FaEdit, FaPlusCircle, FaRegDotCircle, FaTrash } from "react-icons/fa";
+import {
+  FaDotCircle,
+  FaEdit,
+  FaPlusCircle,
+  FaRegDotCircle,
+  FaTrash,
+} from "react-icons/fa";
 import Loading from "../../components/Loading";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -74,17 +80,7 @@ const EducationsDashboard = () => {
                     </button>
                   </th>
                   <th>
-                    <button disabled className="btn btn-sm btn-secondary">
-                      Degree
-                    </button>
-                  </th>
-                  <th>
-                    <button disabled className="btn btn-sm btn-secondary">
-                      Grade
-                    </button>
-                  </th>
-                  <th>
-                    <button disabled className="btn btn-sm btn-secondary">
+                    <button disabled className="btn  btn-sm btn-secondary">
                       Date
                     </button>
                   </th>
@@ -110,30 +106,34 @@ const EducationsDashboard = () => {
                         alt={education.institution}
                         className="h-28 w-28 bg-cover mx-auto"
                       />
-                    </td>
-                    <td>{education.degree}</td>
-                    <td>{education.grade}</td>
-                    <td>
                       <div className="flex flex-col text-center">
-                        <div className="grid grid-flow-col items-center justify-items-start">
+                        <em>{education.degree}</em>
+                        <em>{education.grade}</em>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex flex-col text-center gap-y-2">
+                        <div className="flex flex-row mx-auto justify-start items-center gap-x-3">
                           <FaRegDotCircle />
                           {FormatDate(education.startDate)}
                         </div>
-                        <div className="grid grid-flow-col items-center justify-items-start">
+                        <div className="flex flex-row mx-auto justify-start items-center gap-x-3">
                           <FaDotCircle />
-                          {FormatDate(education.endDate)}
+                          <div>{FormatDate(education.endDate)}</div>
                         </div>
                       </div>
                     </td>
 
                     <td>
                       {" "}
-                      <button
-                        onClick={() => onEdit(education._id)}
-                        className="btn btn-outline-warning"
-                      >
-                        <FaEdit />
-                      </button>{" "}
+                      <Link href={`educations/edit/${education._id}`}>
+                        <button
+                          onClick={() => onEdit(education._id)}
+                          className="btn btn-outline-warning"
+                        >
+                          <FaEdit />
+                        </button>{" "}
+                      </Link>
                     </td>
                     <td>
                       {" "}

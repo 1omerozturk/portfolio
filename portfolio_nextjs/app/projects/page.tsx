@@ -1,9 +1,11 @@
 "use client";
+
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaGithub, FaGlobe, FaProjectDiagram } from "react-icons/fa";
 import { ProjectService } from "../service/projectService";
 import Slider from "react-slick";
+import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -30,18 +32,15 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
   };
 
   const fetchProjects = async () => {
-    setLoading(false);
+    setLoading(true); // setLoading(false) yerine true olmalı
     try {
       setProjects(defaultProjects);
-      await ProjectService.getProjects()
-        .then((res) => {
-          setProjects(res.data);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      const res = await ProjectService.getProjects();
+      setProjects(res.data);
     } catch (error) {
       console.error(error?.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,151 +48,90 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
     fetchProjects();
   }, []);
 
-  /*   const projects = [
-    {
-      id: 1,
-      title: "Project 1",
-      description: "This is a description of project 1",
-      image: "https://picsum.photos/200/300",
-      link: "https://www.example.com",
-    },
-    {
-      id: 2,
-      title: "Project 2",
-      description: "This is a description of project 2",
-      image: "https://picsum.photos/200/301",
-      link: "https://www.example.com",
-    },
-    {
-      id: 3,
-      title: "Project 3",
-      description: "This is a description of project 3",
-      image: "https://picsum.photos/200/302",
-      link: "https://www.example.com",
-    },
-    {
-      id: 4,
-      title: "Project 4",
-      description: "This is a description of project 4",
-      image: "https://picsum.photos/200/303",
-      link: "https://www.example.com",
-    },
-    {
-      id: 5,
-      title: "Project 5",
-      description: "This is a description of project 5",
-      image: "https://picsum.photos/200/304",
-      link: "https://www.example.com",
-    },
-  ]; */
+  const displayedProjects = size ? projects.slice(0, size) : projects;
 
   return (
-    <div>
-      <div className="flex items-center justify-center text-4xl text-gray-800 mb-8 mt-2">
-        <i className="ml-2 pi pi-microchip text-yellow-400"></i>
+    <div className="p-8 shadow-lg">
+      <div className="flex items-center justify-center text-4xl text-white mb-8 mt-2">
+        <FaProjectDiagram className="text-black" />
       </div>
-      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 w-full items-center justify-between lg:grid-cols-3 xl:grid-cols-4  gap-5 space-x-2 px-3">
-        {loading ? (
-          <Loading color={"orange"} />
-        ) : (
-          <>
-            {size &&
-              projects.slice(0, size).map((project, key: any) => (
-                <div
-                  key={key}
-                  className="smooth-border text-center cursor-pointer p-2"
-                >
-                  <h2>{project.title}</h2>
-                  <div className="my-4">
-                    <Slider {...settings}>
-                      {project.images.map((image: any, imgIndex: any) => (
-                        <img
-                          key={imgIndex}
-                          className="object-cover h-[400px] mb-2 p-2 rounded-xl"
-                          src={image}
-                          alt={`${project.title} image ${imgIndex + 1}`}
-                        />
-                      ))}
-                    </Slider>
-                  </div>
-                  <p>
+      {loading ? (
+        <Loading color={"orange"} />
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-3">
+            {displayedProjects.map((project, key) => (
+              <motion.div
+                key={key}
+                className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: key * 0.2 }}
+              >
+                <div className="relative">
+                  <Slider {...settings}>
+                    {project.images.map((image, imgIndex) => (
+                      <img
+                        key={imgIndex}
+                        className="object-cover h-60 w-full"
+                        src={image}
+                        alt={`${project.title} image ${imgIndex + 1}`}
+                      />
+                    ))}
+                  </Slider>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold mb-2">
+                    {project.title}
+                  </h3>
+                  <p className="text-gray-700 mb-4">
                     {project.description.length > 100
                       ? project.description.slice(0, 100) + "..."
                       : project.description}
                   </p>
                   <div className="flex justify-between items-center">
-                    <Link
-                      href={`/projects/${project._id}`}
-                      className="text-indigo-600 hover:text-indigo-800 font-bold text-sm"
-                      style={{ textDecoration: "none" }}
-                    >
-                      İncele
+                    <Link href={`/projects/${project._id}`}>
+                      <p className="text-indigo-600 hover:text-indigo-800 font-bold text-sm">
+                        İncele
+                      </p>
                     </Link>
-                    <div className="flex items-center justify-between space-x-4">
+                    <div className="flex space-x-4">
                       {project.repoLink && (
                         <a
-                          href={project?.repoLink}
+                          href={project.repoLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-gray-700 hover:text-gray-900 text-sm"
+                          className="text-gray-700 hover:text-gray-900"
                         >
-                          <FaGithub className="text-lg" />
+                          <FaGithub className="text-2xl" />
                         </a>
                       )}
                       {project.liveDemoLink && (
                         <a
-                          href={project?.liveDemoLink}
+                          href={project.liveDemoLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-sky-500 hover:text-sky-700 text-sm"
+                          className="text-sky-500 hover:text-sky-700"
                         >
-                          <FaGlobe className="text-lg" />
+                          <FaGlobe className="text-2xl" />
                         </a>
                       )}
                     </div>
                   </div>
                 </div>
-              ))}
-
-            {!size &&
-              projects.map((project) => (
-                <div key={project.id} className="card cursor-pointer">
-                  <div className="my-4">
-                    <Slider {...settings}>
-                      {project.images.map((image: any, imgIndex: any) => (
-                        <img
-                          key={imgIndex}
-                          className="w-full h-[300px]  object-cover rounded mb-2"
-                          src={image}
-                          alt={`${project.title} image ${imgIndex + 1}`}
-                        />
-                      ))}
-                    </Slider>
-                  </div>
-                  <h2>{project.title}</h2>
-                  <p>{project.description}</p>
-                  <a
-                    href={project?.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View Project
-                  </a>
-                </div>
-              ))}
-          </>
-        )}
-      </div>
-      {size && (
-        <div className="text-center my-5">
-          <Link
-            href="/projects"
-            style={{ textDecoration: "none" }}
-            className="bg-gradient-to-r from-indigo-400 to-white p-1 text-indigo-800 border-indigo-800 border-2 rounded-lg hover:text-white"
-          >
-            View All Projects
-          </Link>
-        </div>
+              </motion.div>
+            ))}
+          </div>
+          {size && projects.length > size && (
+            <div className="text-center my-5">
+              <Link href="/projects">
+                <p className="bg-white text-indigo-800 font-bold py-2 px-6 rounded-full shadow-md hover:bg-indigo-800 hover:text-white transition duration-300">
+                  Tüm Projeleri Gör
+                </p>
+              </Link>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -17,6 +17,12 @@ const Links = () => {
         <Link className="link" href="/projects">
         Projects
         </Link>
+        <Link className="link" href="/experiences">
+        Experiences
+        </Link>
+        <Link className="link" href="/certificas">
+        Certificas
+        </Link>
         <Link className="link" href="/contact">
         Contact
         </Link>

@@ -34,7 +34,7 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
       {loading ? (
         <Loading color={"lime"} />
       ) : (
-        <div className="bg-gradient-to-b">
+        <div className="pt-2">
           <FaMedium className="text-4xl mx-auto mb-3 text-slate-700" />
           <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  p-3">
             {size &&
