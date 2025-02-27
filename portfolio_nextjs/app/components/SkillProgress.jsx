@@ -42,7 +42,7 @@ const CircularProgressBar = ({ value }) => {
           fontSize="20"
           fontWeight="bold"
         >
-          {`${displayValue}%`}
+          {`${displayValue}`}
         </text>
       </svg>
     </div>
@@ -72,7 +72,7 @@ const SkillProgress = ({ skills }) => {
           };
           return newProgress;
         });
-      }, index * 500); // Her bir yetenek için animasyon gecikmesi
+      }, index*2 * 500); // Her bir yetenek için animasyon gecikmesi
     });
   }, [skills]);
 

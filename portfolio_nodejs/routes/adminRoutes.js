@@ -30,6 +30,9 @@ const {
   updateProjects,
   deleteProjects,
   updateSocialLinks,
+  updateCertifications,
+  createCertifications,
+  deleteCertifications,
   // updatePassword
 } = require('../controller/adminController')
 
@@ -48,6 +51,7 @@ router.put('/skills/:id', admin, updateSkills)
 router.put('/projects/:id', admin, updateProjects)
 router.put('/hobbies/:id', admin, updateHobbies)
 router.put('/languages/:id', admin, updateLanguages)
+router.put('/certifications/:id', admin, updateCertifications)
 router.put('/social-links/:id', admin, updateSocialLinks)
 
 // delete routes
@@ -59,6 +63,7 @@ router.delete('/contents/:id', admin, deleteContents)
 router.delete('/skills/:id', admin, deleteSkills)
 router.delete('/projects/:id', admin, deleteProjects)
 router.delete('/hobbies/:id', admin, deleteHobbies)
+router.delete('/certifications/:id', admin, deleteCertifications)
 router.delete('/languages/:id', admin, deleteLanguages)
 
 // post routes
@@ -73,5 +78,6 @@ router.post('/skills', admin, createSkills)
 router.post('/hobbies', admin, createHobbies)
 router.post('/languages', admin, createLanguages)
 router.post('/projects', admin, createProjects)
+router.post('/certifications', admin, createCertifications)
 
 module.exports = router

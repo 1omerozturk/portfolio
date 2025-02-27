@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { EducationService } from "../service/educationService";
 import { FaDotCircle, FaGraduationCap, FaRegDotCircle } from "react-icons/fa";
+import Loading from "./Loading";
 
 interface EducationSizeProps {
   size?: number;
@@ -37,20 +38,21 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
       <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
         <FaGraduationCap />
       </div>
+      {loading && <Loading color="yellow" />}
       <div className="space-y-8">
         {educations?.map((education, index) => (
           <div
             key={index}
             className="flex flex-col md:flex-row rounded-lg drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6"
           >
-           <div className="md:w-1/4 flex items-center justify-center mb-6 md:mb-0">
-           <Image
+            <div className="md:w-1/4 flex items-center justify-center mb-6 md:mb-0">
+              <Image
                 src={education?.institutionLogo}
                 alt={education?.institution}
                 width={200}
                 height={200}
-                className="object-contain rounded-full border-4 border-gray-900"/>
-            
+                className="object-contain rounded-full border-4 border-gray-900"
+              />
             </div>
 
             {/* Education Details */}

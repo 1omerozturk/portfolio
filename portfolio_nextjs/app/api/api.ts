@@ -174,6 +174,13 @@ export const createHobbies = async (data: any) => {
 export const createLanguages = async (data: any) => {
   return await axios.post(`${api}/admin/languages`, data, getAdminConfig());
 };
+export const createCertifications = async (data: any) => {
+  return await axios.post(
+    `${api}/admin/certifications`,
+    data,
+    getAdminConfig()
+  );
+};
 
 // admin put functions
 
@@ -232,6 +239,13 @@ export const updateLanguages = async (id: any, data: any) => {
     getAdminConfig()
   );
 };
+export const updateCertifications = async (id: any, data: any) => {
+  return await axios.put(
+    `${api}/admin/certifications/${id}`,
+    data,
+    getAdminConfig()
+  );
+};
 
 // admin delete functions
 export const deletePersonalInfo = async (id: any) => {
@@ -274,4 +288,11 @@ export const deleteHobbies = async (id: any) => {
 
 export const deleteLanguages = async (id: any) => {
   return await axios.delete(`${api}/admin/languages/${id}`, getAdminConfig());
+};
+
+export const deleteCertifications = async (id: any) => {
+  return await axios.delete(
+    `${api}/admin/certifications/${id}`,
+    getAdminConfig()
+  );
 };
