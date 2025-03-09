@@ -21,7 +21,6 @@ const SocialBanner = () => {
       setSocialLinks(defaultSocialLinks);
       await SocialService.getSocials()
         .then((res) => {
-          console.log(res.data);
           setSocialLinks(res.data);
         })
         .finally(() => {
@@ -36,7 +35,7 @@ const SocialBanner = () => {
   return (
     <>
       {loading ? (
-        <Loading color={"green"} />
+        <Loading color={"teal"} />
       ) : (
         <div
           className={`grid grid-flow-col w-fit sm:space-x-4 space-x-1 text-center mx-auto`}

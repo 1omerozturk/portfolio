@@ -1,15 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoShareSocialSharp } from "react-icons/io5";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // Takvim stillendirmesi için gerekli
+import "react-calendar/dist/Calendar.css"; // Takvim stillendirmesi
 import { FaCalendarDay } from "react-icons/fa";
 import Links from "./Links";
 import Contact from "./Contact";
 import SocialBanner from "./SocialBanner";
 
 const Footer = () => {
-  const [value, setValue] = useState(() => Date.now());
+  const [value, setValue] = useState(null);
+
+  useEffect(() => {
+    setValue(Date.now());
+  }, []);
 
   return (
     <footer className="space-x-3 p-6 bg-gray-500 md:grid">
@@ -19,12 +23,12 @@ const Footer = () => {
         </div>
         <div className="flex w-[280px] sm:w-auto mx-auto">
           <Calendar
-            value={value}
+            value={value ? new Date(value) : null}
             locale="en-US"
             className="border shadow-md text-slate-500 mx-auto border-gray-300 rounded-lg"
             onChange={setValue}
             calendarType="iso8601"
-            tileClassName={({ date, view }) =>
+            tileClassName={({ date }) =>
               date?.getDay() === 0 || date?.getDay() === 6 ? "bg-red-100" : ""
             }
           />

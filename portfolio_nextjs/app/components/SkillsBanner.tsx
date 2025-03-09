@@ -1,7 +1,7 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCode } from "react-icons/fa";
-import SkillProgress from "./SkillProgress";
+const SkillProgress = React.lazy(() => import("./SkillProgress")); // Lazy yükleme
 import Link from "next/link";
 import { SkillService } from "../service/skillService";
 import { defaultSkillsData } from "../models/skills";
@@ -12,24 +12,17 @@ interface PageProps {
 }
 
 const SkillsBanner: React.FC<PageProps> = ({ size }) => {
-  const [skills] = useState(defaultSkillsData);
-  const [skills2, setSkills2] = useState([]);
-
-  const memoizedSkills = useMemo(() => {
-    return size ? skills.slice(0, size) : skills;
-  }, [size, skills]);
-
-  const memoizedSkills2 = useMemo(() => {
-    return size ? skills2.slice(0, size) : skills2;
-  }, [size, skills2]);
+  const [skills, setSkills] = useState(defaultSkillsData);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchSkills = async () => {
     try {
       const res = await SkillService.getSkills();
-      setSkills2(res.data);
-      console.log(res.data);
+      setSkills(res.data); // Gelen verilerle güncelle
+      setIsLoading(false); // Yükleme durumunu kaldır
     } catch (error) {
       console.error(error?.message);
+      setIsLoading(false); // Yükleme durumunu kaldır
     }
   };
 
@@ -37,18 +30,21 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
     fetchSkills();
   }, []);
 
+  // Gösterilecek verileri boyutlandır
+  const displayedSkills = size ? skills.slice(0, size) : skills;
+
   return (
     <div id="skillsBanner" className="skills-banner drop-shadow-lg">
-      <div className="px-5  mx-auto p-4">
+      <div className="px-5 mx-auto p-4">
         <FaCode className="text-4xl mx-auto mb-3 text-slate-700" />
         <div className="space-y-2 gap-4">
-          {skills2.length === 0 && (
-            <>
-              <SkillProgress skills={memoizedSkills} />
-              <Loading color={"lime"} />
-            </>
-          )}
-          {skills2.length > 0 && <SkillProgress skills={memoizedSkills2} />}
+          <React.Suspense fallback={<Loading color={"lime"} />}>
+            {isLoading ? (
+              <Loading color={"lime"} /> // Veriler yüklenirken gösterilecek
+            ) : (
+              <SkillProgress skills={displayedSkills} /> // Veriler yüklendiğinde gösterilecek
+            )}
+          </React.Suspense>
           {size && (
             <div className="flex justify-center mt-3">
               <Link

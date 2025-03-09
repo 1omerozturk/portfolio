@@ -17,7 +17,6 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
     try {
       await EducationService.getEducations()
         .then((res) => {
-          console.log(res.data);
           setEducations(res.data);
         })
         .finally(() => {
@@ -38,7 +37,7 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
       <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
         <FaGraduationCap />
       </div>
-      {loading && <Loading color="yellow" />}
+      {loading && <Loading color="orange" />}
       <div className="space-y-8">
         {educations?.map((education, index) => (
           <div
