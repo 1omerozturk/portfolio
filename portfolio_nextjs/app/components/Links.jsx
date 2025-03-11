@@ -4,7 +4,7 @@ import { FaLink } from 'react-icons/fa'
 
 const Links = () => {
   return (
-    <div className='grid grid-flow-row space-y-4'>
+    <div className='grid grid-flow-row w-full space-y-4'>
         <div className='w-fit h-fit p-2 rounded-full bg-slate-300'>
         <FaLink className='mx-auto text-3xl text-lime-500'/>
         </div>

@@ -124,11 +124,9 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
           </div>
           {size && projects.length > size && (
             <div className="text-center my-5">
-              <Link href="/projects">
-                <p className="bg-white text-indigo-800 font-bold py-2 px-6 rounded-full shadow-md hover:bg-indigo-800 hover:text-white transition duration-300">
+              <a style={{textDecoration:'none'}} className="bg-white w-fit mx-auto text-indigo-800 font-bold py-2 px-6 rounded-full shadow-md hover:bg-indigo-800 hover:text-black transition duration-300" href="/projects">
                   Tüm Projeleri Gör
-                </p>
-              </Link>
+              </a>
             </div>
           )}
         </>

@@ -23,7 +23,7 @@ const Footer = () => {
         </div>
         <div className="flex w-[280px] sm:w-auto mx-auto">
           <Calendar
-            value={value ? new Date(value) : null}
+            value={value}
             locale="en-US"
             className="border shadow-md text-slate-500 mx-auto border-gray-300 rounded-lg"
             onChange={setValue}

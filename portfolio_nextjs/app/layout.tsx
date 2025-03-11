@@ -2,6 +2,7 @@
 import "./globals.css";
 import "primeicons/primeicons.css";
 import "bootstrap/dist/css/bootstrap.css";
+import "@radix-ui/themes/styles.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
