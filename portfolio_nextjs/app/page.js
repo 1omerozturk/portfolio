@@ -30,9 +30,9 @@ export default function Home() {
         <div className="w-full">
           <button
             title="Download CV"
-            name="Download CV"
+            aria-label="Download CV"
             onClick={handleDownload}
-            className=" bg-indigo-500 hover:bg-indigo-700 hover:text-lime-600  text-white  font-extrabold py-2 p-2 rounded my-3"
+            className=" bg-slate-950 hover:bg-slate-500   text-slate-100 hover:text-slate-950 transition-all hover:duration-500 hover:shadow-2xl shadow-black font-extrabold py-2 p-2 rounded my-3"
           >
             Download CV <i className="pi pi-download text-xl ml-2 "></i>
           </button>

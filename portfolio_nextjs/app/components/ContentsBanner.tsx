@@ -49,9 +49,11 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
                     alt={content.name}
                     width={300}
                     height={300}
-                    className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px]"
+                    className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px] hover:scale-105 hover:animate-pulse transition-all duration-500 cursor-pointer"
                   />
                   <a
+                  className="text-black hover:font-bold"
+                  style={{textDecoration:'none'}}
                     title={content.name}
                     key={index}
                     href={content.link}

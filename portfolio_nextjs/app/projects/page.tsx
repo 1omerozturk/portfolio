@@ -51,7 +51,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
   const displayedProjects = size ? projects.slice(0, size) : projects;
 
   return (
-    <div className="p-8 shadow-lg">
+    <div className="p-2 shadow-lg">
       <div className="flex items-center justify-center text-4xl text-white mb-8 mt-2">
         <FaProjectDiagram className="text-black" />
       </div>
@@ -73,7 +73,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                     {project.images.map((image, imgIndex) => (
                       <img
                         key={imgIndex}
-                        className="object-cover h-60 w-full"
+                        className="object-cover h-96 w-full"
                         src={image}
                         alt={`${project.title} image ${imgIndex + 1}`}
                       />
@@ -124,8 +124,12 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
           </div>
           {size && projects.length > size && (
             <div className="text-center my-5">
-              <a style={{textDecoration:'none'}} className="bg-white w-fit mx-auto text-indigo-800 font-bold py-2 px-6 rounded-full shadow-md hover:bg-indigo-800 hover:text-black transition duration-300" href="/projects">
-                  Tüm Projeleri Gör
+              <a
+                style={{ textDecoration: "none" }}
+                className="bg-slate-200 w-fit mx-auto text-indigo-800 font-bold py-2 px-6 rounded-full shadow-md hover:bg-slate-500  hover:text-black transition-all duration-300 transform hover:translate-y-1"
+                href="/projects"
+              >
+               View more Projects
               </a>
             </div>
           )}

@@ -50,7 +50,7 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
               <Link
                 href="/skills"
                 style={{ textDecoration: "none" }}
-                className="bg-gradient-to-r from-white to-slate-500 p-1 border-blue-500 border-2 rounded-lg hover:bg-black hover:text-white"
+                className="bg-slate-200 w-fit mx-auto text-indigo-600 font-bold py-2 px-6 rounded-full shadow-md hover:bg-slate-500  hover:text-black transition-all duration-300 transform hover:translate-y-1"
               >
                 View More Skills
               </Link>

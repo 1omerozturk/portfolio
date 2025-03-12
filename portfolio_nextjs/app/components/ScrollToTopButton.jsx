@@ -22,6 +22,7 @@ const ScrollToTopButton = () => {
 
   return (
     <button
+      aria-label="gototop"
       onClick={() =>
         document.getElementById("top")?.scrollIntoView({ behavior: "smooth" })
       }
@@ -29,7 +30,7 @@ const ScrollToTopButton = () => {
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       } transition-opacity duration-300`}
     >
-        <i className="pi pi-arrow-up"></i>
+      <i className="pi pi-arrow-up"></i>
     </button>
   );
 };

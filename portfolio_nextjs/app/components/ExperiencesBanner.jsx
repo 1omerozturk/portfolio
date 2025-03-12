@@ -76,6 +76,7 @@ const ExperiencesBanner = ({ size }) => {
       {size && experiences.length > size && (
         <div className="text-center mt-6">
           <button
+          aria-label="seeAll"
             onClick={() => navigate.push("/experiences")}
             className="bg-white text-blue-500 font-bold py-2 px-6 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
           >
