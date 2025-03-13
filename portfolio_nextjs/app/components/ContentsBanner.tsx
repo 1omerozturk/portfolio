@@ -39,7 +39,16 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
           <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  p-3">
             {size &&
               contents.slice(0, size).map((content, index) => (
-                <div className="animate-border text-center my-2" key={index}>
+                <a
+                className="text-black"
+                style={{textDecoration:'none'}}
+                  title={content.name}
+                  key={index}
+                  href={content.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                <div className=" text-center my-2" key={index}>
                   <div className="text-4xl" title={content.name}>
                     {content.name.slice(0, 15)}
                   </div>
@@ -51,18 +60,11 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
                     height={300}
                     className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px] hover:scale-105 hover:animate-pulse transition-all duration-500 cursor-pointer"
                   />
-                  <a
-                  className="text-black hover:font-bold"
-                  style={{textDecoration:'none'}}
-                    title={content.name}
-                    key={index}
-                    href={content.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <div className="hover:font-semibold text-slate-50 hover:text-slate-950 hover:underline w-fit mx-auto text-center">
                     Read..
-                  </a>
+                  </div>
                 </div>
+                  </a>
               ))}
             {!size &&
               contents.map((content, index) => (

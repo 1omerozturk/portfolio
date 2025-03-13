@@ -7,12 +7,11 @@ import { motion } from "framer-motion";
 const CircularProgressBar = ({ value }) => {
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const displayValue = value !== undefined ? value : 0;
-  const offset = circumference - (displayValue / 100) * circumference;
 
   return (
     <div className="flex items-center justify-center">
-      <svg width="120" height="120" className="circular-progress-bar">
+      <svg width="120" height="120">
+        {/* Arkaplan Çemberi */}
         <circle
           cx="60"
           cy="60"
@@ -21,19 +20,26 @@ const CircularProgressBar = ({ value }) => {
           stroke="#d3d3d3"
           fill="none"
         />
+        {/* İlerleme Çemberi */}
         <motion.circle
           cx="60"
           cy="60"
           r={radius}
           strokeWidth="10"
-          stroke={getColor(displayValue)}
+          stroke={getColor(value)}
           fill="none"
           strokeDasharray={circumference}
-          strokeDashoffset={circumference}
-          className="circular-progress"
-          animate={{ strokeDashoffset: offset }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+          strokeDashoffset={
+            circumference - (value / 100) * circumference
+          }
+          initial={{ strokeDashoffset: circumference }}
+          animate={{
+            strokeDashoffset:
+              circumference - (value / 100) * circumference,
+            transition: { duration: 1, ease: "easeOut" },
+          }}
         />
+        {/* Yüzde Değeri */}
         <text
           x="60"
           y="60"
@@ -42,7 +48,7 @@ const CircularProgressBar = ({ value }) => {
           fontSize="20"
           fontWeight="bold"
         >
-          {`${displayValue}`}
+          {`${value}`}
         </text>
       </svg>
     </div>
@@ -50,31 +56,64 @@ const CircularProgressBar = ({ value }) => {
 };
 
 const SkillProgress = ({ skills }) => {
-  const [progress, setProgress] = useState([]);
+  const [progress, setProgress] = useState(
+    skills.map(() => ({ value: 0 }))
+  );
 
+  // 🚀 İlk Yüklemede Animasyonu Başlatan useEffect
   useEffect(() => {
-    setProgress(
-      skills?.map((skill) => ({
-        name: skill.name,
-        value: 0,
-      }))
-    );
-  }, [skills]);
-
-  useEffect(() => {
-    skills?.forEach((skill, index) => {
+    skills.forEach((skill, index) => {
       setTimeout(() => {
-        setProgress((prevProgress) => {
-          const newProgress = [...prevProgress];
-          newProgress[index] = {
-            ...newProgress[index],
-            value: Number(skill.percentage),
-          };
-          return newProgress;
-        });
-      }, index*2 * 500); // Her bir yetenek için animasyon gecikmesi
+        startAnimation(index, skill.percentage);
+      }, index * 300); // Sıralı yükleme efekti için gecikme
     });
   }, [skills]);
+
+  // 🏆 Animasyon Başlatıcı Fonksiyon
+  const startAnimation = (index, targetValue) => {
+    let start = 0;
+    const duration = 3000; // 1 saniye
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progressTime = timestamp - start;
+      const progressValue = Math.min(
+        (progressTime / duration) * targetValue,
+        targetValue
+      );
+
+      setProgress((prevProgress) => {
+        const newProgress = [...prevProgress];
+        newProgress[index] = {
+          ...newProgress[index],
+          value: Math.round(progressValue),
+        };
+        return newProgress;
+      });
+
+      if (progressTime < duration) {
+        requestAnimationFrame(step);
+      }
+    };
+
+    requestAnimationFrame(step);
+  };
+
+  // 🖱️ Hover Başladığında Animasyon Başlat
+  const handleMouseEnter = (index, targetValue) => {
+    startAnimation(index, targetValue);
+  };
+
+  // 🖱️ Hover Bittiğinde Değer Sabit Kalsın
+  const handleMouseLeave = (index) => {
+    setProgress((prevProgress) => {
+      const newProgress = [...prevProgress];
+      newProgress[index] = {
+        ...newProgress[index],
+        value: skills[index].percentage, // Sabit değer gösterimi
+      };
+      return newProgress;
+    });
+  };
 
   const DynamicIcon = ({ iconName }) => {
     if (!iconName) return null;
@@ -94,6 +133,14 @@ const SkillProgress = ({ skills }) => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.2 }}
+          whileHover={{
+            scale: 1.05,
+            transition: { duration: 0.3 },
+          }}
+          onMouseEnter={() =>
+            handleMouseEnter(index, skill.percentage)
+          }
+          onMouseLeave={() => handleMouseLeave(index)}
         >
           <div className="md:text-2xl text-sm sm:text-xl flex items-center justify-between my-2 gap-x-3 font-semibold">
             {skill.name.split(" ")[0]}
@@ -104,9 +151,7 @@ const SkillProgress = ({ skills }) => {
               <DynamicIcon iconName={skill.icon} />
             </div>
           </div>
-          <CircularProgressBar
-            value={progress[index] ? progress[index].value : 0}
-          />
+          <CircularProgressBar value={progress[index].value} />
         </motion.div>
       ))}
     </div>
