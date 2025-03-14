@@ -43,7 +43,7 @@ const SocialBanner = () => {
           {socialLinks?.map((social, index) => (
             <a
               title={social.name}
-              aria-label={social.name}
+              aria-label={"link name" + social.name}
               key={index}
               href={social.url}
               target="_blank"

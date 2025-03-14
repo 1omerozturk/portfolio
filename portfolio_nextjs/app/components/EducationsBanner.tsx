@@ -50,6 +50,7 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
                 alt={education?.institution}
                 width={200}
                 height={200}
+                priority
                 className="object-contain rounded-full border-4 border-gray-900"
               />
             </div>

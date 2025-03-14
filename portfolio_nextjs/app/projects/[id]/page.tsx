@@ -107,16 +107,18 @@ const ProjectDetail = () => {
               {project.repoLink && (
                 <a
                   href={project.repoLink}
+                  aria-label={project.title}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300"
-                >
+                  >
                   GitHub Repo
                 </a>
               )}
               {project.liveDemoLink && (
                 <a
                   href={project.liveDemoLink}
+                  aria-label={project.title}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 transition duration-300"
