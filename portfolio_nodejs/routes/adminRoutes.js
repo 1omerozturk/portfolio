@@ -33,6 +33,12 @@ const {
   updateCertifications,
   createCertifications,
   deleteCertifications,
+
+  // messages routing
+  getMessages,
+  deleteMessage,
+
+  // admin management routing
   // updatePassword
 } = require('../controller/adminController')
 
@@ -40,6 +46,8 @@ const router = express.Router()
 
 // admin login
 router.get('/admin', admin, getAdmin)
+
+router.get('/messages', admin, getMessages)
 
 // put routes
 // router.put('/update-password',updatePassword)
@@ -65,6 +73,7 @@ router.delete('/projects/:id', admin, deleteProjects)
 router.delete('/hobbies/:id', admin, deleteHobbies)
 router.delete('/certifications/:id', admin, deleteCertifications)
 router.delete('/languages/:id', admin, deleteLanguages)
+router.delete('/messages/:id', admin, deleteMessage)
 
 // post routes
 

@@ -5,7 +5,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // Takvim stillendirmesi
 import { FaCalendarDay } from "react-icons/fa";
 import Links from "./Links";
-import Contact from "./Contact";
+import ContactBanner from "./Contact";
 import SocialBanner from "./SocialBanner";
 
 const Footer = () => {
@@ -36,7 +36,7 @@ const Footer = () => {
       </div>
       <div className="grid grid-flow-col items-start justify-around pt-5 pb-5">
         <Links />
-        <Contact />
+        <ContactBanner />
       </div>
       <div className="col-span-2 place-self-center">
         <div className="bg-slate-300 rounded-full w-fit h-fit mx-auto p-2 mb-3">

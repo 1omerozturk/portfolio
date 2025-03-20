@@ -12,6 +12,7 @@ const Languages = require('../models/languages')
 const References = require('../models/references')
 const Hobbies = require('../models/hobbies')
 const User = require('../models/user')
+const Messages = require('../models/messages')
 
 // Admin login
 exports.login = async (req, res) => {
@@ -414,6 +415,25 @@ exports.deleteHobbies = async (req, res) => {
   try {
     await Hobbies.findByIdAndDelete(req.params.id)
     res.status(200).json({ message: 'Hobbies deleted successfully' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+// message management
+exports.getMessages = async (req, res) => {
+  try {
+    const messages = await Messages.find()
+    res.status(200).json(messages)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.deleteMessage = async (req, res) => {
+  try {
+    await Messages.findByIdAndDelete(req.params.id)
+    res.status(200).json({ message: 'Message deleted successfully' })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

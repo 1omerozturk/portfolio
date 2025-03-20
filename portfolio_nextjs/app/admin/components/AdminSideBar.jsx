@@ -13,6 +13,7 @@ import {
   FaSpaceShuttle,
   FaMediumM,
 } from "react-icons/fa";
+import { MdMessage } from "react-icons/md";
 
 const AdminSideBar = ({ onLogout }) => {
   const [active, setActive] = useState("Dashboard");
@@ -55,6 +56,11 @@ const AdminSideBar = ({ onLogout }) => {
       name: "Certificates",
       path: "/admin/dashboard/certificates",
       icon: <FaAward className="text-yellow-500" />,
+    },
+    {
+      name: "Contacts",
+      path: "/admin/dashboard/contacts",
+      icon: <MdMessage className="text-orange-500"/>,
     }
   ];
 

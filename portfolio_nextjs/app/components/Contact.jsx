@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { FaAddressCard } from "react-icons/fa";
 
-const Contact = () => {
+const ContactBanner = () => {
   return (
     <div className="grid grid-flow-row text-center space-y-4">
       <div className="w-fit h-fit p-2 mx-auto rounded-full bg-slate-300">
@@ -14,4 +14,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactBanner;

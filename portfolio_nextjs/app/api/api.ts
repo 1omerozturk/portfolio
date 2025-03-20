@@ -296,3 +296,16 @@ export const deleteCertifications = async (id: any) => {
     getAdminConfig()
   );
 };
+
+// Message CRUDs
+export const postMessages = async (data: any) => {
+  return await axios.post(`${api}/user/messages`, data);
+};
+
+export const getMessages = async () => {
+  return await axios.get(`${api}/admin/messages`, getAdminConfig());
+};
+
+export const deleteMessage = async (id: any) => {
+  return await axios.delete(`${api}/admin/messages/${id}`, getAdminConfig());
+};

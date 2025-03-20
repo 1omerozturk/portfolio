@@ -9,6 +9,18 @@ const Languages = require('../models/languages')
 const References = require('../models/references')
 const Hobbies = require('../models/hobbies')
 const Contents = require('../models/contents')
+const Messages = require('../models/messages')
+
+// message post
+exports.postMessage = async (req, res) => {
+  try {
+    const message = await new Messages(req.body)
+    await message.save()
+    res.status(201).json('Message send successfully')
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
 
 exports.getPersonalInfo = async (req, res) => {
   try {
