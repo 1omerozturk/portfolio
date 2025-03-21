@@ -6,11 +6,13 @@ import DonutChartCard from "../components/DonutChart";
 import { SkillService } from "../service/skillService";
 import { ProjectService } from "../../service/projectService";
 import { ContentService } from "../service/contentService";
+import { MessageService } from "../service/messageService";
 
 const Dashboard = () => {
   const [skills, setSkills] = useState(null);
   const [projects, setProjects] = useState(null);
   const [contents, setContents] = useState(null);
+  const [messages, setMessages] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const getData = async () => {
@@ -18,10 +20,12 @@ const Dashboard = () => {
       const skillData = await SkillService.getSkills();
       const projectData = await ProjectService.getProjects();
       const contentData = await ContentService.getContents();
+      const messageData = await MessageService.getMessages();
 
       setSkills(skillData.data);
       setProjects(projectData.data);
       setContents(contentData.data);
+      setMessages(messageData.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -36,7 +40,7 @@ const Dashboard = () => {
   return (
     <div>
       <h2 className="text-center">Dashboard</h2>
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
         {isLoading ? (
           <>
             <div style={{ width: "250px", height: "250px" }}>
@@ -59,8 +63,8 @@ const Dashboard = () => {
                   projects.filter((p) => p.type === "web").length,
                 ]} // Backend'den gelen veri
                 labels={["Mobile", "Web"]}
-                colors={["#FF2453FF", "#0099FFFF"]}
-                hoverColors={["#EF9CAEFF", "#A4D3F1FF"]}
+                colors={["#FF0037FF", "#0099FFFF"]}
+                hoverColors={["#B20027FF", "#00588FFF"]}
               />
             )}
             {skills && (
@@ -69,7 +73,7 @@ const Dashboard = () => {
                 labels={["Skills"]}
                 data={[skills.length]} // Backend'den gelen veri
                 colors={["#00FFFFFF"]}
-                hoverColors={["#A2E2E2FF"]}
+                hoverColors={["#009898FF"]}
               />
             )}
             {contents && (
@@ -78,7 +82,19 @@ const Dashboard = () => {
                 labels={["Contents"]}
                 data={[contents.length]} // Backend'den gelen veri
                 colors={["#FF8000FF"]}
-                hoverColors={["#D79F66FF"]}
+                hoverColors={["#A05000FF"]}
+              />
+            )}
+            {messages && (
+              <DonutChartCard
+                title="Messages"
+                labels={["Unread","Read"]}
+                data={[
+                  messages.filter((msg) => msg.isRead === false).length,
+                  messages.filter((msg) => msg.isRead === true).length,
+                ]} // Backend'den gelen veri
+                colors={["#0DFE00FF", "#F86B00FF"]}
+                hoverColors={["#078900FF", "#A50101FF"]}
               />
             )}
           </>

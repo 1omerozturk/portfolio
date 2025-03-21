@@ -44,7 +44,7 @@ const DonutChartCard = ({ title, data, colors, hoverColors, labels }) => {
       <h3 className="text-lg text-center font-semibold text-gray-800 dark:text-gray-200 mb-4">
         {title}
       </h3>
-      <div className="flex justify-center ">
+      <div className="flex justify-center w-3/4 h-3/4 md:h-full md:w-full mx-auto">
         <Doughnut
           data={chartData}
           options={{

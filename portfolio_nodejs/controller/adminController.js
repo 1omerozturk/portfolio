@@ -438,3 +438,38 @@ exports.deleteMessage = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
+exports.markMessage = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { isRead } = req.query
+
+    let isReadBoolean
+    if (isRead === 'true') {
+      isReadBoolean = true
+    } else if (isRead === 'false') {
+      isReadBoolean = false
+    } else {
+      return res
+        .status(400)
+        .json({
+          message: 'Invalid isRead parameter. It must be "true" or "false".',
+        })
+    }
+
+    const message = await Messages.findByIdAndUpdate(
+      id,
+      { isRead: isReadBoolean },
+      { new: true, runValidators: true },
+    )
+
+    if (!message) {
+      return res.status(404).json({ message: 'Message not found' })
+    }
+
+    res.status(200).json(message)
+  } catch (error) {
+    console.error('Mark Message Error:', error)
+    res.status(500).json({ message: 'Internal server error.' })
+  }
+}

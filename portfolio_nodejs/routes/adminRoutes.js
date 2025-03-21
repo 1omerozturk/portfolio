@@ -37,6 +37,7 @@ const {
   // messages routing
   getMessages,
   deleteMessage,
+  markMessage,
 
   // admin management routing
   // updatePassword
@@ -61,6 +62,8 @@ router.put('/hobbies/:id', admin, updateHobbies)
 router.put('/languages/:id', admin, updateLanguages)
 router.put('/certifications/:id', admin, updateCertifications)
 router.put('/social-links/:id', admin, updateSocialLinks)
+
+router.put('/messages/:id', admin, markMessage)
 
 // delete routes
 router.delete('/personal-info/:id', admin, deletePersonalInfo)

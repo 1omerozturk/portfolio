@@ -1,10 +1,10 @@
-import { deleteMessage, postMessages } from "../api/api";
+import { deleteMessageApi, postMessagesApi } from "../api/api";
 import Message from "../components/Message";
 
 export class MessageService {
   static async postMessage(data: any) {
     try {
-      const response = await postMessages(data).then((res) => {
+      const response = await postMessagesApi(data).then((res) => {
         if (res?.status == 201) {
           Message.ToastMessage("success", "Message sent successfully");
           return res;
@@ -20,7 +20,7 @@ export class MessageService {
 
   static async deleteMessage(id: any) {
     try {
-      return await deleteMessage(id).then((res) => {
+      return await deleteMessageApi(id).then((res) => {
         return res;
       });
     } catch (error) {
