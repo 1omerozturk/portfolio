@@ -65,7 +65,6 @@ export default function RootLayout({ children }) {
             draggable
             pauseOnHover
           />
-          ;
           <Navbar />
           {children}
           <ScrollToTopButton />
