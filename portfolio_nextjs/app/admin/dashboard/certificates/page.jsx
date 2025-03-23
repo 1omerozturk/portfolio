@@ -1,9 +1,7 @@
 "use client";
-import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { CertificationService } from "../../service/certificationsService";
 import Loading from "../../components/Loading";
-import "tailwindcss/tailwind.css";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 
@@ -16,11 +14,10 @@ const Certificates = () => {
     navigate.push(`certificates/edit/${id}`);
   };
 
-  const onDelete = (id) => async () => {
+  const onDelete = async (id) => {
     try {
-      await CertificationService.deleteCertification(id).then(() => {
-        fetchCertificates();
-      });
+      await CertificationService.deleteCertification(id);
+      fetchCertificates();
     } catch (error) {
       console.log(error);
     }
@@ -32,11 +29,7 @@ const Certificates = () => {
 
   const fetchCertificates = async () => {
     try {
-      const response = await CertificationService.getCertifications().then(
-        (res) => {
-          return res;
-        }
-      );
+      const response = await CertificationService.getCertifications();
       setCertificates(response.data);
       setLoading(false);
     } catch (error) {
@@ -49,15 +42,15 @@ const Certificates = () => {
   }, []);
 
   return (
-    <div className="mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold text-center">Certificates</h1>
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Sertifikalar</h1>
         <button
-          className="btn btn-outline-light justify-center"
           onClick={onAdd}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center"
         >
-          Add
-          <FaPlusCircle className="inline-block ml-2" />
+          <FaPlusCircle className="mr-2" />
+          Ekle
         </button>
       </div>
       {loading ? (
@@ -65,13 +58,13 @@ const Certificates = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {certificates.map((certificate, index) => (
-            <div key={index} className="bg-white p-4 shadow rounded-lg">
+            <div key={index} className="bg-white p-4 rounded-lg shadow-md">
               <img
-                height={200}
-                width={200}
-                src={certificate.certificateImage || "null"}
+                src={certificate.certificateImage || "/placeholder-image.png"}
+                alt={certificate.name}
+                className="w-full h-40 object-cover rounded"
               />
-              <h3 className="text-lg font-semibold">{certificate.name}</h3>
+              <h3 className="text-lg font-semibold mt-2">{certificate.name}</h3>
               <p className="text-gray-600">{certificate.issuingOrganization}</p>
               <p className="text-gray-600">
                 {new Date(certificate.issueDate).toLocaleDateString()}
@@ -80,20 +73,20 @@ const Certificates = () => {
                 href={certificate.certificateLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500"
+                className="text-blue-500 hover:underline"
               >
                 Görüntüle
               </a>
-              <div className="flex items-center justify-between mt-2">
+              <div className="flex justify-between mt-4">
                 <button
                   onClick={onEdit(certificate._id)}
-                  className="btn btn-secondary mr-2"
+                  className="text-blue-500 hover:text-blue-700"
                 >
                   <FaEdit />
                 </button>
                 <button
-                  onClick={onDelete(certificate._id)}
-                  className="btn btn-danger"
+                  onClick={() => onDelete(certificate._id)}
+                  className="text-red-500 hover:text-red-700"
                 >
                   <FaMinusCircle />
                 </button>

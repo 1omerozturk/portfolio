@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { CertificationService } from "../../../service/certificationsService";
-import Message from "../../../../components/Message";
 import { useRouter } from "next/navigation";
 import BackIcon from "../../../components/BackIcon";
 
@@ -15,15 +14,20 @@ const AddCertification: React.FC<AddCertificationProps> = ({
   const navigate = useRouter();
   const [data, setData] = useState(
     certification
-      ? certification
+      ? {
+          ...certification,
+          issueDate: certification.issueDate.split("T")[0], // Tarih formatını düzelt
+        }
       : {
           name: "",
           issuingOrganization: "",
           issueDate: "",
           certificateLink: "",
           certificateImage: "",
+          type: "web",
         }
   );
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({
@@ -31,106 +35,114 @@ const AddCertification: React.FC<AddCertificationProps> = ({
       [name]: value,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (certification) {
-      await CertificationService.updateCertification(
-        certification._id,
-        data
-      ).then((res) => {
-        if (Number(res) === 200) {
-          Message.ToastMessage(
-            "success",
-            data.institution + " başarıyla güncellendi."
-          );
-          navigate.back();
-        } else {
-          Message.ToastMessage("error", "Bir hata oluştu");
-          navigate.refresh();
-        }
-      });
-    } else {
-      await CertificationService.createCertification(data).then((res) => {
-        if (Number(res) === 201) {
-          navigate.back();
-        } else {
-          navigate.refresh();
-        }
-      });
+    try {
+      if (certification) {
+        await CertificationService.updateCertification(certification._id, data);
+      } else {
+        await CertificationService.createCertification(data);
+      }
+      setTimeout(() => {
+        navigate.back();
+      }, 1500); // 1.5 saniye sonra yönlendir
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
-    <div>
+    <div className="p-4">
       <BackIcon />
-      <div className="md:w-1/2 w-2/3 mx-auto p-4 bg-gradient-to-br from-gray-900 to-gray-600 rounded-lg shadow-lg">
+      <div className="max-w-2xl mx-auto bg-black/50 text-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          {certification ? "Sertifikayı Güncelle" : "Yeni Sertifika Ekle"}
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="form-group">
-            <label htmlFor="name" className="form-label">
-              Name
-            </label>
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
             <input
               type="text"
               name="name"
-              className="form-control"
               value={data.name}
               onChange={handleChange}
+              className="w-full p-2 border rounded"
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="issuingOrganization" className="form-label">
+          <div>
+            <label className="block text-sm font-medium mb-1">
               Organization
             </label>
             <input
               type="text"
               name="issuingOrganization"
-              className="form-control"
               value={data.issuingOrganization}
               onChange={handleChange}
+              className="w-full p-2 border rounded"
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="issueDate" className="form-label">
-              Issue Date
-            </label>
+          <div>
+            <label className="block text-sm font-medium mb-1">Issue Date</label>
             <input
               type="date"
               name="issueDate"
-              className="form-control"
               value={data.issueDate}
               onChange={handleChange}
+              className="w-full p-2 border rounded text-black"
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="certificateLink" className="form-label">
-              URL
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Certificate Link
             </label>
             <input
               type="url"
               name="certificateLink"
-              className="form-control"
               value={data.certificateLink}
               onChange={handleChange}
+              className="w-full p-2 border rounded"
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="certificateImage" className="form-label">
-            Image
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Certificate Image
             </label>
             <input
-              type="text"
+              type="url"
               name="certificateImage"
-              className="form-control"
               value={data.certificateImage}
               onChange={handleChange}
+              className="w-full p-2 border rounded"
             />
           </div>
-          <div className="flex items-center justify-center">
-            <button type="submit" className="btn btn-outline-light">
-              {certification ? "Update" : "Add"}
+          <div>
+            <label className="block text-sm font-medium mb-1">Type</label>
+            <select
+              name="type"
+              value={data.type}
+              onChange={handleChange}
+              className="w-full p-2 border rounded text-black"
+              required
+            >
+              {/* default value */}
+              <option value="">Seçiniz</option>
+              <option value="web">Web</option>
+              <option value="mobile">Mobile</option>
+              <option value="ai">AI</option>
+              <option value="database">Database</option>
+              <option value="security">Security</option>
+            </select>
+          </div>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              {certification ? "Güncelle" : "Ekle"}
             </button>
           </div>
         </form>

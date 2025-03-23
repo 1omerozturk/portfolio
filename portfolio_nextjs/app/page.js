@@ -1,28 +1,29 @@
-"use client";
-import React, { Suspense } from "react";
-import "react-toastify/dist/ReactToastify.css";
-import Loading from "./components/Loading";
+'use client'
+import React, { Suspense } from 'react'
+import 'react-toastify/dist/ReactToastify.css'
+import Loading from './components/Loading'
 
-const Typing = React.lazy(() => import("./components/Typing"));
-const SkillsBanner = React.lazy(() => import("./components/SkillsBanner"));
-const ContentsBanner = React.lazy(() => import("./components/ContentsBanner"));
-const Footer = React.lazy(() => import("./components/Footer"));
-const SocialBanner = React.lazy(() => import("./components/SocialBanner"));
-const Projects = React.lazy(() => import("./projects/page"));
+const Typing = React.lazy(() => import('./components/Typing'))
+const SkillsBanner = React.lazy(() => import('./components/SkillsBanner'))
+const ContentsBanner = React.lazy(() => import('./components/ContentsBanner'))
+const Footer = React.lazy(() => import('./components/Footer'))
+const SocialBanner = React.lazy(() => import('./components/SocialBanner'))
+const Projects = React.lazy(() => import('./projects/page'))
 const EducationsBanner = React.lazy(() =>
-  import("./components/EducationsBanner")
-);
+  import('./components/EducationsBanner'),
+)
 const ExperiencesBanner = React.lazy(() =>
-  import("./components/ExperiencesBanner")
-);
+  import('./components/ExperiencesBanner'),
+)
+const Certificates = React.lazy(() => import('./certificas/page'))
 
 export default function Home() {
   const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = "cv.pdf"; // PDF dosyanızın yolu
-    link.download = "omer_ozturk.pdf";
-    link.click();
-  };
+    const link = document.createElement('a')
+    link.href = 'cv.pdf' // PDF dosyanızın yolu
+    link.download = 'omer_ozturk.pdf'
+    link.click()
+  }
 
   return (
     <div className="min-h-dvh bg-gradient-to-tl from-slate-600 to-slate-200">
@@ -60,9 +61,12 @@ export default function Home() {
       <Suspense fallback={<Loading color="teal" />}>
         <ContentsBanner size={4} />
       </Suspense>
+      <Suspense fallback={<Loading color="yellow" />}>
+        <Certificates size={3} />
+      </Suspense>
       <Suspense fallback={<Loading color="indigo" />}>
         <Footer />
       </Suspense>
     </div>
-  );
+  )
 }

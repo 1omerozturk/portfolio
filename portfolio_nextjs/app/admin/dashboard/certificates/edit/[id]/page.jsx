@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import React from "react";
@@ -8,15 +8,11 @@ import Loading from "../../../../components/Loading";
 
 const EditCertification = () => {
   const [data, setData] = useState(null);
-  const {id} = useParams();
+  const { id } = useParams();
 
   const fetchData = async () => {
     try {
-      const response = await CertificationService.getCertification(id).then(
-        (res) => {
-          return res;
-        }
-      );
+      const response = await CertificationService.getCertification(id);
       setData(response.data);
     } catch (error) {
       console.log(error);
