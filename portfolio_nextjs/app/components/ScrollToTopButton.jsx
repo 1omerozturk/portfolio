@@ -5,7 +5,6 @@ const ScrollToTopButton = () => {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      // Eğer kullanıcı 300px'den fazla kaydırdıysa butonu göster
       if (window.scrollY > 300) {
         setIsVisible(true);
       } else {
@@ -13,10 +12,8 @@ const ScrollToTopButton = () => {
       }
     };
 
-    // Scroll event'ini dinle
     window.addEventListener("scroll", toggleVisibility);
 
-    // Cleanup: Component kaldırıldığında event listener'ı temizle
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 

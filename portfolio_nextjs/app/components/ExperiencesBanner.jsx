@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ExperienceService } from "../service/experienceService";
 import { motion } from "framer-motion";
-import { FaBuilding, FaCalendarAlt, FaGraduationCap, FaUserTie } from "react-icons/fa";
+import { FaBuilding, FaCalendarAlt, FaUserTie } from "react-icons/fa";
 import Loading from "./Loading";
 
 const ExperiencesBanner = ({ size }) => {
@@ -35,7 +35,7 @@ const ExperiencesBanner = ({ size }) => {
   return (
     <div className=" p-8 rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold text-white mb-6 text-center">
-        <FaBuilding className="text-green-500 text-black mx-auto" />
+        <FaBuilding className="text-black mx-auto" />
       </h2>
       {loading ? (
         <Loading color={"red"} />

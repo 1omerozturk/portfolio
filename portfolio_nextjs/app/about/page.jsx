@@ -13,7 +13,7 @@ const AboutMe = () => {
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = "cv.pdf"; // PDF dosyanızın yolu
+    link.href = "cv.pdf"; 
     link.download = "omer_ozturk.pdf";
     link.click();
   };

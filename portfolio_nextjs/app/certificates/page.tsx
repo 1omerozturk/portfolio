@@ -46,6 +46,7 @@ const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
         ))}
         {size && (
           <Link
+            aria-label="certificates"
             href="/certificates"
             style={{}}
             className="text-center hover:drop-shadow-xl hover:font-semibold text-indigo-700"

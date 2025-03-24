@@ -30,30 +30,25 @@ const ProjectDetail = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       {loading ? (
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
-          {/* Skeleton Başlık */}
+      
           <Skeleton className="h-8 w-3/4 mb-4 rounded" />
 
-          {/* Skeleton Açıklama */}
           <Skeleton className="h-6 w-full mb-4 rounded" />
           <Skeleton className="h-6 w-full mb-4 rounded" />
 
-          {/* Skeleton Proje Türü */}
           <Skeleton className="h-6 w-24 mb-4 rounded" />
 
-          {/* Skeleton Teknolojiler */}
           <div className="flex gap-2 mb-4">
             <Skeleton className="h-6 w-20 rounded" />
             <Skeleton className="h-6 w-20 rounded" />
             <Skeleton className="h-6 w-20 rounded" />
           </div>
 
-          {/* Skeleton Linkler */}
           <div className="flex gap-4 mb-4">
             <Skeleton className="h-10 w-32 rounded" />
             <Skeleton className="h-10 w-32 rounded" />
           </div>
 
-          {/* Skeleton Görseller */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Skeleton className="h-64 w-full rounded" />
             <Skeleton className="h-64 w-full rounded" />

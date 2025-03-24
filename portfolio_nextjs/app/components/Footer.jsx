@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { IoShareSocialSharp } from "react-icons/io5";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // Takvim stillendirmesi
+import "react-calendar/dist/Calendar.css";
 import { FaCalendarDay } from "react-icons/fa";
 import Links from "./Links";
 import ContactBanner from "./Contact";

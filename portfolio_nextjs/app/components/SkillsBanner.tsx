@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaCode } from "react-icons/fa";
-const SkillProgress = React.lazy(() => import("./SkillProgress")); // Lazy yükleme
+const SkillProgress = React.lazy(() => import("./SkillProgress"));
 import Link from "next/link";
 import { SkillService } from "../service/skillService";
 import { defaultSkillsData } from "../models/skills";
@@ -18,11 +18,11 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
   const fetchSkills = async () => {
     try {
       const res = await SkillService.getSkills();
-      setSkills(res.data); // Gelen verilerle güncelle
-      setIsLoading(false); // Yükleme durumunu kaldır
+      setSkills(res.data); 
+      setIsLoading(false); 
     } catch (error) {
       console.error(error?.message);
-      setIsLoading(false); // Yükleme durumunu kaldır
+      setIsLoading(false); 
     }
   };
 
@@ -30,7 +30,7 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
     fetchSkills();
   }, []);
 
-  // Gösterilecek verileri boyutlandır
+  
   const displayedSkills = size ? skills.slice(0, size) : skills;
 
   return (
@@ -40,9 +40,9 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
         <div className="space-y-2 gap-4">
           <React.Suspense fallback={<Loading color={"lime"} />}>
             {isLoading ? (
-              <Loading color={"lime"} /> // Veriler yüklenirken gösterilecek
+              <Loading color={"lime"} /> 
             ) : (
-              <SkillProgress skills={displayedSkills} /> // Veriler yüklendiğinde gösterilecek
+              <SkillProgress skills={displayedSkills} /> 
             )}
           </React.Suspense>
           {size && (

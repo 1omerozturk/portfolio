@@ -29,7 +29,6 @@ const Navbar = () => {
             height={40}
             className="object-cover rounded-full mr-2"
           />
-          {/* <img src="/omer ozturk.webp" alt="Ömer Öztürk" className="h-10 w-10 object-cover rounded-full mr-2" /> */}
           Ömer Öztürk
         </a>
         <div className="hidden nav-items  md:flex space-x-10">

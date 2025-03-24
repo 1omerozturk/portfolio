@@ -13,7 +13,7 @@ import Loading from "../components/Loading";
 import { defaultProjects } from "../models/projects";
 
 interface ProjectsProps {
-  size?: number; // İhtiyaca göre uygun türü belirleyin
+  size?: number; 
 }
 
 const Projects: React.FC<ProjectsProps> = ({ size }) => {
@@ -98,6 +98,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                     <div className="flex space-x-4">
                       {project.repoLink && (
                         <a
+                        aria-label="github"
                           href={project.repoLink}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -108,6 +109,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                       )}
                       {project.liveDemoLink && (
                         <a
+                        aria-label="live demo"
                           href={project.liveDemoLink}
                           target="_blank"
                           rel="noopener noreferrer"

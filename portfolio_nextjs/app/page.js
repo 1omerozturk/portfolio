@@ -21,7 +21,6 @@ export default function Home() {
   useEffect(() => {
     const originalTitle = document.title
 
-    // Sekmeden çıkıldığında "Lütfen geri dön" mesajını göster
     const handleVisibilityChange = () => {
       if (document.hidden) {
         document.title = 'Software is here 🧑‍💻'
@@ -32,7 +31,6 @@ export default function Home() {
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
-    // Cleanup işlemi
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       document.title = originalTitle
@@ -41,7 +39,7 @@ export default function Home() {
 
   const handleDownload = () => {
     const link = document.createElement('a')
-    link.href = 'cv.pdf' // PDF dosyanızın yolu
+    link.href = 'cv.pdf'
     link.download = 'omer_ozturk.pdf'
     link.click()
   }

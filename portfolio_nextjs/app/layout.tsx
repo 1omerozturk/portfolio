@@ -23,6 +23,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr">
       <head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-E17H5FDP93"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-E17H5FDP93');
+        `,
+          }}
+        />
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
         <link
@@ -51,9 +65,8 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
       </head>
       <body>
-        <div id="top" /> {/* Buraya yeni anchor ekliyoruz */}
+        <div id="top" /> 
         <main className="content">
-          {/* <ToastContainer /> */}
           <ToastContainer
             position="top-right"
             autoClose={3000}

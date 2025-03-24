@@ -7,7 +7,7 @@ interface LoadingProps {
 }
 
 const Loading: React.FC<LoadingProps> = ({ color }) => {
-  const colorClass = color ? `border-${color}-500` : "border-indigo-500"; // Default renk
+  const colorClass = color ? `border-${color}-500` : "border-indigo-500";
 
   return (
     <div

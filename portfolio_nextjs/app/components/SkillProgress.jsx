@@ -29,13 +29,10 @@ const CircularProgressBar = ({ value }) => {
           stroke={getColor(value)}
           fill="none"
           strokeDasharray={circumference}
-          strokeDashoffset={
-            circumference - (value / 100) * circumference
-          }
+          strokeDashoffset={circumference - (value / 100) * circumference}
           initial={{ strokeDashoffset: circumference }}
           animate={{
-            strokeDashoffset:
-              circumference - (value / 100) * circumference,
+            strokeDashoffset: circumference - (value / 100) * circumference,
             transition: { duration: 1, ease: "easeOut" },
           }}
         />
@@ -56,9 +53,7 @@ const CircularProgressBar = ({ value }) => {
 };
 
 const SkillProgress = ({ skills }) => {
-  const [progress, setProgress] = useState(
-    skills.map(() => ({ value: 0 }))
-  );
+  const [progress, setProgress] = useState(skills.map(() => ({ value: 0 })));
 
   // 🚀 İlk Yüklemede Animasyonu Başlatan useEffect
   useEffect(() => {
@@ -69,10 +64,9 @@ const SkillProgress = ({ skills }) => {
     });
   }, [skills]);
 
-  // 🏆 Animasyon Başlatıcı Fonksiyon
   const startAnimation = (index, targetValue) => {
     let start = 0;
-    const duration = 3000; // 1 saniye
+    const duration = 3000;
     const step = (timestamp) => {
       if (!start) start = timestamp;
       const progressTime = timestamp - start;
@@ -98,18 +92,16 @@ const SkillProgress = ({ skills }) => {
     requestAnimationFrame(step);
   };
 
-  // 🖱️ Hover Başladığında Animasyon Başlat
   const handleMouseEnter = (index, targetValue) => {
     startAnimation(index, targetValue);
   };
 
-  // 🖱️ Hover Bittiğinde Değer Sabit Kalsın
   const handleMouseLeave = (index) => {
     setProgress((prevProgress) => {
       const newProgress = [...prevProgress];
       newProgress[index] = {
         ...newProgress[index],
-        value: skills[index].percentage, // Sabit değer gösterimi
+        value: skills[index].percentage,
       };
       return newProgress;
     });
@@ -137,9 +129,7 @@ const SkillProgress = ({ skills }) => {
             scale: 1.05,
             transition: { duration: 0.3 },
           }}
-          onMouseEnter={() =>
-            handleMouseEnter(index, skill.percentage)
-          }
+          onMouseEnter={() => handleMouseEnter(index, skill.percentage)}
           onMouseLeave={() => handleMouseLeave(index)}
         >
           <div className="md:text-2xl text-sm sm:text-xl flex items-center justify-between my-2 gap-x-3 font-semibold">
@@ -159,10 +149,10 @@ const SkillProgress = ({ skills }) => {
 };
 
 const getColor = (percentage) => {
-  if (percentage >= 85) return "#4caf50"; // Yeşil
-  if (percentage >= 70) return "#8bc34a"; // Açık Yeşil
-  if (percentage >= 55) return "#ff9800"; // Turuncu
-  if (percentage >= 40) return "#ffeb3b"; // Sarı
+  if (percentage >= 85) return "#4caf50";
+  if (percentage >= 70) return "#8bc34a";
+  if (percentage >= 55) return "#ff9800";
+  if (percentage >= 40) return "#ffeb3b";
   return "#f44336"; // Kırmızı
 };
 
