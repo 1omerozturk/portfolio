@@ -1,3 +1,4 @@
+import { pdfLinks } from "../../models/certificates";
 import {
   createCertifications,
   deleteCertifications,
@@ -7,9 +8,7 @@ import {
 } from "./../../api/api";
 export class CertificationService {
   static async getCertifications() {
-    const response = await getCertifications().then((res) => {
-      return res;
-    });
+    const response = await pdfLinks;
     return response;
   }
 

@@ -1,5 +1,5 @@
 'use client'
-import React, { Suspense } from 'react'
+import React, { Suspense,useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import Loading from './components/Loading'
 
@@ -15,9 +15,30 @@ const EducationsBanner = React.lazy(() =>
 const ExperiencesBanner = React.lazy(() =>
   import('./components/ExperiencesBanner'),
 )
-const Certificates = React.lazy(() => import('./certificas/page'))
+const Certificates = React.lazy(() => import('./certificates/page'))
 
 export default function Home() {
+  useEffect(() => {
+    const originalTitle = document.title
+
+    // Sekmeden çıkıldığında "Lütfen geri dön" mesajını göster
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = 'Software is here 🧑‍💻'
+      } else {
+        document.title = originalTitle
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Cleanup işlemi
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      document.title = originalTitle
+    }
+  }, [])
+
   const handleDownload = () => {
     const link = document.createElement('a')
     link.href = 'cv.pdf' // PDF dosyanızın yolu
@@ -37,6 +58,17 @@ export default function Home() {
           >
             Download CV <i className="pi pi-download text-xl ml-2 "></i>
           </button>
+          <div className="text-center mt-5">
+            <h1 className="font-serif text-3xl font-bold text-slate-800">
+              Hi! I'm Ömer Öztürk
+            </h1>
+            <p className="mt-3 text-lg text-slate-600 max-w-2xl mx-auto">
+              Software Engineer, Full Stack and Mobile App Developer As a
+              project manager, I get to develop projects and use technology and
+              innovations. I love exploring!
+            </p>
+          </div>
+
           <Suspense fallback={<Loading color="blue" />}>
             <Typing />
           </Suspense>

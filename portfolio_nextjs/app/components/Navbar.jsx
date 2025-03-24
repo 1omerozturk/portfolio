@@ -15,6 +15,7 @@ const Navbar = () => {
     <nav className="bg-gradient-to-bl to-black from-indigo-600 px-3 py-2">
       <div className="mx-auto nav-items flex justify-between items-center">
         <a
+          aria-label=""
           id="#top"
           className={`flex items-center justify-center ${
             pathName == "/" ? "active" : ""
@@ -22,7 +23,8 @@ const Navbar = () => {
           href="/"
         >
           <Image
-            src="/omer ozturk.webp"
+            src="/ozturkomer.webp"
+            alt="Ömer Öztürk"
             width={40}
             height={40}
             className="object-cover rounded-full mr-2"
@@ -32,12 +34,14 @@ const Navbar = () => {
         </a>
         <div className="hidden nav-items  md:flex space-x-10">
           <a
+            aria-label="skills"
             className={`${pathName == "/skills" ? "active" : ""}`}
             href="/skills"
           >
             Skills <i className="ml-2 pi pi-code text-lime-500"></i>
           </a>
           <a
+            aria-label="projects"
             className={`${pathName == "/projects" ? "active" : ""}`}
             href="/projects"
           >
@@ -45,6 +49,7 @@ const Navbar = () => {
             <i className="ml-2 pi pi-folder-open text-orange-400"></i>
           </a>
           <a
+            aria-label="educations"
             className={`block ${pathName == "/educations" ? "active" : ""}`}
             href="/educations"
           >
@@ -52,6 +57,7 @@ const Navbar = () => {
             <i className="ml-2 pi pi-graduation-cap text-slate-100"></i>
           </a>
           <a
+            aria-label="experiences"
             className={`${pathName == "/experiences" ? "active" : ""}`}
             href="/experiences"
           >
@@ -59,13 +65,15 @@ const Navbar = () => {
             <i className="ml-2 pi pi-slack text-sky-400"></i>
           </a>
           <a
+            aria-label="certificates"
             className={`${pathName == "/certificas" ? "active" : ""}`}
-            href="/certificas"
+            href="/certificates"
           >
-            Certificas
+            Certificates
             <i className="ml-2 pi pi-trophy text-indigo-400"></i>
           </a>
           <a
+            aria-label="about"
             className={`${pathName == "/about" ? "active" : ""}`}
             href="/about"
           >
@@ -73,6 +81,7 @@ const Navbar = () => {
             <i className="ml-2 pi pi-user text-slate-400"></i>
           </a>
           <a
+            aria-label="contact"
             className={`${pathName == "/contact" ? "active" : ""}`}
             href="/contact"
           >
@@ -94,18 +103,21 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden space-y-6 mt-5 nav-items">
           <a
+            aria-label="skills"
             className={`block ${pathName == "/skills" ? "active" : ""}`}
             href="/skills"
           >
             Skills <i className="ml-2 pi pi-code text-lime-400"></i>
           </a>
           <a
+            aria-label="projects"
             className={`block ${pathName == "/projects" ? "active" : ""}`}
             href="/projects"
           >
             Projects <i className="ml-2 pi pi-microchip text-yellow-400"></i>
           </a>
           <a
+            aria-label="educations"
             className={`block ${pathName == "/educations" ? "active" : ""}`}
             href="/educations"
           >
@@ -113,6 +125,7 @@ const Navbar = () => {
             <i className="ml-2 pi pi-graduation-cap text-slate-100"></i>
           </a>
           <a
+            aria-label="experiences"
             className={`block ${pathName == "/experiences" ? "active" : ""}`}
             href="/experiences"
           >
@@ -120,19 +133,22 @@ const Navbar = () => {
             <i className="ml-2 pi pi-slack text-sky-400"></i>
           </a>
           <a
+            aria-label="certificates"
             className={`block ${pathName == "/certificas" ? "active" : ""}`}
             href="/certificas"
           >
-            Certificas
+            Certificates
             <i className="ml-2 pi pi-trophy text-indigo-400"></i>
           </a>
           <a
+            aria-label="about"
             className={`block ${pathName == "/about" ? "active" : ""}`}
             href="/about"
           >
             About <i className="ml-2 pi pi-user text-slate-400"></i>
           </a>
           <a
+            aria-label="contact"
             className={`block ${pathName == "/contact" ? "active" : ""}`}
             href="/contact"
           >

@@ -7,11 +7,13 @@ import { SkillService } from "../service/skillService";
 import { ProjectService } from "../../service/projectService";
 import { ContentService } from "../service/contentService";
 import { MessageService } from "../service/messageService";
+import { CertificationService } from "../service/certificationsService";
 
 const Dashboard = () => {
   const [skills, setSkills] = useState(null);
   const [projects, setProjects] = useState(null);
   const [contents, setContents] = useState(null);
+  const [certificates, setCertificates] = useState(null);
   const [messages, setMessages] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -20,11 +22,13 @@ const Dashboard = () => {
       const skillData = await SkillService.getSkills();
       const projectData = await ProjectService.getProjects();
       const contentData = await ContentService.getContents();
+      const certificateData = await CertificationService.getCertifications();
       const messageData = await MessageService.getMessages();
 
       setSkills(skillData.data);
       setProjects(projectData.data);
       setContents(contentData.data);
+      setCertificates(certificateData);
       setMessages(messageData.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -43,6 +47,9 @@ const Dashboard = () => {
       <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
         {isLoading ? (
           <>
+            <div style={{ width: "250px", height: "250px" }}>
+              <Skeleton />
+            </div>
             <div style={{ width: "250px", height: "250px" }}>
               <Skeleton />
             </div>
@@ -85,10 +92,19 @@ const Dashboard = () => {
                 hoverColors={["#A05000FF"]}
               />
             )}
+            {certificates && (
+              <DonutChartCard
+                title="Certificates"
+                labels={["Certificates"]}
+                data={[certificates.length]} // Backend'den gelen veri
+                colors={["#00B7FFFF"]}
+                hoverColors={["#002A5BFF"]}
+              />
+            )}
             {messages && (
               <DonutChartCard
                 title="Messages"
-                labels={["Unread","Read"]}
+                labels={["Unread", "Read"]}
                 data={[
                   messages.filter((msg) => msg.isRead === false).length,
                   messages.filter((msg) => msg.isRead === true).length,

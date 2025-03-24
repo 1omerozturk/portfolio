@@ -30,7 +30,7 @@ const Certificates = () => {
   const fetchCertificates = async () => {
     try {
       const response = await CertificationService.getCertifications();
-      setCertificates(response.data);
+      setCertificates(response);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -43,8 +43,8 @@ const Certificates = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Sertifikalar</h1>
+      <div className="flex justify-around items-center mb-6">
+        <h1 className="text-2xl font-bold">Certificates</h1>
         <button
           onClick={onAdd}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center"
@@ -58,25 +58,16 @@ const Certificates = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {certificates.map((certificate, index) => (
-            <div key={index} className="bg-white p-4 rounded-lg shadow-md">
-              <img
-                src={certificate.certificateImage || "/placeholder-image.png"}
-                alt={certificate.name}
-                className="w-full h-40 object-cover rounded"
-              />
-              <h3 className="text-lg font-semibold mt-2">{certificate.name}</h3>
-              <p className="text-gray-600">{certificate.issuingOrganization}</p>
-              <p className="text-gray-600">
-                {new Date(certificate.issueDate).toLocaleDateString()}
-              </p>
-              <a
-                href={certificate.certificateLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Görüntüle
-              </a>
+            <div key={index} className="bg-white p-1 rounded-lg shadow-md">
+               <iframe
+              className="transition-all duration-500 hover:scale-110 hover:shadow-xl hover:shadow-black"
+              src={certificate}
+              width="100%"
+              height="400"
+              frameBorder="0"
+              allowFullScreen
+              title={`Certifica ${index + 1}`}
+            ></iframe>
               <div className="flex justify-between mt-4">
                 <button
                   onClick={onEdit(certificate._id)}

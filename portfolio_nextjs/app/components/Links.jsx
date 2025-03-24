@@ -20,8 +20,8 @@ const Links = () => {
         <Link className="link" href="/experiences">
         Experiences
         </Link>
-        <Link className="link" href="/certificas">
-        Certificas
+        <Link className="link" href="/certificates">
+        Certificates
         </Link>
         <Link className="link" href="/contact">
         Contact
