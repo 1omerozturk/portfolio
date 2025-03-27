@@ -40,7 +40,7 @@ const AboutDashboard = () => {
               </button>
               {/* image */}
               <img
-                src={admin?.profilePciture || "/omer ozturk.webp"}
+                src={admin?.profilePciture || "/ozturkomer.webp"}
                 alt="Admin"
                 className="rounded-circle h-80 w-80 mx-auto d-block"
               />

@@ -74,7 +74,7 @@ const AdminSideBar = ({ onLogout }) => {
     >
       <h6 className="text-center font-bold mt-2">Admin</h6>
       <img
-      src="/omer ozturk.webp"
+      src="/ozturkomer.webp"
       className="bg-cover h-16 w-16 rounded-full mx-auto"
       />
       <nav className="mt-5">
