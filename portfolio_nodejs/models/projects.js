@@ -8,6 +8,8 @@ const projectSchema = new mongoose.Schema({
   repoLink: String,
   liveDemoLink: String,
   images: [String],
+  // is showcasing
+  isShowcasing: { type: String, default: "false" },
 })
 
 module.exports = mongoose.model('Project', projectSchema)
