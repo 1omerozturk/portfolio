@@ -22,6 +22,7 @@ const ProjectAdd: React.FC<ProjectAddProps> = ({ project }) => {
           repoLink: "",
           liveDemoLink: "",
           images: [],
+          isShowcasing:"false",
         }
   );
 
@@ -179,6 +180,35 @@ const ProjectAdd: React.FC<ProjectAddProps> = ({ project }) => {
               }
               className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
             />
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-2 text-sm font-medium text-gray-300">
+              Showcasing
+            </label>
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="true"
+                name="isShowcasing"
+                value={"true"}
+                checked={data.isShowcasing === "true"}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              <label htmlFor="true" className="mr-4">
+                True
+              </label>
+              <input
+                type="radio"
+                id="false"
+                name="isShowcasing"
+                value={"false"}
+                checked={data.isShowcasing === "false"}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              <label htmlFor="false">False</label>
+            </div>
           </div>
           <button
             type="submit"

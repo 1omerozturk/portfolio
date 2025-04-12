@@ -11,9 +11,10 @@ import "slick-carousel/slick/slick-theme.css";
 
 import Loading from "../components/Loading";
 import { defaultProjects } from "../models/projects";
+import Image from "next/image";
 
 interface ProjectsProps {
-  size?: number; 
+  size?: number;
 }
 
 const Projects: React.FC<ProjectsProps> = ({ size }) => {
@@ -36,9 +37,9 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -48,9 +49,9 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const fetchProjects = async () => {
@@ -70,12 +71,14 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
     fetchProjects();
   }, []);
 
-  const displayedProjects = size ? projects.slice(0, size) : projects;
+  const displayedProjects = size
+    ? projects.filter((p) => p.isShowcasing === "true")
+    : projects;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -90,11 +93,11 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
             <Loading color={"indigo"} />
           </div>
         ) : (
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
             {displayedProjects.map((project, key) => (
               <motion.div
@@ -106,11 +109,16 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                   <Slider {...settings}>
                     {project.images.map((image, imgIndex) => (
                       <div key={imgIndex} className="relative">
-                        <img
-                          className="object-cover h-64 w-full transform transition-transform duration-500 group-hover:scale-110"
-                          src={image}
-                          alt={`${project.title} image ${imgIndex + 1}`}
-                        />
+                        {image && (
+                          <Image
+                          width={500}
+                          height={800}
+                            priority
+                            className="object-cover w-full transform transition-transform duration-500 group-hover:scale-110"
+                            src={image}
+                            alt={`${project.title} image ${imgIndex + 1}`}
+                          />
+                        )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
                     ))}
@@ -129,8 +137,18 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                     <Link href={`/projects/${project._id}`}>
                       <span className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors duration-300">
                         View Details
-                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        <svg
+                          className="w-4 h-4 ml-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
                         </svg>
                       </span>
                     </Link>
@@ -166,7 +184,7 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
         )}
 
         {size && projects.length > size && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
@@ -177,8 +195,18 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
               className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               View More Projects
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              <svg
+                className="w-5 h-5 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
               </svg>
             </Link>
           </motion.div>
