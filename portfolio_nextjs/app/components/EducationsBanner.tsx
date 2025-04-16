@@ -4,6 +4,7 @@ import Image from "next/image";
 import { EducationService } from "../service/educationService";
 import { FaDotCircle, FaGraduationCap, FaRegDotCircle } from "react-icons/fa";
 import Loading from "./Loading";
+import AOS from "aos";
 
 interface EducationSizeProps {
   size?: number;
@@ -29,7 +30,9 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
   };
 
   useEffect(() => {
-    fetchEducations();
+    fetchEducations().then(() => {
+      AOS.init({ duration: 1000 });
+    });
   }, []);
 
   return (
@@ -41,8 +44,9 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
       <div className="space-y-8">
         {educations?.map((education, index) => (
           <div
-            key={index}
-            className="flex flex-col md:flex-row rounded-lg drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6"
+          key={index}
+          className="flex flex-col md:flex-row rounded-lg drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6"
+          data-aos="fade-up"
           >
             <div className="md:w-1/4 flex items-center justify-center mb-6 md:mb-0">
               <Image

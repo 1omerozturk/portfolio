@@ -1,8 +1,12 @@
+'use client'
 import React from 'react'
 import { ReactTyped } from 'react-typed'
 const Typing = () => {
+
   return (
-    <div className="block font-serif lg:text-5xl md:text-4xl sm:text-3xl text-xl font-bold text-center bg-clip-text bg-gradient-to-l text-transparent from-black to-indigo-500 mt-5 drop-shadow-2xl">
+    <div
+      className="block font-serif lg:text-5xl md:text-4xl sm:text-3xl text-xl font-bold text-center bg-clip-text bg-gradient-to-l text-transparent from-black to-indigo-500 mt-5 drop-shadow-2xl"
+    >
       <ReactTyped
         strings={[
           "<strong class='text-blue-500 md:underline '>Hi👋</strong>",

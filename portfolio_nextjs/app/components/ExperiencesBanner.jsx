@@ -6,6 +6,7 @@ import { ExperienceService } from "../service/experienceService";
 import { motion } from "framer-motion";
 import { FaBuilding, FaCalendarAlt, FaUserTie } from "react-icons/fa";
 import Loading from "./Loading";
+import AOS from "aos";
 
 const ExperiencesBanner = ({ size }) => {
   const [experiences, setExperiences] = useState([]);
@@ -13,7 +14,9 @@ const ExperiencesBanner = ({ size }) => {
   const navigate = useRouter();
 
   useEffect(() => {
-    fetchData();
+    fetchData().then(() => {
+      AOS.init({ duration: 1000, once: true });
+    });
   }, []);
 
   const fetchData = async () => {
@@ -41,11 +44,12 @@ const ExperiencesBanner = ({ size }) => {
         <Loading color={"red"} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {displayedExperiences.map((exp) => (
+          {displayedExperiences.map((exp, index) => (
             <motion.div
               key={exp._id}
               className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300"
               whileHover={{ scale: 1.03 }}
+              data-aos={`${index % 2 == 0 ? "fade-left" : "fade-right"}`}
             >
               <div className="flex items-center mb-2">
                 <FaBuilding className="text-blue-500 text-xl mr-2" />
@@ -53,16 +57,14 @@ const ExperiencesBanner = ({ size }) => {
               </div>
               <div className="flex items-center mb-2">
                 <FaUserTie className="text-green-500 text-xl mr-2" />
-               {exp.position}
+                {exp.position}
               </div>
               <div className="flex items-center mb-4">
                 <FaCalendarAlt className="text-purple-500 text-xl mr-2" />
-               
-                  {new Date(exp.startDate).toLocaleDateString()} -{" "}
-                  {exp.endDate
-                    ? new Date(exp.endDate).toLocaleDateString()
-                    : "still working"}
-              
+                {new Date(exp.startDate).toLocaleDateString()} -{" "}
+                {exp.endDate
+                  ? new Date(exp.endDate).toLocaleDateString()
+                  : "still working"}
               </div>
               <ul className="list-disc list-inside text-gray-700">
                 {exp.responsibilities.map((resp, index) => (
@@ -76,7 +78,7 @@ const ExperiencesBanner = ({ size }) => {
       {size && experiences.length > size && (
         <div className="text-center mt-6">
           <button
-          aria-label="seeAll"
+            aria-label="seeAll"
             onClick={() => navigate.push("/experiences")}
             className="bg-white text-blue-500 font-bold py-2 px-6 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
           >

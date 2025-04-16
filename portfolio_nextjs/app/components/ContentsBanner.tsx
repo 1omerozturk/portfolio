@@ -5,6 +5,7 @@ import { FaMedium } from "react-icons/fa";
 import { ContentService } from "../service/contentService";
 import Loading from "./Loading";
 import Image from "next/image";
+import AOS from "aos";
 
 interface ContentSizeProps {
   size?: number;
@@ -26,7 +27,9 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData().then(() => {
+      AOS.init({ duration: 1000 });
+    });
   }, []);
 
   return (
@@ -40,35 +43,37 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
             {size &&
               contents.slice(0, size).map((content, index) => (
                 <a
-                className="text-black"
-                style={{textDecoration:'none'}}
+                  data-aos={`${index % 2 == 0 ? "fade-up" : "fade-down"}`}
+                  className="text-black"
+                  style={{ textDecoration: "none" }}
                   title={content.name}
                   key={index}
                   href={content.link}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                <div className=" text-center my-2" key={index}>
-                  <div className="text-4xl" title={content.name}>
-                    {content.name.slice(0, 15)}
-                  </div>
+                  <div className=" text-center my-2" key={index}>
+                    <div className="text-4xl" title={content.name}>
+                      {content.name.slice(0, 15)}
+                    </div>
 
-                  <Image
-                    src={content.image}
-                    alt={content.name}
-                    width={300}
-                    height={300}
-                    className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px] hover:scale-105 hover:animate-pulse transition-all duration-500 cursor-pointer"
-                  />
-                  <div className="hover:font-semibold text-slate-50 hover:text-slate-950 hover:underline w-fit mx-auto text-center">
-                    Read..
+                    <Image
+                      src={content.image}
+                      alt={content.name}
+                      width={300}
+                      height={300}
+                      className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px] hover:scale-105 hover:animate-pulse transition-all duration-500 cursor-pointer"
+                    />
+                    <div className="hover:font-semibold text-slate-50 hover:text-slate-950 hover:underline w-fit mx-auto text-center">
+                      Read..
+                    </div>
                   </div>
-                </div>
-                  </a>
+                </a>
               ))}
             {!size &&
               contents.map((content, index) => (
                 <div
+                  data-aos={`${index % 2 == 0 ? "fade-up" : "fade-down"}`}
                   className="text-center border-2 border-black rounded-lg my-2"
                   key={index}
                 >

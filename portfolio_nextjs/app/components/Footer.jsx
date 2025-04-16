@@ -17,7 +17,9 @@ const Footer = () => {
 
   return (
     <footer className="space-x-3 p-6 bg-gray-500 md:grid">
-      <div className="grid grid-flow-row border-b-2 border-b-black md:border-b-0 py-5">
+      <div
+        className="grid grid-flow-row border-b-2 border-b-black md:border-b-0 py-5"
+      >
         <div className="bg-slate-300 rounded-full w-fit h-fit mx-auto p-2 mb-3">
           <FaCalendarDay className="text-indigo-500 text-3xl" />
         </div>

@@ -6,13 +6,16 @@ import { SocialService } from "../service/SocialService";
 import { DynamicIcon } from "./DynamicIcon";
 import Loading from "../components/Loading";
 import { defaultSocialLinks } from "../models/socialLinks";
+import AOS from "aos"
 
 const SocialBanner = () => {
   const [socialLinks, setSocialLinks] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchSocialLinks();
+    fetchSocialLinks().then(()=>{
+      AOS.init({duration:1000});
+    });
   }, []);
 
   const fetchSocialLinks = async () => {
@@ -49,6 +52,7 @@ const SocialBanner = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-200 transition duration-100 ease-in-out transform hover:scale-95 hover:text-black"
+              data-aos="fade-up"
             >
               <div className="p-2 w-fit rounded-full bg-indigo-200 hover:bg-indigo-700 shadow-md hover:shadow-lg transition duration-100 ease-in-out transform hover:scale-95">
                 <DynamicIcon iconName={social.icon} />

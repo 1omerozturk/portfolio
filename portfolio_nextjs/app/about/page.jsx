@@ -8,7 +8,7 @@ import SocialBanner from "../components/SocialBanner";
 
 const AboutMe = () => {
   React.useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 1000, once: false });
   }, []);
 
   const handleDownload = () => {

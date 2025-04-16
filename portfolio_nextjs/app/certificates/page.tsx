@@ -13,7 +13,7 @@ interface CertificatesSizeProps {
 
 const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
   React.useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 1000 });
   }, []);
 
   return (
@@ -22,7 +22,7 @@ const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {pdfLinks.slice(0, size ? size : pdfLinks.length).map((link, index) => (
           <div
-            data-aos={"fade-up"}
+            data-aos={`${index % 2 == 0 ? "fade-up" : "fade-down"}`}
             key={index}
             className="bg-white rounded-lg shadow-lg overflow-hidden"
           >
@@ -44,7 +44,9 @@ const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
             </a>
           </div>
         ))}
-        {size && (
+      </div>
+      {size && (
+        <div className="flex items-center justify-center mt-4">
           <Link
             aria-label="certificates"
             href="/certificates"
@@ -53,8 +55,8 @@ const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
           >
             See More
           </Link>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

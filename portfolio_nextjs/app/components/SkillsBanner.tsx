@@ -18,19 +18,18 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
   const fetchSkills = async () => {
     try {
       const res = await SkillService.getSkills();
-      setSkills(res.data); 
-      setIsLoading(false); 
+      setSkills(res.data);
+      setIsLoading(false);
     } catch (error) {
       console.error(error?.message);
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSkills();
+    fetchSkills()
   }, []);
 
-  
   const displayedSkills = size ? skills.slice(0, size) : skills;
 
   return (
@@ -40,9 +39,9 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
         <div className="space-y-2 gap-4">
           <React.Suspense fallback={<Loading color={"lime"} />}>
             {isLoading ? (
-              <Loading color={"lime"} /> 
+              <Loading color={"lime"} />
             ) : (
-              <SkillProgress skills={displayedSkills} /> 
+              <SkillProgress skills={displayedSkills} />
             )}
           </React.Suspense>
           {size && (
