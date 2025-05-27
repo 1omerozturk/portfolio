@@ -3,7 +3,6 @@ require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
-const job = require('./service/cron')
 
 // app conect to express
 const app = express()
@@ -12,7 +11,8 @@ const app = express()
 connectDb()
 
 // cron func
-job.start()
+// const job = require('./service/cron')
+// job.start()
 
 app.use(cors())
 app.use(express.json())
