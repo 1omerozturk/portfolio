@@ -20,6 +20,12 @@ const nextConfig = {
       },
       {
           protocol: 'https',
+          hostname: 'raw.githubusercontent.com',
+          port: '',
+          pathname: '**',
+      },
+      {
+          protocol: 'https',
           hostname: 'www.toyayazilim.com.tr',
           port: '',
           pathname: '**',

@@ -84,8 +84,9 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">My Projects</h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+          <h2 className="text-3xl font-bold mb-6 text-center">
+           <i className="pi pi-microchip text-yellow-400"></i>
+          </h2>
         </motion.div>
 
         {loading ? (
@@ -111,11 +112,11 @@ const Projects: React.FC<ProjectsProps> = ({ size }) => {
                       <div key={imgIndex} className="relative">
                         {image && (
                           <Image
-                          width={500}
-                          height={800}
+                            width={500}
+                            height={800}
                             priority
                             className="object-cover w-full transform transition-transform duration-500 group-hover:scale-110"
-                            src={image}
+                            src={image.trim()}
                             alt={`${project.title} image ${imgIndex + 1}`}
                           />
                         )}

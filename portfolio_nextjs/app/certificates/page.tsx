@@ -18,7 +18,9 @@ const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Certificates</h1>
+      <h2 className="text-3xl font-bold drop-shadow-lg  mb-6 text-center">
+        <i className="pi pi-trophy text-orange-600 mx-auto"></i>
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {pdfLinks.slice(0, size ? size : pdfLinks.length).map((link, index) => (
           <div

@@ -38,7 +38,7 @@ const ExperiencesBanner = ({ size }) => {
   return (
     <div className=" p-8 rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold text-white mb-6 text-center">
-        <FaBuilding className="text-black mx-auto" />
+        <FaBuilding className="text-black text-4xl mx-auto mb-3" />
       </h2>
       {loading ? (
         <Loading color={"red"} />

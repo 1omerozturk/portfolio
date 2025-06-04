@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as FaIcons from "react-icons/fa";
 import * as SiIcons from "react-icons/si";
 import { motion } from "framer-motion";
+import AOS from "aos";
 
 const CircularProgressBar = ({ value }) => {
   const radius = 50;
@@ -57,6 +58,8 @@ const SkillProgress = ({ skills }) => {
 
   // 🚀 İlk Yüklemede Animasyonu Başlatan useEffect
   useEffect(() => {
+    if (skills) AOS.init({ duration: 1000 });
+
     skills.forEach((skill, index) => {
       setTimeout(() => {
         startAnimation(index, skill.percentage);
@@ -120,6 +123,8 @@ const SkillProgress = ({ skills }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {skills.map((skill, index) => (
         <motion.div
+          data-aos="fade-down"
+          data-aos-delay={index * 200}
           key={index}
           className="bg-gradient-to-t from-indigo-400 to-white p-4 rounded-lg shadow-md space-y-6"
           initial={{ opacity: 0, y: 50 }}

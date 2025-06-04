@@ -65,7 +65,7 @@ const Navbar = () => {
           </a>
           <a
             aria-label="certificates"
-            className={`${pathName == "/certificas" ? "active" : ""}`}
+            className={`${pathName == "/certificates" ? "active" : ""}`}
             href="/certificates"
           >
             Certificates
@@ -133,8 +133,8 @@ const Navbar = () => {
           </a>
           <a
             aria-label="certificates"
-            className={`block ${pathName == "/certificas" ? "active" : ""}`}
-            href="/certificas"
+            className={`block ${pathName == "/certificates" ? "active" : ""}`}
+            href="/certificates"
           >
             Certificates
             <i className="ml-2 pi pi-trophy text-indigo-400"></i>
