@@ -47,22 +47,22 @@ exports.getAdmin = async (req, res) => {
 }
 
 // admin update
-// exports.updatePassword = async (req, res) => {
-//   try {
-//     const { username, password, newpassword } = req.body
-//     const user = await User.findOne({ username })
-//     if (!user) {
-//       return res.status(400).json({ message: 'Invalid email or password' })
-//     }
-//     console.log(user.password)
-//     user.password = newpassword
-//     await user.save()
-//     console.log(user.password)
-//     res.status(200).json({ message: 'Password updated successfully' })
-//   } catch (err) {
-//     res.status(500).json({ message: err.message })
-//   }
-// }
+/* exports.updatePassword = async (req, res) => {
+  try {
+    const { username, password, newpassword } = req.body
+    const user = await User.findOne({ username })
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid email or password' })
+    }
+    console.log(user.password)
+    user.password = newpassword
+    await user.save()
+    console.log(user.password)
+    res.status(200).json({ message: 'Password updated successfully' })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+} */
 
 // Admin Controller for post update and delete
 // Post

@@ -42,7 +42,7 @@ exports.getSocialLinks = async (req, res) => {
 
 exports.getEducations = async (req, res) => {
   try {
-    const educations = await Educations.find()
+    const educations = await Educations.find({}).sort({_id:-1}) 
     res.status(200).json(educations)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -51,7 +51,7 @@ exports.getEducations = async (req, res) => {
 
 exports.getExperiences = async (req, res) => {
   try {
-    const experiences = await Experiences.find()
+    const experiences = await Experiences.find({}).sort({_id:-1})
     res.status(200).json(experiences)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -77,7 +77,7 @@ exports.getSkills = async (req, res) => {
 
 exports.getProjects = async (req, res) => {
   try {
-    const projects = await Projects.find()
+    const projects = await Projects.find({}).sort({_id:-1})
     res.status(200).json(projects)
   } catch (error) {
     res.status(500).json({ message: error.message })

@@ -39,7 +39,7 @@ const SocialBanner = () => {
       {loading ? (
         <Loading color={"teal"} />
       ) : (
-        <div className="grid grid-flow-col w-fit sm:space-x-4 space-x-1 text-center mx-auto">
+        <div className="grid grid-flow-col w-fit sm:space-x-4 space-x-1 mb-4 text-center mx-auto">
           {socialLinks?.map((social, index) => (
             <a
               title={social.name}
@@ -52,7 +52,7 @@ const SocialBanner = () => {
               data-aos={index % 2 === 0 ? "fade-up" : "fade-down"}
               data-aos-delay={index * 200} // Her öğeye 200ms farkla gecikme ekler
             >
-              <div className="p-2 w-fit rounded-full bg-indigo-200 hover:bg-indigo-700 shadow-md hover:shadow-lg transition duration-100 ease-in-out transform hover:scale-95">
+              <div className="p-2 w-fit rounded-full bg-indigo-200 hover:bg-indigo-400 shadow-md hover:shadow-lg transition duration-100 ease-in-out transform hover:scale-95">
                 <DynamicIcon iconName={social.icon} />
               </div>
             </a>

@@ -11,7 +11,7 @@ interface EducationSizeProps {
 }
 
 const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
-  const [educations, setEducations] = useState(null);
+  const [educations, setEducations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchEducations = async () => {
@@ -41,11 +41,11 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
         <FaGraduationCap />
       </div>
       {loading && <Loading color="orange" />}
-      <div className="space-y-8">
-        {educations?.map((education, index) => (
+      <div className="space-y-8 grid grid-cols-1 md:grid-cols-2">
+        {educations.reverse().map((education, index) => (
           <div
           key={index}
-          className="flex flex-col md:flex-row rounded-lg drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6"
+          className="flex flex-col md:flex-row rounded-none drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6 border-b-2 border-b-sky-600 md:border-y-0 md:border-x-2 md:border-x-slate-600 first:border-l-0 last:border-0"
           data-aos="fade-up"
           >
             <div className="md:w-1/4 flex items-center justify-center mb-6 md:mb-0">
@@ -60,7 +60,7 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
             </div>
 
             {/* Education Details */}
-            <div className="md:w-3/4 md:pl-8 flex items-center justify-center">
+            <div className="md:w-full md:pl-8 flex items-center justify-start">
               <div className="flex flex-col space-y-4">
                 <h3 className="text-2xl font-semibold text-gray-800">
                   {education.institution}

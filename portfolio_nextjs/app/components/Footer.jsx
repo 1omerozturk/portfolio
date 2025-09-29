@@ -44,7 +44,10 @@ const Footer = () => {
         <div className="bg-slate-300 rounded-full w-fit h-fit mx-auto p-2 mb-3">
           <IoShareSocialSharp className="text-3xl text-fuchsia-500" />
         </div>
+        <div className="my-4">
+
         <SocialBanner />
+        </div>
       </div>
     </footer>
   );

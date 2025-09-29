@@ -40,7 +40,7 @@ const {
   markMessage,
 
   // admin management routing
-  // updatePassword
+  updatePassword
 } = require('../controller/adminController')
 
 const router = express.Router()
