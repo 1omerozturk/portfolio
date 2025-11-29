@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 
+@font-face {
+  font-family: 'Slick';
+  src: url('/media/slick.653a4cbb.woff') format('woff');
+  font-display: swap;
+}
+
 .nav-items > a {
   @apply text-lg font-semibold  text-white hover:cursor-pointer;
   text-decoration: none;
