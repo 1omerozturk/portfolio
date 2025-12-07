@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+turbopack: {},
   webpack(config, { dev, isServer }) {
     if (!dev && !isServer) {
       config.optimization.minimize = true
