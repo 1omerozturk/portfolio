@@ -71,7 +71,7 @@ const AboutMe = () => {
               onClick={() => handleDownload()}
               className="px-3 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-300"
             >
-              CV'yi İndir
+              Download CV ⬇️
             </button>
             <div data-aos="fade-left" className="flex lg:block ">
               <SocialBanner />
