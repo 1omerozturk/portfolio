@@ -2,7 +2,7 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import Loading from './components/Loading'
-import YoutubeSection from "./components/YoutubeSection";
+import YoutubeSection from "./components/YouTubeSection";
 import "./styles/youtube-section.css";
 const Typing = React.lazy(() => import('./components/Typing'))
 const SkillsBanner = React.lazy(() => import('./components/SkillsBanner'))
