@@ -29,4 +29,4 @@ const YoutubeSection=()=> {
     </section>
   );
 }
-export default YoutubeSectoin;
+export default YoutubeSection;
