@@ -1,4 +1,5 @@
-export default function YoutubeSection() {
+"use client";
+const YoutubeSection=()=> {
   return (
     <section className="youtube-section">
       <h2>YouTube Videolarım</h2>
@@ -28,3 +29,4 @@ export default function YoutubeSection() {
     </section>
   );
 }
+export default YoutubeSectoin;
