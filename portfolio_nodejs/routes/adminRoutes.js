@@ -39,6 +39,12 @@ const {
   deleteMessage,
   markMessage,
 
+  // blog routing
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  getAdminBlogs,
+
   // admin management routing
   updatePassword
 } = require('../controller/adminController')
@@ -91,5 +97,11 @@ router.post('/hobbies', admin, createHobbies)
 router.post('/languages', admin, createLanguages)
 router.post('/projects', admin, createProjects)
 router.post('/certifications', admin, createCertifications)
+
+// Blog routes
+router.post('/blogs', admin, createBlog)
+router.get('/blogs', admin, getAdminBlogs)
+router.put('/blogs/:id', admin, updateBlog)
+router.delete('/blogs/:id', admin, deleteBlog)
 
 module.exports = router

@@ -10,6 +10,7 @@ const References = require('../models/references')
 const Hobbies = require('../models/hobbies')
 const Contents = require('../models/contents')
 const Messages = require('../models/messages')
+const Blogs = require('../models/blogs')
 
 // message post
 exports.postMessage = async (req, res) => {
@@ -228,6 +229,130 @@ exports.getOneHobbies = async (req, res) => {
     const hobbies = await Hobbies.findById(id)
     res.status(200).json(hobbies)
   } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+// Blog endpoints for users
+exports.getBlogs = async (req, res) => {
+  try {
+    const { page = 1, limit = 6, category, search } = req.query
+    
+    const query = { isPublished: true }
+    
+    if (category) {
+      query.category = category
+    }
+    
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { content: { $regex: search, $options: 'i' } },
+        { tags: { $in: [new RegExp(search, 'i')] } }
+      ]
+    }
+
+    const skip = (page - 1) * limit
+    
+    const blogs = await Blogs.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit))
+
+    const total = await Blogs.countDocuments(query)
+
+    res.status(200).json({
+      blogs,
+      total,
+      pages: Math.ceil(total / limit),
+      currentPage: parseInt(page)
+    })
+  } catch (error) {
+    console.error('Get Blogs Error:', error)
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getBlogById = async (req, res) => {
+  try {
+    const { id } = req.params
+    
+    // Views sayısını artır
+    const blog = await Blogs.findByIdAndUpdate(
+      id,
+      { $inc: { views: 1 } },
+      { new: true }
+    )
+
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog bulunamadı' })
+    }
+
+    if (!blog.isPublished) {
+      return res.status(403).json({ message: 'Bu blog yayınlanmamış' })
+    }
+
+    res.status(200).json(blog)
+  } catch (error) {
+    console.error('Get Blog Error:', error)
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getBlogsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params
+    const { page = 1, limit = 6 } = req.query
+
+    const skip = (page - 1) * limit
+
+    const blogs = await Blogs.find({ 
+      category, 
+      isPublished: true 
+    })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit))
+
+    const total = await Blogs.countDocuments({ 
+      category, 
+      isPublished: true 
+    })
+
+    res.status(200).json({
+      blogs,
+      total,
+      pages: Math.ceil(total / limit),
+      currentPage: parseInt(page)
+    })
+  } catch (error) {
+    console.error('Get Blogs By Category Error:', error)
+    res.status(500).json({ message: error.message })
+  }
+}
+
+exports.searchBlogs = async (req, res) => {
+  try {
+    const { query } = req.query
+    
+    if (!query || query.trim() === '') {
+      return res.status(400).json({ message: 'Arama terimi gereklidir' })
+    }
+
+    const blogs = await Blogs.find(
+      {
+        isPublished: true,
+        $or: [
+          { title: { $regex: query, $options: 'i' } },
+          { content: { $regex: query, $options: 'i' } },
+          { tags: { $in: [new RegExp(query, 'i')] } }
+        ]
+      }
+    ).sort({ createdAt: -1 })
+
+    res.status(200).json(blogs)
+  } catch (error) {
+    console.error('Search Blogs Error:', error)
     res.status(500).json({ message: error.message })
   }
 }

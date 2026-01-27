@@ -21,6 +21,10 @@ const {
   getOneHobbies,
   getOneReferences,
   postMessage,
+  getBlogs,
+  getBlogById,
+  getBlogsByCategory,
+  searchBlogs,
 } = require('../controller/userController')
 
 const router = express.Router()
@@ -45,6 +49,12 @@ router.get('/projects/:id', getOneProjects)
 router.get('/certifications/:id', getOneCertifications)
 router.get('/hobbies/:id', getOneHobbies)
 router.get('/references/:id', getOneReferences)
+
+// Blog routes (public)
+router.get('/blogs', getBlogs)
+router.get('/blogs/category/:category', getBlogsByCategory)
+router.get('/blogs/:id', getBlogById)
+router.get('/search/blogs', searchBlogs)
 
 // message posting
 router.post('/messages', postMessage)
