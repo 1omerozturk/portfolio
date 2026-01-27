@@ -52,9 +52,9 @@ router.get('/references/:id', getOneReferences)
 
 // Blog routes (public)
 router.get('/blogs', getBlogs)
+router.get('/search/blogs', searchBlogs)
 router.get('/blogs/category/:category', getBlogsByCategory)
 router.get('/blogs/:id', getBlogById)
-router.get('/search/blogs', searchBlogs)
 
 // message posting
 router.post('/messages', postMessage)

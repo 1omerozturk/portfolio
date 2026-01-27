@@ -44,6 +44,7 @@ const {
   updateBlog,
   deleteBlog,
   getAdminBlogs,
+  getAdminBlogById,
 
   // admin management routing
   updatePassword
@@ -101,6 +102,7 @@ router.post('/certifications', admin, createCertifications)
 // Blog routes
 router.post('/blogs', admin, createBlog)
 router.get('/blogs', admin, getAdminBlogs)
+router.get('/blogs/:id', admin, getAdminBlogById)
 router.put('/blogs/:id', admin, updateBlog)
 router.delete('/blogs/:id', admin, deleteBlog)
 

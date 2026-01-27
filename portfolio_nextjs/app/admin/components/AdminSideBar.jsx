@@ -12,6 +12,7 @@ import {
   FaAward,
   FaSpaceShuttle,
   FaMediumM,
+  FaPenFancy,
 } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
 
@@ -56,6 +57,11 @@ const AdminSideBar = ({ onLogout }) => {
       name: "Certificates",
       path: "/admin/dashboard/certificates",
       icon: <FaAward className="text-yellow-500" />,
+    },
+    {
+      name: "Blogs",
+      path: "/admin/dashboard/blogs",
+      icon: <FaPenFancy className="text-pink-500" />,
     },
     {
       name: "Contacts",
