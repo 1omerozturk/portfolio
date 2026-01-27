@@ -8,7 +8,9 @@ const YoutubeSection = () => {
       <h2>YouTube Videos</h2>
       <p>
         Can you watch me videos and subscribe to Youtube Channel{" "}
-        <FaYoutubeSquare />
+        <h3>
+          <i class="fa fa-youtube-square" aria-hidden="true"></i>
+        </h3>
       </p>
 
       {/* Playlist */}
@@ -31,6 +33,7 @@ const YoutubeSection = () => {
         className="subscribe-btn"
       >
         🔔 Subscribe to me YouTube
+        <i class="fa fa-youtube-square" aria-hidden="true"></i>
       </a>
     </section>
   );
