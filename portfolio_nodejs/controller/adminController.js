@@ -590,6 +590,8 @@ exports.getAllBlogs = async (req, res) => {
   }
 }
 
+
+
 exports.getBlogById = async (req, res) => {
   try {
     const { id } = req.params
@@ -656,5 +658,25 @@ exports.getAdminBlogs = async (req, res) => {
   } catch (error) {
     console.error('Get Admin Blogs Error:', error)
     res.status(500).json({ message: error.message })
+  }
+}
+
+exports.getAdminBlogById=async(req,res)=>{
+  try {
+    const {id}=req.params
+    const blog = await Blogs.findByIdAndUpdate(id)
+
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog bulunamadı' })
+    }
+
+    if (!blog.isPublished) {
+      return res.status(403).json({ message: 'Bu blog yayınlanmamış' })
+    }
+
+    res.status(200).json(blog)
+  } catch (error) {
+    console.error("Get Admin Blog By Id Error:", error)
+    res.status(500).json({message:error.message})
   }
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
-// const api: string = "http://localhost:5050/api";
-const api: string = "https://portfolio-m5zz.onrender.com/api";
+const api: string = "http://localhost:5050/api";
+// const api: string = "https://portfolio-m5zz.onrender.com/api";
 
 // User Log check function
 export const getToken = () => {
@@ -316,4 +316,46 @@ export const markMessageApi = async (id: any, isRead: any) => {
     {},
     { ...getAdminConfig(), params: { isRead } }
   );
+};
+// Blog APIs - User endpoints
+export const getBlogs = async (query?: string) => {
+  const url = query ? `${api}/user/blogs?${query}` : `${api}/user/blogs`;
+  return await axios.get(url);
+};
+
+export const getBlogById = async (id: string) => {
+  return await axios.get(`${api}/user/blogs/${id}`);
+};
+
+export const getBlogsByCategory = async (category: string, query?: string) => {
+  const url = query 
+    ? `${api}/user/blogs/category/${category}?${query}` 
+    : `${api}/user/blogs/category/${category}`;
+  return await axios.get(url);
+};
+
+export const searchBlogs = async (query: string) => {
+  return await axios.get(`${api}/user/search/blogs?query=${query}`);
+};
+
+// Blog APIs - Admin endpoints
+export const createBlog = async (data: any) => {
+  return await axios.post(`${api}/admin/blogs`, data, getAdminConfig());
+};
+
+export const getAdminBlogs = async (query?: string) => {
+  const url = query ? `${api}/admin/blogs?${query}` : `${api}/admin/blogs`;
+  return await axios.get(url, getAdminConfig());
+};
+
+export const getAdminBlogById = async (id: string) => {
+  return await axios.get(`${api}/admin/blogs/${id}`, getAdminConfig());
+};
+
+export const updateBlog = async (id: string, data: any) => {
+  return await axios.put(`${api}/admin/blogs/${id}`, data, getAdminConfig());
+};
+
+export const deleteBlog = async (id: string) => {
+  return await axios.delete(`${api}/admin/blogs/${id}`, getAdminConfig());
 };
