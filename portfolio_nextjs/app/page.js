@@ -17,6 +17,7 @@ const ExperiencesBanner = React.lazy(() =>
   import('./components/ExperiencesBanner'),
 )
 const Certificates = React.lazy(() => import('./certificates/page'))
+const BlogsSection = React.lazy(() => import('./components/BlogsSection'))
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -142,6 +143,9 @@ export default function Home() {
       </Suspense>
       <Suspense fallback={<Loading color="yellow" />}>
         <Certificates size={3} />
+      </Suspense>
+      <Suspense fallback={<Loading color="pink" />}>
+        <BlogsSection />
       </Suspense>
       <Suspense fallback={<Loading color="indigo" />}>
         <Footer />

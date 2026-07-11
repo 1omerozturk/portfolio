@@ -1,9 +1,17 @@
 "use client";
-const YoutubeSection=()=> {
+
+import { FaYoutubeSquare } from "react-icons/fa";
+
+const YoutubeSection = () => {
   return (
     <section className="youtube-section">
-      <h2>YouTube Videolarım</h2>
-      <p>Paylaştığım videolara buradan ulaşabilir ve kanalıma abone olabilirsin.</p>
+      <h2>YouTube Videos</h2>
+      <p>
+        Can you watch me videos and subscribe to Youtube Channel{" "}
+        <h3>
+          <i class="fa fa-youtube-square" aria-hidden="true"></i>
+        </h3>
+      </p>
 
       {/* Playlist */}
       <div className="video-wrapper">
@@ -24,9 +32,10 @@ const YoutubeSection=()=> {
         rel="noopener noreferrer"
         className="subscribe-btn"
       >
-        🔔 YouTube Kanalıma Abone Ol
+        🔔 Subscribe to me YouTube
+        <i class="fa fa-youtube-square" aria-hidden="true"></i>
       </a>
     </section>
   );
-}
+};
 export default YoutubeSection;

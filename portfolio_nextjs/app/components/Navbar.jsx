@@ -72,6 +72,14 @@ const Navbar = () => {
             <i className="ml-2 pi pi-trophy text-indigo-400"></i>
           </a>
           <a
+            aria-label="blog"
+            className={`${pathName == "/blog" ? "active" : ""}`}
+            href="/blog"
+          >
+            Blog
+            <i className="ml-2 pi pi-pen-to-square text-pink-500"></i>
+          </a>
+          <a
             aria-label="about"
             className={`${pathName == "/about" ? "active" : ""}`}
             href="/about"
@@ -138,6 +146,14 @@ const Navbar = () => {
           >
             Certificates
             <i className="ml-2 pi pi-trophy text-indigo-400"></i>
+          </a>
+          <a
+            aria-label="blog"
+            className={`block ${pathName == "/blog" ? "active" : ""}`}
+            href="/blog"
+          >
+            Blog
+            <i className="ml-2 pi pi-pen-to-square text-pink-500"></i>
           </a>
           <a
             aria-label="about"
