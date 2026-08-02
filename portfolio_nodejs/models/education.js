@@ -1,15 +1,18 @@
-const mongoose = require('mongoose')
-
-const educationSchema = new mongoose.Schema({
-  institution: { type: String, required: true },
-  degree: { type: String, required: true },
-  fieldOfStudy: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
-  grade: String,
-  activities: [String],
-  description: String,
-  institutionLogo: String, // URL to the institution's logo
+const createEducationPayload = (input = {}) => ({
+  institution: input.institution || '',
+  degree: input.degree || '',
+  fieldOfStudy: input.fieldOfStudy || '',
+  startDate: input.startDate || new Date(),
+  endDate: input.endDate || null,
+  grade: input.grade || '',
+  activities: Array.isArray(input.activities) ? input.activities : [],
+  description: input.description || '',
+  institutionLogo: input.institutionLogo || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Education', educationSchema)
+module.exports = {
+  collectionName: 'educations',
+  createEducationPayload,
+}

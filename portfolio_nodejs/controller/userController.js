@@ -1,22 +1,16 @@
-const PersonalInfos = require('../models/personalInfo')
-const SocialLinks = require('../models/socialLinks')
-const Educations = require('../models/education')
-const Experiences = require('../models/experiences')
-const Skills = require('../models/skills')
-const Projects = require('../models/projects')
-const Certifications = require('../models/certifications')
-const Languages = require('../models/languages')
-const References = require('../models/references')
-const Hobbies = require('../models/hobbies')
-const Contents = require('../models/contents')
-const Messages = require('../models/messages')
-const Blogs = require('../models/blogs')
+const {
+  getCollectionDocs,
+  getDocById,
+  createDoc,
+  updateDoc,
+  deleteDoc,
+  sortDocs
+} = require('../service/firestoreRepository')
 
 // message post
 exports.postMessage = async (req, res) => {
   try {
-    const message = await new Messages(req.body)
-    await message.save()
+    const message = await createDoc('messages', req.body)
     res.status(201).json('Message send successfully')
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -25,7 +19,7 @@ exports.postMessage = async (req, res) => {
 
 exports.getPersonalInfo = async (req, res) => {
   try {
-    const personalInfo = await PersonalInfos.find()
+    const personalInfo = await getCollectionDocs('personalInfo')
     res.status(200).json(personalInfo)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -34,7 +28,7 @@ exports.getPersonalInfo = async (req, res) => {
 
 exports.getSocialLinks = async (req, res) => {
   try {
-    const socialLinks = await SocialLinks.find()
+    const socialLinks = await getCollectionDocs('socialLinks')
     res.status(200).json(socialLinks)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -43,7 +37,7 @@ exports.getSocialLinks = async (req, res) => {
 
 exports.getEducations = async (req, res) => {
   try {
-    const educations = await Educations.find({}).sort({_id:-1}) 
+    const educations = sortDocs(await getCollectionDocs('educations'), 'createdAt', 'desc')
     res.status(200).json(educations)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -52,7 +46,7 @@ exports.getEducations = async (req, res) => {
 
 exports.getExperiences = async (req, res) => {
   try {
-    const experiences = await Experiences.find({}).sort({_id:-1})
+    const experiences = sortDocs(await getCollectionDocs('experiences'), 'createdAt', 'desc')
     res.status(200).json(experiences)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -60,7 +54,7 @@ exports.getExperiences = async (req, res) => {
 }
 exports.getContents = async (req, res) => {
   try {
-    const contents = await Contents.find()
+    const contents = await getCollectionDocs('contents')
     res.status(200).json(contents)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -69,7 +63,7 @@ exports.getContents = async (req, res) => {
 
 exports.getSkills = async (req, res) => {
   try {
-    const skills = await Skills.find()
+    const skills = await getCollectionDocs('skills')
     res.status(200).json(skills)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -78,7 +72,7 @@ exports.getSkills = async (req, res) => {
 
 exports.getProjects = async (req, res) => {
   try {
-    const projects = await Projects.find({}).sort({_id:-1})
+    const projects = sortDocs(await getCollectionDocs('projects'), 'createdAt', 'desc')
     res.status(200).json(projects)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -87,7 +81,7 @@ exports.getProjects = async (req, res) => {
 
 exports.getCertifications = async (req, res) => {
   try {
-    const certifications = await Certifications.find()
+    const certifications = await getCollectionDocs('certifications')
     res.status(200).json(certifications)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -96,7 +90,7 @@ exports.getCertifications = async (req, res) => {
 
 exports.getLanguages = async (req, res) => {
   try {
-    const languages = await Languages.find()
+    const languages = await getCollectionDocs('languages')
     res.status(200).json(languages)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -105,7 +99,7 @@ exports.getLanguages = async (req, res) => {
 
 exports.getReferences = async (req, res) => {
   try {
-    const references = await References.find()
+    const references = await getCollectionDocs('references')
     res.status(200).json(references)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -114,7 +108,7 @@ exports.getReferences = async (req, res) => {
 
 exports.getHobbies = async (req, res) => {
   try {
-    const hobbies = await Hobbies.find()
+    const hobbies = await getCollectionDocs('hobbies')
     res.status(200).json(hobbies)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -126,7 +120,7 @@ exports.getHobbies = async (req, res) => {
 exports.getOnePersonalInfo = async (req, res) => {
   try {
     const id = req.params.id
-    const personalInfo = await PersonalInfos.findById(id)
+    const personalInfo = await getDocById('personalInfo', id)
     res.status(200).json(personalInfo)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -136,7 +130,7 @@ exports.getOnePersonalInfo = async (req, res) => {
 exports.getOneSocialLinks = async (req, res) => {
   try {
     const id = req.params.id
-    const socialLinks = await SocialLinks.findById(id)
+    const socialLinks = await getDocById('socialLinks', id)
     res.status(200).json(socialLinks)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -146,7 +140,7 @@ exports.getOneSocialLinks = async (req, res) => {
 exports.getOneEducations = async (req, res) => {
   try {
     const id = req.params.id
-    const educations = await Educations.findById(id)
+    const educations = await getDocById('educations', id)
     res.status(200).json(educations)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -156,7 +150,7 @@ exports.getOneEducations = async (req, res) => {
 exports.getOneExperiences = async (req, res) => {
   try {
     const id = req.params.id
-    const experiences = await Experiences.findById(id)
+    const experiences = await getDocById('experiences', id)
     res.status(200).json(experiences)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -166,7 +160,7 @@ exports.getOneExperiences = async (req, res) => {
 exports.getOneContents = async (req, res) => {
   try {
     const id = req.params.id
-    const contents = await Contents.findById(id)
+    const contents = await getDocById('contents', id)
     res.status(200).json(contents)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -176,7 +170,7 @@ exports.getOneContents = async (req, res) => {
 exports.getOneSkills = async (req, res) => {
   try {
     const id = req.params.id
-    const skills = await Skills.findById(id)
+    const skills = await getDocById('skills', id)
     res.status(200).json(skills)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -186,7 +180,7 @@ exports.getOneSkills = async (req, res) => {
 exports.getOneProjects = async (req, res) => {
   try {
     const id = req.params.id
-    const projects = await Projects.findById(id)
+    const projects = await getDocById('projects', id)
     res.status(200).json(projects)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -196,7 +190,7 @@ exports.getOneProjects = async (req, res) => {
 exports.getOneCertifications = async (req, res) => {
   try {
     const id = req.params.id
-    const certifications = await Certifications.findById(id)
+    const certifications = await getDocById('certifications', id)
     res.status(200).json(certifications)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -206,7 +200,7 @@ exports.getOneCertifications = async (req, res) => {
 exports.getOneLanguages = async (req, res) => {
   try {
     const id = req.params.id
-    const languages = await Languages.findById(id)
+    const languages = await getDocById('languages', id)
     res.status(200).json(languages)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -216,7 +210,7 @@ exports.getOneLanguages = async (req, res) => {
 exports.getOneReferences = async (req, res) => {
   try {
     const id = req.params.id
-    const references = await References.findById(id)
+    const references = await getDocById('references', id)
     res.status(200).json(references)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -226,7 +220,7 @@ exports.getOneReferences = async (req, res) => {
 exports.getOneHobbies = async (req, res) => {
   try {
     const id = req.params.id
-    const hobbies = await Hobbies.findById(id)
+    const hobbies = await getDocById('hobbies', id)
     res.status(200).json(hobbies)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -237,27 +231,19 @@ exports.getOneHobbies = async (req, res) => {
 exports.getBlogs = async (req, res) => {
   try {
     const { page = 1, limit = 6, category, search } = req.query
-    
-    const query = { isPublished: true }
-    
-    if (category) {
-      query.category = category
-    }
-    
-    if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { content: { $regex: search, $options: 'i' } },
-        { tags: { $in: [new RegExp(search, 'i')] } }
-      ]
-    }
+    const allBlogs = sortDocs(await getCollectionDocs('blogs'), 'createdAt', 'desc')
+    const filtered = allBlogs.filter((blog) => {
+      if (!blog.isPublished) return false
+      if (category && blog.category !== category) return false
+      if (search) {
+        const haystack = `${blog.title || ''} ${blog.content || ''} ${blog.tags?.join(' ') || ''}`.toLowerCase()
+        if (!haystack.includes(search.toLowerCase())) return false
+      }
+      return true
+    })
 
     const skip = (page - 1) * limit
-    
-    const blogs = await Blogs.find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit))
+    const blogs = filtered.slice(skip, skip + parseInt(limit))
 
     const total = await Blogs.countDocuments(query)
 

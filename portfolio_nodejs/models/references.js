@@ -1,12 +1,15 @@
-const mongoose = require('mongoose')
-
-const referenceSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  position: { type: String, required: true },
-  company: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: String,
-  relationship: String, // Relationship with the reference (e.g., previous manager)
+const createReferencePayload = (input = {}) => ({
+  name: input.name || '',
+  position: input.position || '',
+  company: input.company || '',
+  email: input.email || '',
+  phone: input.phone || '',
+  relationship: input.relationship || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Reference', referenceSchema)
+module.exports = {
+  collectionName: 'references',
+  createReferencePayload,
+}

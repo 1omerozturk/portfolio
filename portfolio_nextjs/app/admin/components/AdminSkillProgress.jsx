@@ -87,6 +87,7 @@ const AdminSkillProgress = ({ skills, setSkills }) => {
                   onClick={() => onDelete(skill._id)}
                   className="btn btn-outline-danger"
                 >
+                  
                   <FaIcons.FaMinusCircle />
                 </button>
               </div>

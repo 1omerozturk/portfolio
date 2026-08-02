@@ -1,58 +1,25 @@
-const mongoose = require('mongoose')
+const createBlogPayload = (input = {}) => {
+  const content = input.content || ''
+  const words = content.trim().split(/\s+/).filter(Boolean).length
+  const readingTime = input.readingTime || Math.ceil(words / 200)
 
-const blogSchema = new mongoose.Schema({
-  title: { 
-    type: String, 
-    required: true,
-    trim: true 
-  },
-  content: { 
-    type: String, 
-    required: true 
-  },
-  author: { 
-    type: String, 
-    required: true,
-    trim: true 
-  },
-  category: { 
-    type: String, 
-    enum: ['yazı', 'düşünce', 'özlü söz', 'teknik', 'diğer'],
-    default: 'yazı'
-  },
-  tags: [String],
-  excerpt: { 
-    type: String,
-    trim: true 
-  },
-  views: { 
-    type: Number, 
-    default: 0 
-  },
-  isPublished: { 
-    type: Boolean, 
-    default: true 
-  },
-  createdAt: { 
-    type: Date, 
-    default: Date.now 
-  },
-  updatedAt: { 
-    type: Date, 
-    default: Date.now 
-  },
-  featuredImage: String,
-  readingTime: Number // Tahmini okuma süresi (dakika)
-})
-
-// Okuma süresini otomatik hesapla
-blogSchema.pre('save', function(next) {
-  if (this.content) {
-    const wordsPerMinute = 200
-    const wordCount = this.content.split(/\s+/).length
-    this.readingTime = Math.ceil(wordCount / wordsPerMinute)
+  return {
+    title: input.title || '',
+    content,
+    author: input.author || '',
+    category: input.category || 'yazı',
+    tags: Array.isArray(input.tags) ? input.tags : [],
+    excerpt: input.excerpt || content.substring(0, 150),
+    views: typeof input.views === 'number' ? input.views : 0,
+    isPublished: typeof input.isPublished === 'boolean' ? input.isPublished : true,
+    featuredImage: input.featuredImage || '',
+    createdAt: input.createdAt || new Date(),
+    updatedAt: input.updatedAt || new Date(),
+    readingTime,
   }
-  next()
-})
+}
 
-module.exports = mongoose.model('Blog', blogSchema)
+module.exports = {
+  collectionName: 'blogs',
+  createBlogPayload,
+}

@@ -1,9 +1,12 @@
-const mongoose = require('mongoose')
-
-const socialLinkSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  url: { type: String, required: true },
-  icon: String, // URL to the social platform icon
+const createSocialLinkPayload = (input = {}) => ({
+  name: input.name || '',
+  url: input.url || '',
+  icon: input.icon || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('SocialLink', socialLinkSchema)
+module.exports = {
+  collectionName: 'socialLinks',
+  createSocialLinkPayload,
+}

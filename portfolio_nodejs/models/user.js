@@ -1,41 +1,38 @@
-const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  fullName: String,
-  role: { type: String, default: 'admin' },
-  createdAt: { type: Date, default: Date.now },
-  profilePicture: String, // URL to the profile picture
-  tokens: [{ token: { type: String, required: true } }],
-})
+const createUserPayload = async (input = {}) => {
+  const password = input.password || ''
+  const hashedPassword = await bcrypt.hash(password, 10)
 
-userSchema.methods.generateAuthToken = async function () {
-  const user = this
-  const token = jwt.sign(
-    {
-      _id: user._id.toString(),
-      role: user.role,
-    },
-    process.env.JWT_SECRET_KEY,
-    { expiresIn: '7 d' },
-  )
-  user.tokens = user.tokens.concat({ token })
-  await user.save()
-  return token
+  return {
+    username: input.username || '',
+    email: input.email || '',
+    password: hashedPassword,
+    fullName: input.fullName || '',
+    role: input.role || 'admin',
+    createdAt: input.createdAt || new Date(),
+    updatedAt: input.updatedAt || new Date(),
+    profilePicture: input.profilePicture || '',
+    tokens: Array.isArray(input.tokens) ? input.tokens : [],
+  }
 }
 
-userSchema.pre('save', async function (next) {
-  const user = this
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 10)
-  }
-  next()
-})
+const createAuthToken = (user, secret = process.env.JWT_SECRET_KEY) => {
+  return jwt.sign(
+    {
+      _id: user.id || user._id || user.username,
+      role: user.role || 'admin',
+      username: user.username,
+    },
+    secret,
+    { expiresIn: '7d' },
+  )
+}
 
-const User = mongoose.model('User', userSchema)
-module.exports = User
+module.exports = {
+  collectionName: 'users',
+  createUserPayload,
+  createAuthToken,
+}

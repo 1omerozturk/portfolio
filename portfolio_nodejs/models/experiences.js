@@ -1,12 +1,15 @@
-const mongoose = require('mongoose')
-
-const experienceSchema = new mongoose.Schema({
-  company: { type: String, required: true },
-  position: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  endDate: Date,
-  responsibilities: [String],
-  companyLogo: String, 
+const createExperiencePayload = (input = {}) => ({
+  company: input.company || '',
+  position: input.position || '',
+  startDate: input.startDate || new Date(),
+  endDate: input.endDate || null,
+  responsibilities: Array.isArray(input.responsibilities) ? input.responsibilities : [],
+  companyLogo: input.companyLogo || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Experience', experienceSchema)
+module.exports = {
+  collectionName: 'experiences',
+  createExperiencePayload,
+}

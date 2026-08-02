@@ -1,11 +1,14 @@
-const mongoose = require('mongoose')
-
-const postSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  content: { type: String, required: true },
-  date: { type: Date, default: Date.now },
-  tags: [String],
-  coverImage: String, // URL to the post's cover image
+const createPostPayload = (input = {}) => ({
+  title: input.title || '',
+  content: input.content || '',
+  date: input.date || new Date(),
+  tags: Array.isArray(input.tags) ? input.tags : [],
+  coverImage: input.coverImage || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Post', postSchema)
+module.exports = {
+  collectionName: 'posts',
+  createPostPayload,
+}

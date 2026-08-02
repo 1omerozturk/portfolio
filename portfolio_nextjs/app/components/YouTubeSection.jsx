@@ -33,7 +33,7 @@ const YoutubeSection = () => {
         className="subscribe-btn"
       >
         🔔 Subscribe to me YouTube
-        <i class="fa fa-youtube-square" aria-hidden="true"></i>
+        <i className="fa fa-youtube-square" aria-hidden="true"></i>
       </a>
     </section>
   );

@@ -1,15 +1,14 @@
-const mongoose = require('mongoose')
-
-const skillSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  level: {
-    type: String,
-    enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
-    required: true,
-  },
-  percentage: Number,
-  icon: String,
-  color: String,
+const createSkillPayload = (input = {}) => ({
+  name: input.name || '',
+  level: input.level || 'Beginner',
+  percentage: input.percentage || 0,
+  icon: input.icon || '',
+  color: input.color || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Skill', skillSchema)
+module.exports = {
+  collectionName: 'skills',
+  createSkillPayload,
+}
