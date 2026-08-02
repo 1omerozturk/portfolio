@@ -9,11 +9,11 @@ const Typing = () => {
     >
       <ReactTyped
         strings={[
-          "<strong class='text-blue-500 md:underline '>Hi👋</strong>",
-          "<strong class='text-blue-600 md:underline '>I'm Ömer Öztürk 🧑‍💻</strong>",
-          "<strong class='text-indigo-600 md:underline '>I'm a Software Engineer 🌐</strong>",
-          "<strong class='text-indigo-700 md:underline '>I'm a Full Stack Developer 💻</strong>",
-          "<strong class='text-indigo-800 md:underline '>I'm a Mobile Developer 📱</strong>",
+          "<strong className='text-blue-500 md:underline '>Hi👋</strong>",
+          "<strong className='text-blue-600 md:underline '>I'm Ömer Öztürk 🧑‍💻</strong>",
+          "<strong className='text-indigo-600 md:underline '>I'm a Software Engineer 🌐</strong>",
+          "<strong className='text-indigo-700 md:underline '>I'm a Full Stack Developer 💻</strong>",
+          "<strong className='text-indigo-800 md:underline '>I'm a Mobile Developer 📱</strong>",
         ]}
         typeSpeed={50}
         backSpeed={50}

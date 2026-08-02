@@ -1,9 +1,12 @@
-const mongoose = require('mongoose')
-
-const hobbySchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: String,
-  icon: String, // URL to the hobby icon or image
+const createHobbyPayload = (input = {}) => ({
+  name: input.name || '',
+  description: input.description || '',
+  icon: input.icon || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Hobby', hobbySchema)
+module.exports = {
+  collectionName: 'hobbies',
+  createHobbyPayload,
+}

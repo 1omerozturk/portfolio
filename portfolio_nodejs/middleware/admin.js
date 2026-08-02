@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const User = require('../models/user')
+const { getCollectionDocs } = require('../service/firestoreRepository')
 
 const admin = async (req, res, next) => {
   try {
@@ -11,10 +11,8 @@ const admin = async (req, res, next) => {
     const sanitizedToken = token.replace('Bearer ', '')
     const decoded = jwt.verify(sanitizedToken, process.env.JWT_SECRET_KEY)
 
-    const user = await User.findOne(
-      { _id: decoded._id, 'tokens.token': sanitizedToken },
-      { role: 1, _id: 1 },
-    )
+    const users = await getCollectionDocs('users', { filters: { username: decoded.username }, limit: 1 })
+    const user = users[0]
 
     if (!user) {
       return res.status(401).send({ error: 'Please authenticate.' })
@@ -22,8 +20,12 @@ const admin = async (req, res, next) => {
     if (user.role !== 'admin') {
       return res.status(403).send({ error: 'Access denied.' })
     }
+    if (!Array.isArray(user.tokens) || !user.tokens.includes(sanitizedToken)) {
+      return res.status(401).send({ error: 'Please authenticate.' })
+    }
 
-    next() // Kullanıcı admin ise buraya ulaşır.
+    req.user = user
+    next()
   } catch (error) {
     console.error('Middleware Error:', error)
     res.status(500).send({ error: 'Internal server error.' })

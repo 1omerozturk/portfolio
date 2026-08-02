@@ -29,7 +29,7 @@ const PersonalInfoUpdate = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-lg mx-auto p-6 border border-gray-300 rounded-lg shadow-md bg-[#151956]"
+      className="max-w-lg mx-auto p-6 border border-gray-300 rounded text-gray-950-lg shadow-md bg-[#151956]"
     >
       <h2 className="text-2xl text-white font-bold mb-4 text-center">Update Personal Info</h2>
       <div className="mb-4">
@@ -39,7 +39,7 @@ const PersonalInfoUpdate = () => {
           name="fullName"
           value={formData.fullName}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded"
+          className="w-full px-3 py-2 border border-gray-300 rounded text-gray-950"
           required
         />
       </div>
@@ -50,7 +50,7 @@ const PersonalInfoUpdate = () => {
           name="jobTitle"
           value={formData.jobTitle}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded"
+          className="w-full px-3 py-2 border border-gray-300 rounded text-gray-950"
           required
         />
       </div>
@@ -61,7 +61,7 @@ const PersonalInfoUpdate = () => {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded"
+          className="w-full px-3 py-2 border border-gray-300 rounded text-gray-950"
           required
         />
       </div>
@@ -72,7 +72,7 @@ const PersonalInfoUpdate = () => {
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded"
+          className="w-full px-3 py-2 border border-gray-300 rounded text-gray-950"
         />
       </div>
       <div className="mb-4">
@@ -82,7 +82,7 @@ const PersonalInfoUpdate = () => {
           name="address"
           value={formData.address}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded"
+          className="w-full px-3 py-2 border border-gray-300 rounded text-gray-950"
         />
       </div>
       <div className="mb-4">
@@ -91,7 +91,7 @@ const PersonalInfoUpdate = () => {
           name="about"
           value={formData.about}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded min-h-[100px]"
+          className="w-full px-3 py-2 border border-gray-300 rounded text-gray-950 min-h-[100px]"
         />
       </div>
       <div className="mb-4">
@@ -103,14 +103,14 @@ const PersonalInfoUpdate = () => {
           name="profilePicture"
           value={formData.profilePicture}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded"
+          className="w-full px-3 py-2 border border-gray-300 rounded text-gray-950"
         />
       </div>
       <div className="flex justify-center">
 
       <button
         type="submit"
-        className="px-4 py-2 bg-indigo-500 text-white font-bold rounded hover:bg-indigo-700"
+        className="px-4 py-2 bg-indigo-500 text-white font-bold rounded text-gray-950 hover:bg-indigo-700"
         >
         Save
       </button>

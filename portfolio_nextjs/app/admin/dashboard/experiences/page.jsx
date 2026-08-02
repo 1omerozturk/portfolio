@@ -79,7 +79,7 @@ const Experiences = () => {
           <div className="flex flex-col space-y-4">
             {experiences.map((experience) => (
               <div
-                key={experience._id}
+                key={experience?.id}
                 className="flex flex-col md:flex-row justify-between items-center md:items-center border-b py-4"
               >
                 <div>

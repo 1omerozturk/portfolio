@@ -135,18 +135,18 @@ export default function Home() {
       <Suspense fallback={<Loading color="orange" />}>
         <SkillsBanner size={4} />
       </Suspense>
-      <Suspense fallback={<Loading color="purple" />}>
+      {/* <Suspense fallback={<Loading color="purple" />}>
         <Projects size={4} />
-      </Suspense>
-      <Suspense fallback={<Loading color="teal" />}>
+      </Suspense> */}
+      {/* <Suspense fallback={<Loading color="teal" />}>
         <ContentsBanner size={4} />
-      </Suspense>
+      </Suspense> */}
       <Suspense fallback={<Loading color="yellow" />}>
         <Certificates size={3} />
       </Suspense>
-      <Suspense fallback={<Loading color="pink" />}>
+      {/* <Suspense fallback={<Loading color="pink" />}>
         <BlogsSection />
-      </Suspense>
+      </Suspense> */}
       <Suspense fallback={<Loading color="indigo" />}>
         <Footer />
       </Suspense>

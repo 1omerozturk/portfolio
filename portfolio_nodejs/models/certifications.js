@@ -1,12 +1,15 @@
-const mongoose = require('mongoose')
-
-const certificateSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  issuingOrganization: { type: String, required: true },
-  issueDate: { type: Date, required: true },
-  expirationDate: Date,
-  certificateLink: String,
-  certificateImage: String,
+const createCertificationPayload = (input = {}) => ({
+  name: input.name || '',
+  issuingOrganization: input.issuingOrganization || '',
+  issueDate: input.issueDate || new Date(),
+  expirationDate: input.expirationDate || null,
+  certificateLink: input.certificateLink || '',
+  certificateImage: input.certificateImage || '',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Certificate', certificateSchema)
+module.exports = {
+  collectionName: 'certifications',
+  createCertificationPayload,
+}

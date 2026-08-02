@@ -1,15 +1,17 @@
-const mongoose = require('mongoose')
-
-const projectSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  type: { type: String, required: true, enum: ['mobile', 'web'] },
-  technologies: [String],
-  repoLink: String,
-  liveDemoLink: String,
-  images: [String],
-  // is showcasing
-  isShowcasing: { type: String, default: "false" },
+const createProjectPayload = (input = {}) => ({
+  title: input.title || '',
+  description: input.description || '',
+  type: input.type || 'web',
+  technologies: Array.isArray(input.technologies) ? input.technologies : [],
+  repoLink: input.repoLink || '',
+  liveDemoLink: input.liveDemoLink || '',
+  images: Array.isArray(input.images) ? input.images : [],
+  isShowcasing: input.isShowcasing || 'false',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
 })
 
-module.exports = mongoose.model('Project', projectSchema)
+module.exports = {
+  collectionName: 'projects',
+  createProjectPayload,
+}

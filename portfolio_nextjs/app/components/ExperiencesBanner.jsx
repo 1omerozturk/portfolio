@@ -46,7 +46,7 @@ const ExperiencesBanner = ({ size }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {displayedExperiences.map((exp, index) => (
             <motion.div
-              key={exp._id}
+              key={exp.id}
               className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300"
               whileHover={{ scale: 1.03 }}
               data-aos={`${index % 2 == 0 ? "fade-left" : "fade-right"}`}

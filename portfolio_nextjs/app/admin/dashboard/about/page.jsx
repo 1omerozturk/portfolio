@@ -49,9 +49,9 @@ const AboutDashboard = () => {
               <h6 className="card-text">{admin?.email}</h6>
               <h6 className="card-text text-red-800">{admin?.role}</h6>
               <p className="card-text text-slate-400">
-                {admin?.createdAt?.split("T")[0] +
+                {/* {admin?.createdAt?.split("T")[0] +
                   "-" +
-                  admin?.createdAt?.split("T")[1].split(".")[0]}
+                  admin?.createdAt?.split("T")[1].split(".")[0]} */}
               </p>
             </div>
           </div>

@@ -1,8 +1,11 @@
-const mongoose = require('mongoose')
+const createLanguagePayload = (input = {}) => ({
+  name: input.name || '',
+  proficiency: input.proficiency || 'Beginner',
+  createdAt: input.createdAt || new Date(),
+  updatedAt: input.updatedAt || new Date(),
+})
 
-const languageSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    proficiency: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced', 'Fluent', 'Native'], required: true }
-});
-
-module.exports = mongoose.model('Language', languageSchema);
+module.exports = {
+  collectionName: 'languages',
+  createLanguagePayload,
+}
