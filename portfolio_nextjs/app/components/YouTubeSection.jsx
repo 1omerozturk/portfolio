@@ -8,11 +8,8 @@ const YoutubeSection = () => {
       <h2>YouTube Videos</h2>
       <p>
         Can you watch me videos and subscribe to Youtube Channel{" "}
-        <h3>
-          <i class="fa fa-youtube-square" aria-hidden="true"></i>
-        </h3>
+        <h4><i className="fa fa-youtube-square" aria-hidden="true"></i></h4>
       </p>
-
       {/* Playlist */}
       <div className="video-wrapper">
         <iframe

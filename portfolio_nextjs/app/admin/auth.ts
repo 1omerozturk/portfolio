@@ -1,7 +1,8 @@
-import { login, getAdminAuth } from "../api/api";
+import { login, getAdminAuth, updatePassword } from "../api/api";
 import Message from "../components/Message";
 
 export class AdminAuth {
+  // login
   static async login(username: string, password: string) {
     try {
       const response = await login(username, password);
@@ -22,12 +23,31 @@ export class AdminAuth {
       return null;
     }
   }
+  // logout
   static async logout() {
     localStorage.removeItem("admin");
     localStorage.removeItem("token");
     // Logout Message
     Message.ToastMessage("warning", "Çıkış Başarılı");
   }
+
+  // resetpassword
+  static async resetPassword(
+    username: string,
+    password: string,
+    rePassword: string,
+  ) {
+    try {
+      const response=await updatePassword(username,password,rePassword);
+      console.log(response);
+      const data=response.data;
+      console.log(data);
+    } catch (error) {
+      Message.ToastMessage("error", error.response.data.message);
+      return null;
+    }
+  }
+  //get Admin
   static async getAdmin() {
     const response = await getAdminAuth();
     const admin = response.data;

@@ -58,7 +58,7 @@ router.get('/admin', admin, getAdmin)
 router.get('/messages', admin, getMessages)
 
 // put routes
-// router.put('/update-password',updatePassword)
+router.put('/update-password',updatePassword)
 router.put('/personal-info/:id', admin, updatePersonalInfo)
 router.put('/educations/:id', admin, updateEducations)
 router.put('/experiences/:id', admin, updateExperiences)

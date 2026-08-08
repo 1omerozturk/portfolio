@@ -7,8 +7,11 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Eğer kullanıcı giriş yapmamışsa ve giriş ekranında değilse yönlendir
-  if (!token && pathname !== "/admin/login") {
-    return NextResponse.redirect(new URL("/admin/login", req.url));
+
+  if (pathname !== "/admin/passwordReset") {
+    if (!token && pathname !== "/admin/login") {
+      return NextResponse.redirect(new URL("/admin/login", req.url));
+    }
   }
 
   // Eğer kullanıcı giriş yapmışsa ve tekrar giriş sayfasına gitmek istiyorsa yönlendir

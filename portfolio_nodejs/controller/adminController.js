@@ -44,22 +44,40 @@ exports.getAdmin = async (req, res) => {
 }
 
 // admin update
-/* exports.updatePassword = async (req, res) => {
+exports.updatePassword = async (req, res) => {
   try {
-    const { username, password, newpassword } = req.body
-    const user = await User.findOne({ username })
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' })
+    const { username, password, rePassword } = req.body
+    console.log(req.body)
+
+    if (!username || !password || !rePassword) {
+      return res.status(400).json({ message: 'username, password ve rePassword zorunludur.' })
     }
-    console.log(user.password)
-    user.password = newpassword
-    await user.save()
-    console.log(user.password)
-    res.status(200).json({ message: 'Password updated successfully' })
+
+    // 1. Kullanıcıyı veritabanında bulun
+    const users = await getCollectionDocs('users')
+    const user = users.find((item) => item.username === username)
+
+    // 2. Kullanıcı bulundu mu kontrol edin
+    if (!user) {
+      return res.status(400).json({ message: 'Kullanıcı bulunamadı.' })
+    }
+
+    // 3. Eski şifreyi bcrypt ile doğrulayın
+    // const isMatch = await bcrypt.compare(password, user.password)
+    // if (!isMatch) {
+    //   return res.status(400).json({ message: 'Mevcut şifre hatalı.' })
+    // }
+
+    // 4. Yeni şifreyi hash'leyin ve güncelleyin
+    const hashedPassword = await bcrypt.hash(rePassword, 10)
+    await updateDoc('users', user.id, { password: hashedPassword })
+
+    res.status(200).json({ message: 'Şifre başarıyla güncellendi.' })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
-} */
+}
+
 
 // Admin Controller for post update and delete
 // Post

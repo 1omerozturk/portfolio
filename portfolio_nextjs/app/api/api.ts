@@ -30,13 +30,18 @@ export const login = async (username: string, password: string) => {
 export const updatePassword = async (
   username: string,
   password: string,
-  newpassord: string
+  rePassword: string,
 ) => {
-  return await axios.put(`${api}/admin/update-password`, {
-    username,
-    password,
-    newpassord,
-  });
+  try {
+    return await axios.put(`${api}/admin/update-password`, {
+      username,
+      password,
+      rePassword,
+    });
+  } catch (error) {
+    console.error("Error fetching data for update password.", error);
+    throw error;
+  }
 };
 
 export const getAdminAuth = async () => {
@@ -178,7 +183,7 @@ export const createCertifications = async (data: any) => {
   return await axios.post(
     `${api}/admin/certifications`,
     data,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -188,7 +193,7 @@ export const updatePersonalInfo = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/personal-info/${id}`,
     data,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -196,7 +201,7 @@ export const updateSocialLinks = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/social-links/${id}`,
     data,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -204,7 +209,7 @@ export const updateEducations = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/educations/${id}`,
     data,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -212,7 +217,7 @@ export const updateExperiences = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/experiences/${id}`,
     data,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -236,14 +241,14 @@ export const updateLanguages = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/languages/${id}`,
     data,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 export const updateCertifications = async (id: any, data: any) => {
   return await axios.put(
     `${api}/admin/certifications/${id}`,
     data,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -251,14 +256,14 @@ export const updateCertifications = async (id: any, data: any) => {
 export const deletePersonalInfo = async (id: any) => {
   return await axios.delete(
     `${api}/admin/personal-info/${id}`,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
 export const deleteSocialLinks = async (id: any) => {
   return await axios.delete(
     `${api}/admin/social-links/${id}`,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -293,7 +298,7 @@ export const deleteLanguages = async (id: any) => {
 export const deleteCertifications = async (id: any) => {
   return await axios.delete(
     `${api}/admin/certifications/${id}`,
-    getAdminConfig()
+    getAdminConfig(),
   );
 };
 
@@ -314,7 +319,7 @@ export const markMessageApi = async (id: any, isRead: any) => {
   return await axios.put(
     `${api}/admin/messages/${id}`,
     {},
-    { ...getAdminConfig(), params: { isRead } }
+    { ...getAdminConfig(), params: { isRead } },
   );
 };
 // Blog APIs - User endpoints
@@ -328,8 +333,8 @@ export const getBlogById = async (id: string) => {
 };
 
 export const getBlogsByCategory = async (category: string, query?: string) => {
-  const url = query 
-    ? `${api}/user/blogs/category/${category}?${query}` 
+  const url = query
+    ? `${api}/user/blogs/category/${category}?${query}`
     : `${api}/user/blogs/category/${category}`;
   return await axios.get(url);
 };

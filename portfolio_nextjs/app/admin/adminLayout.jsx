@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { AdminAuth } from "./auth";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AdminSideBar from "./components/AdminSideBar";
 import Login from "./login/page";
 import Loading from "./components/Loading";
@@ -10,13 +10,15 @@ const AdminLayout = ({ children }) => {
   const router = useRouter();
   const [auth, setAuth] = useState(null); // Auth durumunu takip et
 
+  const path=usePathname();
   useEffect(() => {
     const checkAuth = async () => {
       const authStatus = await AdminAuth.isLoggedIn();
       setAuth(authStatus);
-      if (!authStatus) {
-        router.replace("/admin/login");
-      }
+
+      // if (!authStatus && path !== "/admin/passwordReset") {
+      //   router.replace("/admin/login");
+      // }
     };
     checkAuth();
   }, [router]);

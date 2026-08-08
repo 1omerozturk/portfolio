@@ -22,6 +22,7 @@ function initializeFirebase() {
     })
   } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     admin.initializeApp()
+    console.log("Database connected.")
   } else {
     throw new Error("Firebase service account or GOOGLE_APPLICATION_CREDENTIALS not found")
   }

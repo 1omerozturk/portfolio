@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
+const firebase = require('./config/firebase')
 
 require('./config/firebase')
 
@@ -19,4 +20,7 @@ const PORT = process.env.PORT || 5040
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`)
+  if(firebase.databaseId){
+    console.log("Database connected.")
+  }
 })

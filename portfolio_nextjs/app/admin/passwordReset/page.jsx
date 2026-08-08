@@ -1,31 +1,36 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AdminAuth } from "../auth";
+import Message from "../../components/Message";
 
-const Login = () => {
+const passwordReset = () => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState("password");
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    rePassword: "",
   });
-
-  const router = useRouter();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const loginHandle = async (e) => {
+  const updatePasswordHandle = async (e) => {
     setLoading(true);
     e.preventDefault();
-    await AdminAuth.login(formData.username, formData.password)
+    await AdminAuth.resetPassword(
+      formData.username,
+      formData.password,
+      formData.rePassword,
+    )
       .then((res) => {
+        console.log(res)
         if (res.status === 200) {
           setLoading(false);
+           Message.ToastMessage("success",res.data.message)
           window.location.href = "/admin";
         }
       })
@@ -39,9 +44,9 @@ const Login = () => {
     <div className="min-h-max mt-5 w-2/3 md:w-2/5 mx-auto flex justify-center items-center">
       <div className="bg-white border-2 border-indigo-300 p-10 rounded-md w-full shadow-md">
         <h2 className="text-2xl font-bold mb-4 text-center select-none">
-          Login - (Admin){" "}
+          Reset Password - (Admin){" "}
         </h2>
-        <form method={"post"} onSubmit={loginHandle}>
+        <form method={"post"} onSubmit={updatePasswordHandle}>
           <div className="mb-4">
             <label
               className="block select-none text-gray-700 text-sm font-bold mb-2"
@@ -95,30 +100,54 @@ const Login = () => {
               </div>
             </div>
           </div>
+          <div className="mb-4">
+            <label
+              className="block select-none text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password Again
+            </label>
+            <div className="flex justify-center items-center space-x-2">
+              <input
+                className="border rounded-md px-3 py-2 w-full"
+                type={type}
+                id="rePassword"
+                name="rePassword"
+                onChange={handleChange}
+              />
+              {/* hide show password icon  */}
+              <div title="Show/Hide" className="cursor-pointer w-fit">
+                {show ? (
+                  <FaEye
+                    onClick={() => {
+                      setShow(false);
+                      setType("password");
+                    }}
+                    className="text-indigo-500"
+                  />
+                ) : (
+                  <FaEyeSlash
+                    onClick={() => {
+                      setShow(true);
+                      setType("text");
+                    }}
+                    className="text-gray-500"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
           <button
             disabled={loading}
             type="submit"
             className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mx-auto block select-none"
           >
-            {loading ? <i className="pi pi-spin pi-spinner"></i> : "Login"}
+            {loading ? <i className="pi pi-spin pi-spinner"></i> : "Reset Password"}
           </button>
         </form>
-        {/* reset password link
-         */}
-        <div>
-          <p
-            type="button"
-            onClick={() => {
-              router.push("admin/passwordReset");
-            }}
-            className="bg-slate-200 mt-2 hover:bg-slate-700 text-rose-500 font-bold py-1 rounded text-center px-4 w-fit mx-auto select-none"
-          >
-            I forgot password!
-          </p>
-        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default passwordReset;
