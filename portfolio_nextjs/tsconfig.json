@@ -31,7 +31,7 @@
     "app/admin/dashboard/social/edit/[id]/page.jsx",
     "app/admin/dashboard/educations/edit/[id]/page.jsx",
     ".next/dev/types/**/*.ts"
-  ],
+, "app/components/SeeMore.jsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { MdCategory, MdAccessTime } from "react-icons/md";
 import { Blog } from "../models/blogs";
 import { BlogService } from "../service/blogService";
@@ -22,9 +22,29 @@ const BlogsPage = () => {
     fetchBlogs();
   }, [page, search, category]);
 
+  useEffect(() => {
+    const value = searchInput.trim();
+
+    if (value.length === 0) {
+      setSearch("");
+      setPage(1);
+      return;
+    }
+
+    if (value.length >= 2) {
+      setSearch(value);
+      setPage(1);
+    }
+  }, [searchInput]);
+
   const fetchBlogs = async () => {
     setLoading(true);
-    const result = await BlogService.getBlogs(page, 6, category || undefined, search || undefined);
+    const result = await BlogService.getBlogs(
+      page,
+      6,
+      category || undefined,
+      search || undefined,
+    );
     if (result) {
       setBlogs(result.blogs);
       setTotalPages(result.pages);
@@ -34,7 +54,8 @@ const BlogsPage = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearch(searchInput);
+    const value = searchInput.trim();
+    setSearch(value.length >= 2 ? value : "");
     setPage(1);
   };
 
@@ -45,11 +66,11 @@ const BlogsPage = () => {
 
   const getCategoryColor = (cat: string) => {
     const colors: { [key: string]: string } = {
-      yazı: "bg-blue-100 text-blue-700",
-      düşünce: "bg-purple-100 text-purple-700",
-      "özlü söz": "bg-rose-100 text-rose-700",
-      teknik: "bg-green-100 text-green-700",
-      diğer: "bg-gray-100 text-gray-700",
+      article: "bg-blue-100 text-blue-700",
+      thought: "bg-purple-100 text-purple-700",
+      quote: "bg-rose-100 text-rose-700",
+      technical: "bg-green-100 text-green-700",
+      other: "bg-gray-100 text-gray-700",
     };
     return colors[cat] || colors.diğer;
   };
@@ -64,9 +85,10 @@ const BlogsPage = () => {
             <span className="text-slate-800">l</span>
             <span className="text-slate-600">o</span>
             <span className="text-slate-400">g </span>
-            & Yazılar</h1>
+            <span className="text-slate-200">s </span>& Articles
+          </h1>
           <p className="text-lg text-pink-100">
-            Yazılar, düşünceler, özlü sözler ve teknik içerikler
+            Articles, thoughts, quotes, and technical content
           </p>
         </div>
       </div>
@@ -75,19 +97,32 @@ const BlogsPage = () => {
         {/* Search Section */}
         <div className="mb-12">
           <form onSubmit={handleSearch} className="flex gap-2 mb-6">
-            <input
-              type="text"
-              placeholder="Blog ara..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 transition"
-            />
+            <div className="relative flex-1">
+              <input
+                type="text"
+                placeholder="Search blogs..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="w-full px-3 py-2 pr-10 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-sky-500 transition"
+              />
+
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={() => setSearchInput("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
+                  aria-label="Clear search"
+                >
+                  <AiOutlineClose size={18} />
+                </button>
+              )}
+            </div>
+
             <button
               type="submit"
-              className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition flex items-center gap-2"
+              className="px-4 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition flex items-center gap-2"
             >
               <AiOutlineSearch size={20} />
-              Ara
             </button>
           </form>
 
@@ -104,7 +139,7 @@ const BlogsPage = () => {
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
-              Tümü
+              All
             </button>
             {categories.map((cat) => (
               <button
@@ -129,7 +164,7 @@ const BlogsPage = () => {
           </div>
         ) : blogs.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Blog bulunamadı</p>
+            <p className="text-gray-500 text-lg">Blog not found!</p>
           </div>
         ) : (
           <>
@@ -154,7 +189,9 @@ const BlogsPage = () => {
                   <div className="p-6">
                     {/* Category Badge */}
                     <div className="mb-3">
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(blog.category)}`}>
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(blog.category)}`}
+                      >
                         <MdCategory className="inline mr-1" />
                         {blog.category}
                       </span>
@@ -173,8 +210,12 @@ const BlogsPage = () => {
                     {/* Meta Information */}
                     <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-200">
                       <div className="flex flex-col gap-1">
-                        <p className="font-medium text-gray-700">{blog.author}</p>
-                        <p>{new Date(blog.createdAt).toLocaleDateString("tr-TR")}</p>
+                        <p className="font-medium text-gray-700">
+                          {blog.author}
+                        </p>
+                        <p>
+                          {new Date(blog.createdAt).toLocaleDateString("tr-TR")}
+                        </p>
                       </div>
                       <div className="flex items-center gap-3 text-right">
                         <div className="flex items-center gap-1">

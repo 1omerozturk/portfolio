@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { MdArrowForward, MdAccessTime } from "react-icons/md";
 import Loading from "./Loading";
+import { FaComment } from "react-icons/fa";
+import SeeMore from "./SeeMore";
 
 const BlogsSection = () => {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -15,19 +17,14 @@ const BlogsSection = () => {
         setLoading(true);
         const { BlogService } = await import("../service/blogService");
         const result = await BlogService.getBlogs(1, 3);
-        
-        console.log("BlogsSection result:", result);
-        
+                
         if (result?.blogs) {
-          console.log("BlogsSection blogs:", result.blogs);
           setBlogs(result.blogs);
         } else {
-          console.warn("No blogs found in result:", result);
           setBlogs([]);
         }
         setError(null);
       } catch (err: any) {
-        console.error("BlogsSection Error:", err);
         setError(err?.message || "Failed to load blogs");
         setBlogs([]);
       } finally {
@@ -72,18 +69,18 @@ const BlogsSection = () => {
     <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-6xl mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Recent Blogs</h2>
-          <p className="text-gray-600 text-lg">
-            Stay updated with articles, thoughts and technical content
-          </p>
+        <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
+        <div className="grid grid-flow-col space-x-14">
+          <h1 className=" font-rubik text-indigo-500"> Blogs </h1>
+          <FaComment className="text-indigo-400"/>
         </div>
+      </div>
 
         {/* Blogs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {blogs.map((blog) => (
             <Link
-              key={blog._id}
+              key={blog.id}
               href={`/blog/${blog._id}`}
               className="group bg-white rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden"
             >
@@ -134,15 +131,7 @@ const BlogsSection = () => {
         </div>
 
         {/* View All Button */}
-        <div className="text-center">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition font-semibold"
-          >
-            View All Blogs
-            <MdArrowForward size={20} />
-          </Link>
-        </div>
+        <SeeMore path="blog"/>
       </div>
     </section>
   );

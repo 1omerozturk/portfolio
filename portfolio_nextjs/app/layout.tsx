@@ -1,4 +1,11 @@
 "use client";
+import { Rubik_Vinyl } from "next/font/google";
+
+const rubikVinyl = Rubik_Vinyl({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-rubik-vinyl", // Bu isimle config'teki isim BİREBİR aynı olmalı
+});
 import "./globals.css";
 import "primeicons/primeicons.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -21,7 +28,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="tr">
+    <html lang="tr"  className={rubikVinyl.variable}>
       <head>
         <script
           async

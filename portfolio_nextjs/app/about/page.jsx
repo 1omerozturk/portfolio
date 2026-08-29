@@ -14,26 +14,28 @@ const AboutMe = () => {
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = "cv.pdf";
-    link.download = "omer_ozturk.pdf";
-    link.click();
+    const fileName='omer_ozturk_en.pdf'
+    link.href = `/CV/${fileName}`
+    link.download = fileName
+    link.rel = 'noopener noreferrer' // For security and SEO
+    link.click()
   };
 
   return (
     <div>
-      <section className="min-h-screen bg-gradient-to-r from-slate-600 to-slate-200 py-10 flex items-center justify-center">
+      <section className="py-10 flex items-center justify-center">
         <div
-          className="w-4/5 lg:w-3/5 bg-gradient-to-l from-slate-100 to-slate-400 shadow-lg shadow-slate-400 rounded-lg p-10"
+          className="w-4/5 lg:w-3/5 rounded-lg p-10"
           data-aos="fade-up"
         >
           <div className="text-3xl font-bold text-black mb-6 text-center">
             <Image
               src="/ozturkomer.webp"
               alt="Ömer Öztürk"
-              width={100}
-              height={100}
-              quality={100}
-              className="object-cover rounded-lg mx-auto size-44"
+              width={200}
+              height={200}
+              quality={70}
+              className="object-cover rounded-lg mx-auto sm:size-40 md:size-54 lg:size-72"
             />
           </div>
           <h1 className="sm:text-4xl font-bold font-serif text-center mb-5">
@@ -65,11 +67,11 @@ const AboutMe = () => {
             my goal is to use my interest in technology to inspire more people
             by sharing.
           </p>
-          <div className="mt-8 flex flex-col lg:flex-row items-center justify-center lg:space-x-5 space-y-5 lg:space-y-0">
+          <div className="mt-8 flex flex-col space-y-4 items-center justify-center">
             <button
               data-aos="fade-right"
               onClick={() => handleDownload()}
-              className="px-3 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-300"
+              className="px-3 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-300"
             >
               Download CV ⬇️
             </button>

@@ -1,10 +1,14 @@
 "use client";
+
+
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { EducationService } from "../service/educationService";
 import { FaDotCircle, FaGraduationCap, FaRegDotCircle } from "react-icons/fa";
 import Loading from "./Loading";
 import AOS from "aos";
+import SeeMore from "../components/SeeMore";
+
 
 interface EducationSizeProps {
   size?: number;
@@ -36,17 +40,20 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
   }, []);
 
   return (
-    <div className="mx-auto px-4 py-8 shadow-lg">
+    <div className="mx-auto px-4 py-8">
       <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
-        <FaGraduationCap />
+        <div className="grid grid-flow-col space-x-14">
+          <h1 className=" font-rubik text-indigo-500"> Educations </h1>
+          <FaGraduationCap className="text-indigo-400" />
+        </div>
       </div>
       {loading && <Loading color="orange" />}
       <div className="space-y-8 grid grid-cols-1 md:grid-cols-2">
         {educations.reverse().map((education, index) => (
           <div
-          key={index}
-          className="flex flex-col md:flex-row rounded-none drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6 border-b-2 border-b-sky-600 md:border-y-0 md:border-x-2 md:border-x-slate-600 first:border-l-0 last:border-0"
-          data-aos="fade-up"
+            key={index}
+            className="flex flex-col md:flex-row rounded-none drop-shadow-lg hover:drop-shadow-xl transition-shadow duration-300 p-6 border-b-2 border-b-sky-600 md:border-y-0 md:border-x-2 md:border-x-slate-600 first:border-l-0 last:border-0"
+            data-aos="fade-up"
           >
             <div className="md:w-1/4 flex items-center justify-center mb-6 md:mb-0">
               <Image
@@ -119,6 +126,7 @@ const EducationsBanner: React.FC<EducationSizeProps> = ({ size }) => {
           </div>
         ))}
       </div>
+      {<SeeMore path="educations"/>}
     </div>
   );
 };

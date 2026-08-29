@@ -38,7 +38,12 @@ const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
         <Loading color={"lime"} />
       ) : (
         <div className="pt-2">
-          <FaMedium className="text-4xl mx-auto mb-3 text-slate-700" />
+           <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
+        <div className="grid grid-flow-col space-x-14">
+          <h1 className=" font-rubik text-indigo-500"> Contents </h1>
+          <FaMedium className="text-indigo-400" />
+        </div>
+      </div>
           <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  p-3">
             {size &&
               contents.slice(0, size).map((content, index) => (

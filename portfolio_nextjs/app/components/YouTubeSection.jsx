@@ -1,14 +1,11 @@
 "use client";
 
-import { FaYoutubeSquare } from "react-icons/fa";
-
 const YoutubeSection = () => {
   return (
     <section className="youtube-section">
       <h2>YouTube Videos</h2>
       <p>
         Can you watch me videos and subscribe to Youtube Channel{" "}
-        <h4><i className="fa fa-youtube-square" aria-hidden="true"></i></h4>
       </p>
       {/* Playlist */}
       <div className="video-wrapper">

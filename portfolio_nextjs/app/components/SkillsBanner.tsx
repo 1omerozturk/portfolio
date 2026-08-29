@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SkillService } from "../service/skillService";
 import { defaultSkillsData } from "../models/skills";
 import Loading from "./Loading";
+import SeeMore from "./SeeMore";
 
 interface PageProps {
   size?: number;
@@ -35,7 +36,12 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
   return (
     <div id="skillsBanner" className="skills-banner drop-shadow-lg">
       <div className="px-5 mx-auto p-4">
-        <FaCode className="text-4xl mx-auto mb-3 text-slate-700" />
+          <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
+        <div className="grid grid-flow-col space-x-14">
+          <h1 className=" font-rubik text-indigo-500"> Skills </h1>
+          <FaCode className="text-indigo-400" />
+        </div>
+      </div>
         <div className="space-y-2 gap-4">
           <React.Suspense fallback={<Loading color={"lime"} />}>
             {isLoading ? (
@@ -45,15 +51,7 @@ const SkillsBanner: React.FC<PageProps> = ({ size }) => {
             )}
           </React.Suspense>
           {size && (
-            <div className="flex justify-center mt-3">
-              <Link
-                href="/skills"
-                style={{ textDecoration: "none" }}
-                className="bg-slate-200 w-fit mx-auto text-indigo-600 font-bold py-2 px-6 rounded-full shadow-md hover:bg-slate-500  hover:text-black transition-all duration-300 transform hover:translate-y-1"
-              >
-                View More Skills
-              </Link>
-            </div>
+            <SeeMore path="skills"/>
           )}
         </div>
       </div>

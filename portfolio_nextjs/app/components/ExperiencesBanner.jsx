@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { FaBuilding, FaCalendarAlt, FaUserTie } from "react-icons/fa";
 import Loading from "./Loading";
 import AOS from "aos";
+import SeeMore from "./SeeMore";
 
 const ExperiencesBanner = ({ size }) => {
   const [experiences, setExperiences] = useState([]);
@@ -36,10 +37,13 @@ const ExperiencesBanner = ({ size }) => {
   const displayedExperiences = size ? experiences.slice(0, size) : experiences;
 
   return (
-    <div className=" p-8 rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold text-white mb-6 text-center">
-        <FaBuilding className="text-black text-4xl mx-auto mb-3" />
-      </h2>
+    <div className="mx-auto px-4 py-8">
+      <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
+            <div className="grid grid-flow-col space-x-14">
+              <h1 className=" font-rubik text-indigo-500"> Experiences </h1>
+              <FaBuilding className="text-indigo-400" />
+            </div>
+          </div>
       {loading ? (
         <Loading color={"red"} />
       ) : (
@@ -76,15 +80,7 @@ const ExperiencesBanner = ({ size }) => {
         </div>
       )}
       {size && experiences.length > size && (
-        <div className="text-center mt-6">
-          <button
-            aria-label="seeAll"
-            onClick={() => navigate.push("/experiences")}
-            className="bg-white text-blue-500 font-bold py-2 px-6 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition-colors duration-300"
-          >
-            Tümünü Gör
-          </button>
-        </div>
+       <SeeMore path="experiences"/>
       )}
     </div>
   );

@@ -4,8 +4,9 @@ import React from "react";
 // import aos
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Link from "next/link";
 import { pdfLinks } from "../models/certificates";
+import { FaMedal } from "react-icons/fa";
+import SeeMore from "../components/SeeMore";
 
 interface CertificatesSizeProps {
   size?: number;
@@ -18,9 +19,12 @@ const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold drop-shadow-lg  mb-6 text-center">
-        <i className="pi pi-trophy text-orange-600 mx-auto"></i>
-      </h2>
+       <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
+             <div className="grid grid-flow-col space-x-14">
+               <h1 className=" font-rubik text-indigo-500"> Certificates </h1>
+               <FaMedal className="text-indigo-400" />
+             </div>
+           </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {pdfLinks.slice(0, size ? size : pdfLinks.length).map((link, index) => (
           <div
@@ -48,16 +52,7 @@ const Certificas: React.FC<CertificatesSizeProps> = ({ size }) => {
         ))}
       </div>
       {size && (
-        <div className="flex items-center justify-center mt-4">
-          <Link
-            aria-label="certificates"
-            href="/certificates"
-            style={{}}
-            className="text-center hover:drop-shadow-xl hover:font-semibold text-indigo-700"
-          >
-            See More
-          </Link>
-        </div>
+        <SeeMore path="certificates"/>
       )}
     </div>
   );

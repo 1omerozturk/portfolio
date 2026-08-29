@@ -6,6 +6,7 @@ import { DynamicIcon } from "./DynamicIcon";
 import Loading from "../components/Loading";
 import { defaultSocialLinks } from "../models/socialLinks";
 import AOS from "aos";
+import { FaShare } from "react-icons/fa";
 
 const SocialBanner = () => {
   const [socialLinks, setSocialLinks] = useState(null);
@@ -39,7 +40,7 @@ const SocialBanner = () => {
       {loading ? (
         <Loading color={"teal"} />
       ) : (
-        <div className="grid grid-flow-col w-fit sm:space-x-4 space-x-1 mb-4 text-center mx-auto">
+        <div className="grid grid-flow-col w-fit sm:space-x-4 space-x-1 mb-4 my-20 text-center mx-auto "> 
           {socialLinks?.map((social, index) => (
             <a
               title={social.name}
