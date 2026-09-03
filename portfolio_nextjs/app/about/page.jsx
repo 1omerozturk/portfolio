@@ -3,14 +3,10 @@
 import React from "react";
 import Image from "next/image";
 import { ReactTyped } from "react-typed";
-import "aos/dist/aos.css";
-import AOS from "aos";
 import SocialBanner from "../components/SocialBanner";
 
 const AboutMe = () => {
-  React.useEffect(() => {
-    AOS.init({ duration: 1000, once: false });
-  }, []);
+ 
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -26,7 +22,6 @@ const AboutMe = () => {
       <section className="py-10 flex items-center justify-center">
         <div
           className="w-4/5 lg:w-3/5 rounded-lg p-10"
-          data-aos="fade-up"
         >
           <div className="text-3xl font-bold text-black mb-6 text-center">
             <Image
@@ -60,7 +55,6 @@ const AboutMe = () => {
           />
           <p
             className="text-lg mt-5 text-slate-600 leading-relaxed text-justify"
-            data-aos="fade-right"
           >
             I have a growing passion for technology and am constantly Full Stack
             and Mobile Application development I specialise in projects, where
@@ -69,13 +63,12 @@ const AboutMe = () => {
           </p>
           <div className="mt-8 flex flex-col space-y-4 items-center justify-center">
             <button
-              data-aos="fade-right"
               onClick={() => handleDownload()}
               className="px-3 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition duration-300"
             >
               Download CV ⬇️
             </button>
-            <div data-aos="fade-left" className="flex lg:block ">
+            <div className="flex lg:block ">
               <SocialBanner />
             </div>
           </div>
