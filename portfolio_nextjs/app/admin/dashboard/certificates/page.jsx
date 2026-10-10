@@ -4,6 +4,7 @@ import { CertificationService } from "../../service/certificationsService";
 import Loading from "../../components/Loading";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import { isSafeHttpUrl } from "../../../api/urlSafety";
 
 const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
@@ -11,7 +12,7 @@ const Certificates = () => {
   const navigate = useRouter();
 
   const onEdit = (id) => () => {
-    navigate.push(`certificates/edit/${id}`);
+    navigate.push(`/admin/dashboard/certificates/edit/${id}`);
   };
 
   const onDelete = async (id) => {
@@ -24,16 +25,17 @@ const Certificates = () => {
   };
 
   const onAdd = () => {
-    navigate.push("certificates/add");
+    navigate.push("/admin/dashboard/certificates/add");
   };
 
   const fetchCertificates = async () => {
     try {
       const response = await CertificationService.getCertifications();
-      setCertificates(response);
-      setLoading(false);
+      setCertificates(Array.isArray(response) ? response : []);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,18 +59,17 @@ const Certificates = () => {
         <Loading />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {certificates.map((certificate, index) => (
-            <div key={index} className="bg-white p-1 rounded-lg shadow-md">
-               <iframe
-              className="transition-all duration-500 hover:scale-110 hover:shadow-xl hover:shadow-black"
-              src={certificate}
-              width="100%"
-              height="400"
-              frameBorder="0"
-              allowFullScreen
-              title={`Certifica ${index + 1}`}
-            ></iframe>
-              <div className="flex justify-between mt-4">
+          {certificates.map((certificate) => (
+            <div key={certificate._id} className="surface-card rounded-lg p-5 shadow-md">
+              {isSafeHttpUrl(certificate.certificateImage) ? (
+                <img src={certificate.certificateImage} alt="" className="h-40 w-full rounded object-contain" loading="lazy" />
+              ) : (
+                <div className="flex h-40 items-center justify-center text-lg font-semibold">{certificate.name || certificate.issuingOrganization}</div>
+              )}
+              <p className="mt-3 font-semibold">{certificate.name || "Sertifika"}</p>
+              <p className="text-sm text-gray-500">{certificate.issuingOrganization}</p>
+              {isSafeHttpUrl(certificate.certificateLink) && <a href={certificate.certificateLink} target="_blank" rel="noopener noreferrer" className="button-secondary mt-3">Sertifikayı aç</a>}
+              <div className="mt-4 flex justify-between">
                 <button
                   onClick={onEdit(certificate._id)}
                   className="text-blue-500 hover:text-blue-700"

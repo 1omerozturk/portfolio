@@ -1,33 +1,40 @@
 "use client";
 
+import { useState } from "react";
+import { FaPlay, FaYoutube } from "react-icons/fa";
+
 const YoutubeSection = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
-    <section className="youtube-section">
-      <h2>YouTube Videos</h2>
-      <p>
-        Can you watch me videos and subscribe to Youtube Channel{" "}
-      </p>
-      {/* Playlist */}
+    <section className="youtube-section" aria-labelledby="youtube-title">
+      <h2 id="youtube-title">YouTube videolarım</h2>
+      <p>Videolarıma göz atabilir ve kanalıma abone olabilirsiniz.</p>
       <div className="video-wrapper">
-        <iframe
-          src="https://www.youtube.com/embed/videoseries?list=PLk1vdjqSfYiZzQYK1NnfwAe0Lo6g5Epvf"
-          title="Ömer Öztürk YouTube Playlist"
-          frameBorder="0"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+        {isPlaying ? (
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/videoseries?list=PLk1vdjqSfYiZzQYK1NnfwAe0Lo6g5Epvf&autoplay=1"
+            title="Ömer Öztürk YouTube playlist"
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        ) : (
+          <button className="youtube-preview" type="button" onClick={() => setIsPlaying(true)}>
+            <span className="youtube-preview__play"><FaPlay aria-hidden="true" /></span>
+            <span>Oynatma listesini aç</span>
+          </button>
+        )}
       </div>
 
-      {/* Subscribe CTA */}
       <a
         href="https://www.youtube.com/@omer.ozturk?sub_confirmation=1"
         target="_blank"
         rel="noopener noreferrer"
         className="subscribe-btn"
       >
-        🔔 Subscribe to me YouTube
-        <i className="fa fa-youtube-square" aria-hidden="true"></i>
+        <FaYoutube aria-hidden="true" /> YouTube kanalıma abone ol
       </a>
     </section>
   );

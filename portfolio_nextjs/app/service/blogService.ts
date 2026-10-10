@@ -1,78 +1,36 @@
-import { getBlogs, getBlogById, getBlogsByCategory, searchBlogs } from "../api/api";
-import Message from "../components/Message";
-import { Blog, BlogResponse } from "../models/blogs";
+import axios from "axios";
+import { API_BASE_URL, PUBLIC_API_TIMEOUT_MS } from "../api/config";
+import { normalizeApiRecords, unwrapApiData } from "../api/payload";
+import type { BlogResponse } from "../models/blogs";
 
 export class BlogService {
-  static async getBlogs(page: number = 1, limit: number = 6, category?: string, search?: string) {
+  static async getBlogs(page = 1, limit = 6, category?: string, search?: string, signal?: AbortSignal): Promise<BlogResponse | null> {
+    const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+    if (category) params.set("category", category);
+    if (search) params.set("search", search);
+
     try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-      });
+      const response = await axios.get(`${API_BASE_URL}/user/blogs?${params.toString()}`, { timeout: PUBLIC_API_TIMEOUT_MS, signal });
+      const payload = unwrapApiData(response?.data);
 
-      if (category) params.append("category", category);
-      if (search) params.append("search", search);
-
-      const response = await getBlogs(params.toString());
-      if (response?.data) {
-        return response.data as BlogResponse;
-      } else {
+      if (Array.isArray(payload)) {
+        return { blogs: normalizeApiRecords(payload) as unknown as BlogResponse["blogs"], total: payload.length, pages: 1, currentPage: page };
+      }
+      if (typeof payload !== "object" || payload === null || !("blogs" in payload) || !Array.isArray(payload.blogs)) {
         return null;
       }
-    } catch (error: any) {
-      console.error("Get Blogs Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Bloglar yüklenemedi");
+
+      const result = payload as Partial<BlogResponse>;
+      const blogs = normalizeApiRecords(result.blogs ?? []) as unknown as BlogResponse["blogs"];
+      const pages = Number(result.pages);
+      return {
+        blogs,
+        total: Number.isFinite(Number(result.total)) ? Number(result.total) : blogs.length,
+        pages: Number.isFinite(pages) ? Math.max(1, Math.floor(pages)) : 1,
+        currentPage: Number.isFinite(Number(result.currentPage)) ? Number(result.currentPage) : page,
+      };
+    } catch {
       return null;
-    }
-  }
-
-  static async getBlog(id: string) {
-    try {
-      const response = await getBlogById(id);
-      if (response?.data) {
-        return response.data as Blog;
-      } else {
-        return null;
-      }
-    } catch (error: any) {
-      console.error("Get Blog Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Blog yüklenemedi");
-      return null;
-    }
-  }
-
-  static async getBlogsByCategory(category: string, page: number = 1, limit: number = 6) {
-    try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-      });
-
-      const response = await getBlogsByCategory(category, params.toString());
-      if (response?.data) {
-        return response.data as BlogResponse;
-      } else {
-        return null;
-      }
-    } catch (error: any) {
-      console.error("Get Blogs By Category Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Kategoriye göre bloglar yüklenemedi");
-      return null;
-    }
-  }
-
-  static async searchBlogs(query: string) {
-    try {
-      const response = await searchBlogs(query);
-      if (response?.data) {
-        return response.data as Blog[];
-      } else {
-        return [];
-      }
-    } catch (error: any) {
-      console.error("Search Blogs Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Arama yapılamadı");
-      return [];
     }
   }
 }

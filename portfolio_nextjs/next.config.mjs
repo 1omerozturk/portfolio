@@ -1,15 +1,14 @@
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-turbopack: {},
-  webpack(config, { dev, isServer }) {
-    if (!dev && !isServer) {
-      config.optimization.minimize = true
-      config.optimization.splitChunks = {
-        chunks: 'all',
-      }
-    }
-    return config
+  experimental: {
+    serverComponentsHmrCache: false,
+  },
+  turbopack: {
+    root: dirname(fileURLToPath(import.meta.url)),
   },
   images: {
     remotePatterns: [

@@ -8,7 +8,17 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        rubik: ["var(--font-rubik-vinyl)", "sans-serif"],
+        display: ["var(--font-display)", "sans-serif"],
+      },
+      colors: {
+        canvas: "var(--color-canvas)",
+        surface: "var(--color-surface)",
+        "surface-raised": "var(--color-surface-raised)",
+        ink: "var(--color-text)",
+        muted: "var(--color-text-muted)",
+        line: "var(--color-border)",
+        brand: "var(--color-primary)",
+        accent: "var(--color-accent)",
       },
     },
   },

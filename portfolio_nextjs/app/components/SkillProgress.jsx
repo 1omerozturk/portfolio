@@ -1,164 +1,84 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import * as FaIcons from "react-icons/fa";
-import * as SiIcons from "react-icons/si";
-import { motion } from "framer-motion";
-import AOS from "aos";
+import {
+  FaCss3Alt,
+  FaHtml5,
+  FaNodeJs,
+  FaPhp,
+  FaPython,
+  FaReact,
+} from "react-icons/fa";
+import { SiDotnet, SiKotlin, SiNextdotjs } from "react-icons/si";
 
-const CircularProgressBar = ({ value }) => {
-  const radius = 50;
-  const circumference = 2 * Math.PI * radius;
-
-  return (
-    <div className="flex items-center justify-center">
-      <svg width="120" height="120">
-        {/* Arkaplan Çemberi */}
-        <circle
-          cx="60"
-          cy="60"
-          r={radius}
-          strokeWidth="10"
-          stroke="#d3d3d3"
-          fill="none"
-        />
-        {/* İlerleme Çemberi */}
-        <motion.circle
-          cx="60"
-          cy="60"
-          r={radius}
-          strokeWidth="10"
-          stroke={getColor(value)}
-          fill="none"
-          strokeDasharray={circumference}
-          strokeDashoffset={circumference - (value / 100) * circumference}
-          initial={{ strokeDashoffset: circumference }}
-          animate={{
-            strokeDashoffset: circumference - (value / 100) * circumference,
-            transition: { duration: 1, ease: "easeOut" },
-          }}
-        />
-        {/* Yüzde Değeri */}
-        <text
-          x="60"
-          y="60"
-          textAnchor="middle"
-          dy=".3em"
-          fontSize="20"
-          fontWeight="bold"
-        >
-          {`${value}`}
-        </text>
-      </svg>
-    </div>
-  );
+const icons = {
+  FaCss3Alt,
+  FaHtml5,
+  FaNodeJs,
+  FaPhp,
+  FaPython,
+  FaReact,
+  SiDotnet,
+  SiKotlin,
+  SiNextdotjs,
 };
 
-const SkillProgress = ({ skills }) => {
-  const [progress, setProgress] = useState(skills.map(() => ({ value: 0 })));
+function DynamicIcon({ iconName }) {
+  if (!iconName) return null;
 
-  // 🚀 İlk Yüklemede Animasyonu Başlatan useEffect
-  useEffect(() => {
-    if (skills) AOS.init({ duration: 1000 });
+  const Icon = icons[iconName];
+  return Icon ? <Icon aria-hidden="true" /> : null;
+}
 
-    skills.forEach((skill, index) => {
-      setTimeout(() => {
-        startAnimation(index, skill.percentage);
-      }, index * 300); // Sıralı yükleme efekti için gecikme
-    });
-  }, [skills]);
-
-  const startAnimation = (index, targetValue) => {
-    let start = 0;
-    const duration = 3000;
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const progressTime = timestamp - start;
-      const progressValue = Math.min(
-        (progressTime / duration) * targetValue,
-        targetValue
-      );
-
-      setProgress((prevProgress) => {
-        const newProgress = [...prevProgress];
-        newProgress[index] = {
-          ...newProgress[index],
-          value: Math.round(progressValue),
-        };
-        return newProgress;
-      });
-
-      if (progressTime < duration) {
-        requestAnimationFrame(step);
-      }
-    };
-
-    requestAnimationFrame(step);
-  };
-
-  const handleMouseEnter = (index, targetValue) => {
-    startAnimation(index, targetValue);
-  };
-
-  const handleMouseLeave = (index) => {
-    setProgress((prevProgress) => {
-      const newProgress = [...prevProgress];
-      newProgress[index] = {
-        ...newProgress[index],
-        value: skills[index].percentage,
-      };
-      return newProgress;
-    });
-  };
-
-  const DynamicIcon = ({ iconName }) => {
-    if (!iconName) return null;
-
-    const iconLib = iconName.startsWith("Fa") ? FaIcons : SiIcons;
-    const IconComponent = iconLib[iconName];
-
-    return IconComponent ? <IconComponent /> : null;
-  };
+function CircularProgress({ name, value }) {
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+  const safeValue = Math.min(100, Math.max(0, Number(value) || 0));
+  const offset = circumference * (1 - safeValue / 100);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <svg
+      className="skill-progress__circle"
+      viewBox="0 0 112 112"
+      role="img"
+      aria-label={`${name}: ${safeValue}%`}
+    >
+      <circle className="skill-progress__track" cx="56" cy="56" r={radius} />
+      <circle
+        className="skill-progress__value"
+        cx="56"
+        cy="56"
+        r={radius}
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+      />
+      <text className="skill-progress__label" x="56" y="56" textAnchor="middle" dy=".35em">
+        {safeValue}%
+      </text>
+    </svg>
+  );
+}
+
+export default function SkillProgress({ skills = [], headingLevel = 3 }) {
+  const CardHeading = headingLevel === 2 ? "h2" : "h3";
+  if (!skills.length) {
+    return (
+      <div className="surface-card p-6 text-center text-quiet" role="status">
+        Henüz gösterilecek yetenek yok.
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {skills.map((skill, index) => (
-        <motion.div
-          data-aos="fade-down"
-          data-aos-delay={index * 200}
-          key={index}
-          className="bg-gradient-to-t from-indigo-400 to-white p-4 rounded-lg shadow-md space-y-6"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.2 }}
-          whileHover={{
-            scale: 1.05,
-            transition: { duration: 0.3 },
-          }}
-          onMouseEnter={() => handleMouseEnter(index, skill.percentage)}
-          onMouseLeave={() => handleMouseLeave(index)}
-        >
-          <div className="md:text-2xl text-sm sm:text-xl flex items-center justify-between my-2 gap-x-3 font-semibold">
-            {skill.name.split(" ")[0]}
-            <div
-              className="bg-gradient-to-b from-white to-slate-500 flex items-center justify-center text-3xl rounded-full p-3"
-              style={{ color: skill.color }}
-            >
+        <article className="skill-card" key={skill._id ?? `${skill.name}-${index}`}>
+          <div className="flex items-center justify-between gap-3">
+            <CardHeading className="min-w-0 break-words text-lg font-bold text-ink">{skill.name}</CardHeading>
+            <span className="skill-card__icon" style={{ "--skill-accent": skill.color || "var(--color-primary)" }}>
               <DynamicIcon iconName={skill.icon} />
-            </div>
+            </span>
           </div>
-          <CircularProgressBar value={progress[index].value} />
-        </motion.div>
+          <CircularProgress name={skill.name} value={skill.percentage} />
+        </article>
       ))}
     </div>
   );
-};
-
-const getColor = (percentage) => {
-  if (percentage >= 85) return "#4caf50";
-  if (percentage >= 70) return "#8bc34a";
-  if (percentage >= 55) return "#ff9800";
-  if (percentage >= 40) return "#ffeb3b";
-  return "#f44336"; // Kırmızı
-};
-
-export default SkillProgress;
+}

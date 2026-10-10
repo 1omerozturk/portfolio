@@ -1,56 +1,38 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { IoShareSocialSharp } from "react-icons/io5";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import { FaCalendarDay } from "react-icons/fa";
-import Links from "./Links";
-import ContactBanner from "./Contact";
+import Link from "next/link";
+import { FaRegEnvelope } from "react-icons/fa";
 import SocialBanner from "./SocialBanner";
 
-const Footer = () => {
-  const [value, setValue] = useState(null);
+const navigation = [
+  { href: "/about", label: "Hakkımda" },
+  { href: "/skills", label: "Yetenekler" },
+  { href: "/projects", label: "Projeler" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "İletişim" },
+];
 
-  useEffect(() => {
-    setValue(Date.now());
-  }, []);
-
+export default function Footer() {
   return (
-    <footer className="space-x-3 p-6 bg-gray-500 md:grid">
-      <div
-        className="grid grid-flow-row border-b-2 border-b-black md:border-b-0 py-5"
-      >
-        <div className="bg-slate-300 rounded-full w-fit h-fit mx-auto p-2 mb-3">
-          <FaCalendarDay className="text-indigo-500 text-3xl" />
+    <footer className="site-footer">
+      <div className="site-footer__inner">
+        <div>
+          <Link href="/" className="site-footer__brand">Ömer Öztürk</Link>
+          <p className="mt-2 max-w-sm text-sm text-quiet">
+            Web ve mobil uygulamalar geliştiren yazılım mühendisi.
+          </p>
         </div>
-        <div className="flex w-[280px] sm:w-auto mx-auto">
-          <Calendar
-            value={value}
-            locale="en-US"
-            className="border shadow-md text-slate-500 mx-auto border-gray-300 rounded-lg"
-            onChange={setValue}
-            calendarType="iso8601"
-            tileClassName={({ date }) =>
-              date?.getDay() === 0 || date?.getDay() === 6 ? "bg-red-100" : ""
-            }
-          />
-        </div>
-      </div>
-      <div className="grid grid-flow-col items-start justify-around pt-5 pb-5">
-        <Links />
-        <ContactBanner />
-      </div>
-      <div className="col-span-2 place-self-center">
-        <div className="bg-slate-300 rounded-full w-fit h-fit mx-auto p-2 mb-3">
-          <IoShareSocialSharp className="text-3xl text-fuchsia-500" />
-        </div>
-        <div className="my-4">
 
-        <SocialBanner />
+        <nav className="site-footer__links" aria-label="Alt menü">
+          {navigation.map(({ href, label }) => <Link href={href} key={href}>{label}</Link>)}
+        </nav>
+
+        <div className="site-footer__social" aria-label="İletişim ve sosyal medya bağlantıları">
+          <a href="mailto:omer.ozturk.or.ok@gmail.com" aria-label="Ömer Öztürk'e e-posta gönder"><FaRegEnvelope /></a>
+          <SocialBanner />
         </div>
+      </div>
+      <div className="site-footer__copyright">
+        © {new Date().getFullYear()} Ömer Öztürk
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

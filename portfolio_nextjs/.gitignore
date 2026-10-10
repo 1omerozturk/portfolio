@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+UI-ROADMAP.md
+CONTENT-CHECKLIST.md
 
 # vercel
 .vercel

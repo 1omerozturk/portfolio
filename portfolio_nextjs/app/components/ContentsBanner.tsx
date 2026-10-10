@@ -1,113 +1,59 @@
-"use client";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import { FaMedium } from "react-icons/fa";
-import { ContentService } from "../service/contentService";
-import Loading from "./Loading";
-import Image from "next/image";
-import AOS from "aos";
+import { fetchPublicList } from "../api/publicData";
+import { isSafeHttpUrl, isSafeImageSource } from "../api/urlSafety";
+import PageHeader from "./PageHeader";
+import SeeMore from "./SeeMore";
+
+type ContentItem = {
+  _id?: string;
+  name: string;
+  link: string;
+  image?: string;
+};
 
 interface ContentSizeProps {
   size?: number;
 }
 
-const ContentsBanner: React.FC<ContentSizeProps> = ({ size }) => {
-  const [contents, setContents] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchData = async () => {
-    try {
-      await ContentService.getContents().then((res) => {
-        setContents(res.data);
-        setLoading(false);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData().then(() => {
-      AOS.init({ duration: 1000 });
-    });
-  }, []);
+export default async function ContentsBanner({ size }: ContentSizeProps) {
+  const CardHeading = size ? "h3" : "h2";
+  const result = await fetchPublicList<ContentItem>("/user/contents", ["contents", "items"]);
+  const contents = result.status === "ok"
+    ? result.items.filter((content) => content && typeof content.name === "string" && content.name.trim() && isSafeHttpUrl(content.link))
+    : [];
+  const visibleContents = size ? contents.slice(0, size) : contents;
 
   return (
-    <>
-      {loading ? (
-        <Loading color={"lime"} />
-      ) : (
-        <div className="pt-2">
-           <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
-        <div className="grid grid-flow-col space-x-14">
-          <h1 className=" font-rubik text-indigo-500"> Contents </h1>
-          <FaMedium className="text-indigo-400" />
-        </div>
-      </div>
-          <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  p-3">
-            {size &&
-              contents.slice(0, size).map((content, index) => (
-                <a
-                  data-aos={`${index % 2 == 0 ? "fade-up" : "fade-down"}`}
-                  className="text-black"
-                  style={{ textDecoration: "none" }}
-                  title={content.name}
-                  key={index}
-                  href={content.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className=" text-center my-2" key={index}>
-                    <div className="text-4xl" title={content.name}>
-                      {content.name.slice(0, 15)}
-                    </div>
+    <section className="surface-page px-4 py-12">
+      <div className="mx-auto max-w-7xl">
+        <PageHeader title="İçerikler" level={size ? 2 : 1} icon={<FaMedium />} />
 
-                    <Image
-                      src={content.image}
-                      alt={content.name}
-                      width={300}
-                      height={300}
-                      className="mx-auto p-2 rounded-2xl bg-cover w-full h-[300px] hover:scale-105 hover:animate-pulse transition-all duration-500 cursor-pointer"
-                    />
-                    <div className="hover:font-semibold text-slate-50 hover:text-slate-950 hover:underline w-fit mx-auto text-center">
-                      Read..
-                    </div>
-                  </div>
-                </a>
-              ))}
-            {!size &&
-              contents.map((content, index) => (
-                <div
-                  data-aos={`${index % 2 == 0 ? "fade-up" : "fade-down"}`}
-                  className="text-center border-2 border-black rounded-lg my-2"
-                  key={index}
-                >
-                  <div title={content.name} className="text-4xl">
-                    {content.name.slice(0, 15)}
-                  </div>
-
-                  <Image
-                    src={content.image}
-                    alt={content.name}
-                    width={300}
-                    height={300}
-                  />
-                  <a
-                    title={content.name}
-                    key={index}
-                    href={content.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Read..
-                  </a>
+        {visibleContents.length ? (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {visibleContents.map((content, index) => (
+              <a className="surface-card content-card group overflow-hidden" title={content.name} key={content._id ?? `${content.name}-${index}`} href={content.link} target="_blank" rel="noopener noreferrer">
+                {isSafeImageSource(content.image) ? (
+                  <img src={content.image} alt={content.name} width="480" height="320" loading="lazy" decoding="async" className="content-card__image" />
+                ) : (
+                  <div className="content-card__placeholder" aria-hidden="true"><FaMedium /></div>
+                )}
+                <div className="p-5">
+                  <CardHeading className="line-clamp-2 break-words text-lg font-bold text-ink">{content.name}</CardHeading>
+                  <span className="mt-4 inline-flex items-center gap-2 font-semibold text-brand">
+                    İçeriği oku <span aria-hidden="true">↗</span>
+                  </span>
                 </div>
-              ))}
+              </a>
+            ))}
           </div>
-        </div>
-      )}
-    </>
-  );
-};
+        ) : (
+          <p className="surface-card p-8 text-center text-quiet" role="status">
+            {result.status === "unavailable" ? "İçerikler şu anda yüklenemiyor." : "Henüz gösterilecek içerik bulunmuyor."}
+          </p>
+        )}
 
-export default ContentsBanner;
+        {size && contents.length > size && <div className="mt-8"><SeeMore path="contents" /></div>}
+      </div>
+    </section>
+  );
+}

@@ -1,178 +1,90 @@
 "use client";
-import { usePathname } from "next/navigation";
+
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useRef, useState } from "react";
+import ThemeToggle from "./ThemeToggle";
 
-const Navbar = () => {
+const links = [
+  { href: "/skills", label: "Yetenekler" },
+  { href: "/projects", label: "Projeler" },
+  { href: "/educations", label: "Eğitim" },
+  { href: "/experiences", label: "Deneyim" },
+  { href: "/certificates", label: "Sertifikalar" },
+  { href: "/blog", label: "Blog" },
+  { href: "/about", label: "Hakkımda" },
+  { href: "/contact", label: "İletişim" },
+];
+
+export default function Navbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const pathName = usePathname();
+  const menuButton = useRef(null);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const renderLinks = (mobile = false) =>
+    links.map(({ href, label }) => {
+      const isActive = pathname === href || pathname.startsWith(`${href}/`);
+      return (
+        <Link
+          key={href}
+          href={href}
+          className="site-nav__link"
+          aria-current={isActive ? "page" : undefined}
+          onClick={() => mobile && setIsOpen(false)}
+        >
+          {label}
+        </Link>
+      );
+    });
 
   return (
-    <nav className="bg-gradient-to-bl to-black from-indigo-600 px-3 py-2">
-      <div className="mx-auto nav-items flex justify-between items-center">
-        <a
-          aria-label=""
-          id="#top"
-          className={`flex items-center justify-center ${
-            pathName == "/" ? "active" : ""
-          }`}
+    <header className="site-nav" onKeyDown={(event) => {
+      if (event.key === "Escape" && isOpen) {
+        setIsOpen(false);
+        menuButton.current?.focus();
+      }
+    }}>
+      <nav className="site-nav__inner" aria-label="Ana menü">
+        <Link
           href="/"
+          className="site-brand"
+          aria-label="Ömer Öztürk ana sayfa"
+          onClick={() => setIsOpen(false)}
         >
           <Image
             src="/ozturkomer.webp"
-            alt="Ömer Öztürk"
+            alt=""
             width={40}
             height={40}
-            className="object-cover rounded-full mr-2"
+            className="rounded-full object-cover"
           />
-          Ömer Öztürk
-        </a>
-        <div className="hidden nav-items  md:flex space-x-10">
-          <a
-            aria-label="skills"
-            className={`${pathName == "/skills" ? "active" : ""}`}
-            href="/skills"
-          >
-            Skills <i className="ml-2 pi pi-code text-lime-500"></i>
-          </a>
-          <a
-            aria-label="projects"
-            className={`${pathName == "/projects" ? "active" : ""}`}
-            href="/projects"
-          >
-            Projects
-            <i className="ml-2 pi pi-folder-open text-orange-400"></i>
-          </a>
-          <a
-            aria-label="educations"
-            className={`block ${pathName == "/educations" ? "active" : ""}`}
-            href="/educations"
-          >
-            Educations{" "}
-            <i className="ml-2 pi pi-graduation-cap text-slate-100"></i>
-          </a>
-          <a
-            aria-label="experiences"
-            className={`${pathName == "/experiences" ? "active" : ""}`}
-            href="/experiences"
-          >
-            Experiences
-            <i className="ml-2 pi pi-slack text-sky-400"></i>
-          </a>
-          <a
-            aria-label="certificates"
-            className={`${pathName == "/certificates" ? "active" : ""}`}
-            href="/certificates"
-          >
-            Certificates
-            <i className="ml-2 pi pi-trophy text-indigo-400"></i>
-          </a>
-          <a
-            aria-label="blog"
-            className={`${pathName == "/blog" ? "active" : ""}`}
-            href="/blog"
-          >
-            Blog
-            <i className="ml-2 pi pi-pen-to-square text-pink-500"></i>
-          </a>
-          <a
-            aria-label="about"
-            className={`${pathName == "/about" ? "active" : ""}`}
-            href="/about"
-          >
-            About
-            <i className="ml-2 pi pi-user text-slate-400"></i>
-          </a>
-          <a
-            aria-label="contact"
-            className={`${pathName == "/contact" ? "active" : ""}`}
-            href="/contact"
-          >
-            Contact
-            <i className="ml-2 pi pi-envelope text-rose-500"></i>
-          </a>
-        </div>
-        <div className="md:hidden">
+          <span>Ömer Öztürk</span>
+        </Link>
+
+        <div className="site-nav__links">{renderLinks()}</div>
+
+        <div className="site-nav__actions">
+          <ThemeToggle />
           <button
-            aria-label="toggle"
-            onClick={toggleMenu}
-            className="text-gray-300 hover:drop-shadow-2xl hover:shadow-white hover:text-white focus:outline-none"
+            ref={menuButton}
+            type="button"
+            className="site-nav__menu-button"
+            aria-label={isOpen ? "Menüyü kapat" : "Menüyü aç"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setIsOpen((open) => !open)}
           >
-            {" "}
-            <i className={`pi ${isOpen ? "pi-times" : "pi-bars"} text-2xl`}></i>
+            <span aria-hidden="true">{isOpen ? "×" : "☰"}</span>
           </button>
         </div>
-      </div>
+      </nav>
+
       {isOpen && (
-        <div className="md:hidden space-y-6 mt-5 nav-items">
-          <a
-            aria-label="skills"
-            className={`block ${pathName == "/skills" ? "active" : ""}`}
-            href="/skills"
-          >
-            Skills <i className="ml-2 pi pi-code text-lime-400"></i>
-          </a>
-          <a
-            aria-label="projects"
-            className={`block ${pathName == "/projects" ? "active" : ""}`}
-            href="/projects"
-          >
-            Projects <i className="ml-2 pi pi-microchip text-yellow-400"></i>
-          </a>
-          <a
-            aria-label="educations"
-            className={`block ${pathName == "/educations" ? "active" : ""}`}
-            href="/educations"
-          >
-            Educations{" "}
-            <i className="ml-2 pi pi-graduation-cap text-slate-100"></i>
-          </a>
-          <a
-            aria-label="experiences"
-            className={`block ${pathName == "/experiences" ? "active" : ""}`}
-            href="/experiences"
-          >
-            Experiences
-            <i className="ml-2 pi pi-slack text-sky-400"></i>
-          </a>
-          <a
-            aria-label="certificates"
-            className={`block ${pathName == "/certificates" ? "active" : ""}`}
-            href="/certificates"
-          >
-            Certificates
-            <i className="ml-2 pi pi-trophy text-indigo-400"></i>
-          </a>
-          <a
-            aria-label="blog"
-            className={`block ${pathName == "/blog" ? "active" : ""}`}
-            href="/blog"
-          >
-            Blog
-            <i className="ml-2 pi pi-pen-to-square text-pink-500"></i>
-          </a>
-          <a
-            aria-label="about"
-            className={`block ${pathName == "/about" ? "active" : ""}`}
-            href="/about"
-          >
-            About <i className="ml-2 pi pi-user text-slate-400"></i>
-          </a>
-          <a
-            aria-label="contact"
-            className={`block ${pathName == "/contact" ? "active" : ""}`}
-            href="/contact"
-          >
-            Contact <i className="ml-2 pi pi-envelope text-rose-500"></i>
-          </a>
+        <div id="mobile-navigation" className="site-nav__mobile-links">
+          {renderLinks(true)}
         </div>
       )}
-    </nav>
+    </header>
   );
-};
-
-export default Navbar;
+}

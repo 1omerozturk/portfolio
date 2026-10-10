@@ -15,14 +15,15 @@ export const DynamicIcon = ({ iconName }) => {
 
   const lib = iconName.trim();
   const iconLib = {
-    Twitter: <FaTwitter className="text-2xl md:text-4xl text-sky-500" />,
-    Facebook: <FaFacebook className="text-2xl md:text-4xl text-blue-500" />,
-    Instagram: <FaInstagram className="text-2xl md:text-4xl text-rose-500" />,
-    YouTube: <FaYoutube className="text-2xl md:text-4xl text-red-600" />,
-    GitHub: <FaGithub className="text-2xl md:text-4xl text-slate-800" />,
-    LinkedIn: <FaLinkedin className="text-2xl md:text-4xl text-blue-500" />,
-    HackerRank: <FaHackerrank className="text-2xl md:text-4xl text-black" />,
-    Medium: <FaMedium className="text-2xl md:text-4xl text-slate-800" />,
+    Twitter: <FaTwitter aria-hidden="true" className="social-icon social-icon--twitter" />,
+    Facebook: <FaFacebook aria-hidden="true" className="social-icon social-icon--facebook" />,
+    Instagram: <FaInstagram aria-hidden="true" className="social-icon social-icon--instagram" />,
+    YouTube: <FaYoutube aria-hidden="true" className="social-icon social-icon--youtube" />,
+    GitHub: <FaGithub aria-hidden="true" className="social-icon social-icon--github" />,
+    LinkedIn: <FaLinkedin aria-hidden="true" className="social-icon social-icon--linkedin" />,
+    LınkedIn: <FaLinkedin aria-hidden="true" className="social-icon social-icon--linkedin" />,
+    HackerRank: <FaHackerrank aria-hidden="true" className="social-icon social-icon--hackerrank" />,
+    Medium: <FaMedium aria-hidden="true" className="social-icon social-icon--medium" />,
   };
   const IconComponent = iconLib[lib];
 

@@ -1,89 +1,70 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { ExperienceService } from "../service/experienceService";
-import { motion } from "framer-motion";
-import { FaBuilding, FaCalendarAlt, FaUserTie } from "react-icons/fa";
-import Loading from "./Loading";
-import AOS from "aos";
+import { FaBuilding, FaCalendarAlt } from "react-icons/fa";
+import { fetchPublicList } from "../api/publicData";
+import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
 
-const ExperiencesBanner = ({ size }) => {
-  const [experiences, setExperiences] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useRouter();
+function formatDate(value, fallback = "—") {
+  if (!value) return fallback;
+  const date = new Date(value);
+  return Number.isNaN(date.valueOf())
+    ? ""
+    : date.toLocaleDateString("tr-TR", { month: "short", year: "numeric", timeZone: "Europe/Istanbul" });
+}
 
-  useEffect(() => {
-    fetchData().then(() => {
-      AOS.init({ duration: 1000, once: true });
-    });
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      await ExperienceService.getExperiences()
-        .then((res) => {
-          setExperiences(res.data);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+export default async function ExperiencesBanner({ size }) {
+  const CardHeading = size ? "h3" : "h2";
+  const result = await fetchPublicList("/user/experiences", ["experiences", "items"]);
+  const experiences = result.status === "ok"
+    ? result.items.filter((experience) => experience && typeof experience === "object" && typeof experience.company === "string" && experience.company.trim())
+    : [];
+  experiences.sort((first, second) => {
+    const firstDate = Date.parse(first.startDate);
+    const secondDate = Date.parse(second.startDate);
+    return (Number.isFinite(secondDate) ? secondDate : 0) - (Number.isFinite(firstDate) ? firstDate : 0);
+  });
   const displayedExperiences = size ? experiences.slice(0, size) : experiences;
 
   return (
-    <div className="mx-auto px-4 py-8">
-      <div className="flex items-center justify-center text-4xl text-gray-800 mb-3">
-            <div className="grid grid-flow-col space-x-14">
-              <h1 className=" font-rubik text-indigo-500"> Experiences </h1>
-              <FaBuilding className="text-indigo-400" />
-            </div>
-          </div>
-      {loading ? (
-        <Loading color={"red"} />
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {displayedExperiences.map((exp, index) => (
-            <motion.div
-              key={exp.id}
-              className="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-shadow duration-300"
-              whileHover={{ scale: 1.03 }}
-              data-aos={`${index % 2 == 0 ? "fade-left" : "fade-right"}`}
-            >
-              <div className="flex items-center mb-2">
-                <FaBuilding className="text-blue-500 text-xl mr-2" />
-                <h3 className="text-xl font-semibold">{exp.company}</h3>
-              </div>
-              <div className="flex items-center mb-2">
-                <FaUserTie className="text-green-500 text-xl mr-2" />
-                {exp.position}
-              </div>
-              <div className="flex items-center mb-4">
-                <FaCalendarAlt className="text-purple-500 text-xl mr-2" />
-                {new Date(exp.startDate).toLocaleDateString()} -{" "}
-                {exp.endDate
-                  ? new Date(exp.endDate).toLocaleDateString()
-                  : "still working"}
-              </div>
-              <ul className="list-disc list-inside text-gray-700">
-                {exp.responsibilities.map((resp, index) => (
-                  <li key={index}>{resp}</li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
-      )}
-      {size && experiences.length > size && (
-       <SeeMore path="experiences"/>
-      )}
-    </div>
-  );
-};
+    <section className="surface-page mx-auto px-4 py-12">
+      <div className="mx-auto max-w-6xl">
+        <PageHeader title="Deneyim" level={size ? 2 : 1} icon={<FaBuilding />} />
 
-export default ExperiencesBanner;
+        {displayedExperiences.length ? (
+          <div className="grid gap-5 md:grid-cols-2">
+            {displayedExperiences.map((experience, index) => {
+              const responsibilities = Array.isArray(experience.responsibilities)
+                ? experience.responsibilities.filter((responsibility) => typeof responsibility === "string")
+                : [];
+              return (
+                <article className="surface-card p-6" key={experience._id ?? experience.id ?? `${experience.company}-${index}`}>
+                  <div className="mb-4 flex items-start gap-3">
+                    <span className="section-icon"><FaBuilding aria-hidden="true" /></span>
+                    <div className="min-w-0 break-words">
+                      <CardHeading className="text-xl font-bold text-ink">{typeof experience.position === "string" && experience.position.trim() ? experience.position : "Pozisyon"}</CardHeading>
+                      <p className="font-medium text-brand">{experience.company}</p>
+                    </div>
+                  </div>
+                  <p className="mb-4 flex items-center gap-2 text-sm text-quiet">
+                    <FaCalendarAlt aria-hidden="true" />
+                    {formatDate(experience.startDate)} – {formatDate(experience.endDate, "Devam ediyor")}
+                  </p>
+                  {responsibilities.length > 0 && (
+                    <ul className="space-y-2 pl-5 text-quiet">
+                      {responsibilities.map((responsibility, itemIndex) => <li className="list-disc" key={`${index}-${itemIndex}`}>{responsibility}</li>)}
+                    </ul>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="surface-card p-8 text-center text-quiet" role="status">
+            {result.status === "unavailable" ? "Deneyim bilgileri şu anda yüklenemiyor." : "Henüz deneyim bilgisi bulunmuyor."}
+          </p>
+        )}
+
+        {size && experiences.length > size && <div className="mt-8"><SeeMore path="experiences" /></div>}
+      </div>
+    </section>
+  );
+}

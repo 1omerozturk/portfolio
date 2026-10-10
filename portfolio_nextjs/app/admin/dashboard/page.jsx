@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@radix-ui/themes";
 import DonutChartCard from "../components/DonutChart";
 import { SkillService } from "../service/skillService";
-import { ProjectService } from "../../service/projectService";
+import { AdminProjectService } from "../service/projectService";
 import { ContentService } from "../service/contentService";
 import { MessageService } from "../service/messageService";
 import { CertificationService } from "../service/certificationsService";
@@ -20,7 +20,7 @@ const Dashboard = () => {
   const getData = async () => {
     try {
       const skillData = await SkillService.getSkills();
-      const projectData = await ProjectService.getProjects();
+      const projectData = await AdminProjectService.getProjects();
       const contentData = await ContentService.getContents();
       const certificateData = await CertificationService.getCertifications();
       const messageData = await MessageService.getMessages();

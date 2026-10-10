@@ -1,33 +1,36 @@
+"use client";
+
 import { useState, useEffect } from "react";
+import { FaArrowUp } from "react-icons/fa";
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      const shouldShow = window.scrollY > 300;
+      setIsVisible((visible) => visible === shouldShow ? visible : shouldShow);
     };
 
-    window.addEventListener("scroll", toggleVisibility);
+    toggleVisibility();
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
 
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
   return (
     <button
-      aria-label="gototop"
-      onClick={() =>
-        document.getElementById("top")?.scrollIntoView({ behavior: "smooth" })
-      }
-      className={`fixed right-2 bottom-3 md:right-4 md:bottom-4 bg-indigo-600 text-white md:p-3 p-2 rounded-full shadow-lg hover:bg-indigo-800 transition-colors z-50 ${
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-      } transition-opacity duration-300`}
+      type="button"
+      aria-label="Sayfa başına dön"
+      aria-hidden={!isVisible}
+      tabIndex={isVisible ? 0 : -1}
+      disabled={!isVisible}
+      onClick={() => document.getElementById("top")?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      })}
+      className="scroll-top-button button-primary"
     >
-      <i className="pi pi-arrow-up"></i>
+      <FaArrowUp aria-hidden="true" />
     </button>
   );
 };

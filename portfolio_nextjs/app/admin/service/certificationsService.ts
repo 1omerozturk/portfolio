@@ -1,15 +1,14 @@
-import { pdfLinks } from "../../models/certificates";
 import {
   createCertifications,
   deleteCertifications,
-  getCertifications,
+  getCertifications as fetchCertifications,
   getOneCertifications,
   updateCertifications,
 } from "./../../api/api";
 export class CertificationService {
   static async getCertifications() {
-    const response = await pdfLinks;
-    return response;
+    const response = await fetchCertifications();
+    return Array.isArray(response?.data) ? response.data : [];
   }
 
   static async getCertification(id: any) {

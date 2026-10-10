@@ -1,4 +1,16 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Portfolio UI — yerel API ayarları
+
+Veriler Node.js/Express API üzerinden alınır; Firestore bağlantısını backend yönetir.
+
+- Yerel API adresi: `http://localhost:5040/api`.
+- `.env.example` dosyasını `.env.development.local` adıyla kopyalayın; farklı port için `NEXT_PUBLIC_API_URL` değerini değiştirin.
+- `npm run dev` geliştirme ortamını otomatik seçer; `NODE_ENV` değerini elle tanımlamayın.
+- `npm run build` ve `npm run start` production ortamını kullanır. `.env.development.local` production ortamında yüklenmez.
+- Production varsayılan API adresi `https://portfolio-m5zz.onrender.com/api`; dağıtım ortamında `NEXT_PUBLIC_API_URL` ile değiştirilebilir.
+- API adresi değiştiğinde geliştirme sunucusunu yeniden başlatın; production için yeniden derleyin. Ortak `.env.local` dosyasındaki ayarlar varsayılan adresi geçersiz kılabilir.
+- Geliştirmede ziyaretçi verileri önbelleğe alınmaz. Firestore `id` alanı ortak veri katmanında bileşenlerin kullandığı `_id` alanına uyarlanır.
+
+Görev takibi: `UI-ROADMAP.md`.
 
 ## Getting Started
 

@@ -3,6 +3,7 @@
   max-width: 1000px;
   padding: 0 1rem;
   text-align: center;
+  color: var(--color-text);
 }
 
 .youtube-section h2 {
@@ -11,7 +12,7 @@
 }
 
 .youtube-section p {
-  opacity: 0.8;
+  color: var(--color-text-muted);
   margin-bottom: 2rem;
 }
 
@@ -20,7 +21,8 @@
   padding-top: 56.25%; /* 16:9 */
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 20px 40px rgb(var(--color-shadow) / 0.25);
+  background: var(--color-surface-raised);
 }
 
 .video-wrapper iframe {
@@ -32,18 +34,49 @@
 }
 
 .subscribe-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   margin-top: 2rem;
   padding: 14px 32px;
-  background: #ff0000;
-  color: #fff;
+  background: var(--color-youtube-brand);
+  color: var(--color-text-inverse);
   font-weight: 600;
   border-radius: 999px;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.youtube-preview {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.9rem;
+  border: 0;
+  background: radial-gradient(circle at center, var(--color-youtube-preview-start), var(--color-youtube-preview-end) 70%);
+  color: var(--color-text-inverse);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.youtube-preview__play {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-youtube-play);
+  font-size: 1.25rem;
+  transition: transform var(--motion-fast) ease;
+}
+
+.youtube-preview:hover .youtube-preview__play {
+  transform: scale(1.08);
 }
 
 .subscribe-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(255, 0, 0, 0.4);
+  box-shadow: 0 10px 25px color-mix(in srgb, var(--color-youtube-brand) 40%, transparent);
 }

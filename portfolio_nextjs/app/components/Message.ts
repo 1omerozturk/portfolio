@@ -1,6 +1,5 @@
 "use client"
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 class Message {
   async ToastMessage(type:string,message:string) {
