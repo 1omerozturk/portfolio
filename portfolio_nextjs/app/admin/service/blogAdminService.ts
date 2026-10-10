@@ -6,7 +6,9 @@ import {
   getAdminBlogById,
 } from "../../api/api";
 import Message from "../../components/Message";
-import { Blog, BlogResponse } from "../../models/blogs";
+import { Blog } from "../../models/blogs";
+import { normalizeBlog, normalizeBlogPage } from "../../api/blogPayload";
+import { unwrapApiData } from "../../api/payload";
 
 export class BlogAdminService {
   static async createBlog(data: Partial<Blog>) {
@@ -14,11 +16,10 @@ export class BlogAdminService {
       const response = await createBlog(data);
       if (response?.data) {
         Message.ToastMessage("success", "Blog başarıyla oluşturuldu");
-        return response.data as Blog;
+        return normalizeBlog(unwrapApiData(response.data));
       }
-    } catch (error: any) {
-      console.error("Create Blog Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Blog oluşturulamadı");
+    } catch {
+      Message.ToastMessage("error", "Blog oluşturulamadı");
       return null;
     }
   }
@@ -28,11 +29,10 @@ export class BlogAdminService {
       const response = await updateBlog(id, data);
       if (response?.data) {
         Message.ToastMessage("success", "Blog başarıyla güncellendi");
-        return response.data as Blog;
+        return normalizeBlog(unwrapApiData(response.data));
       }
-    } catch (error: any) {
-      console.error("Update Blog Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Blog güncellenemedi");
+    } catch {
+      Message.ToastMessage("error", "Blog güncellenemedi");
       return null;
     }
   }
@@ -42,9 +42,8 @@ export class BlogAdminService {
       await deleteBlog(id);
       Message.ToastMessage("success", "Blog başarıyla silindi");
       return true;
-    } catch (error: any) {
-      console.error("Delete Blog Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Blog silinemedi");
+    } catch {
+      Message.ToastMessage("error", "Blog silinemedi");
       return false;
     }
   }
@@ -62,11 +61,10 @@ export class BlogAdminService {
 
       const response = await getAdminBlogs(params.toString());
       if (response?.data) {
-        return response.data as BlogResponse;
+        return normalizeBlogPage(response.data, page);
       }
-    } catch (error: any) {
-      console.error("Get Admin Blogs Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Bloglar yüklenemedi");
+    } catch {
+      Message.ToastMessage("error", "Bloglar yüklenemedi");
       return null;
     }
   }
@@ -75,12 +73,13 @@ export class BlogAdminService {
     try {
       const response = await getAdminBlogById(id);
       if (response?.data) {
-        return response.data as Blog;
+        return normalizeBlog(unwrapApiData(response.data));
       }
-    } catch (error: any) {
-      console.error("Get Blog Error:", error);
-      Message.ToastMessage("error", error?.response?.data?.message || "Blog yüklenemedi");
+    } catch {
+      Message.ToastMessage("error", "Blog yüklenemedi");
       return null;
     }
   }
 }
+
+

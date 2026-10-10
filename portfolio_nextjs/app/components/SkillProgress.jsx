@@ -1,16 +1,19 @@
 import {
+  FaCode,
   FaCss3Alt,
   FaHtml5,
+  FaJava,
   FaNodeJs,
   FaPhp,
   FaPython,
   FaReact,
 } from "react-icons/fa";
-import { SiDotnet, SiKotlin, SiNextdotjs } from "react-icons/si";
+import { SiDotnet, SiKotlin, SiNextdotjs, SiJavascript, SiTypescript, SiFirebase, SiMongodb, SiExpress } from "react-icons/si";
 
 const icons = {
   FaCss3Alt,
   FaHtml5,
+  FaJava,
   FaNodeJs,
   FaPhp,
   FaPython,
@@ -18,13 +21,18 @@ const icons = {
   SiDotnet,
   SiKotlin,
   SiNextdotjs,
+  SiJavascript,
+  SiTypescript,
+  SiFirebase,
+  SiMongodb,
+  SiExpress,
+  javascript: SiJavascript,
+  FaCss3: FaCss3Alt,
 };
 
 function DynamicIcon({ iconName }) {
-  if (!iconName) return null;
-
-  const Icon = icons[iconName];
-  return Icon ? <Icon aria-hidden="true" /> : null;
+  const Icon = Object.hasOwn(icons, iconName) ? icons[iconName] : FaCode;
+  return <Icon aria-hidden="true" />;
 }
 
 function CircularProgress({ name, value }) {
@@ -72,7 +80,7 @@ export default function SkillProgress({ skills = [], headingLevel = 3 }) {
         <article className="skill-card" key={skill._id ?? `${skill.name}-${index}`}>
           <div className="flex items-center justify-between gap-3">
             <CardHeading className="min-w-0 break-words text-lg font-bold text-ink">{skill.name}</CardHeading>
-            <span className="skill-card__icon" style={{ "--skill-accent": skill.color || "var(--color-primary)" }}>
+            <span className="skill-card__icon" aria-hidden="true">
               <DynamicIcon iconName={skill.icon} />
             </span>
           </div>

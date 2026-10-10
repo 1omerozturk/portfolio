@@ -1,126 +1,23 @@
+"use client";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import Link from "next/link";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import {
-  FaEdit,
-  FaGithub,
-  FaGlobe,
-  FaMinusCircle,
-} from "react-icons/fa"; 
 import { AdminProjectService } from "../service/projectService";
-import { useRouter } from "next/navigation";
+import { type PublicProject } from "../../api/projectPayload";
+import { isSafeHttpUrl } from "../../api/urlSafety";
+import PublicImage from "../../components/PublicImage";
 
-const ProjectComponent = ({ projects, setProjects }) => {
-  const navigate = useRouter();
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    arrows: true,
-  };
-
-  const onDelete = (id: any) => {
-    AdminProjectService.deleteProject(id).then((res) => {
-      if (res.status === 200) {
-        const updatedProjects = projects.filter(
-          (project) => project._id !== id
-        );
-        setProjects(updatedProjects);
-      }
-    });
-  };
-
-  const onEdit = (id: any) => {
-    navigate.push(`projects/edit/${id}`);
-  };
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:p-6 p-1 rounded-lg shadow-sm">
-      {projects.map((project:any, index:any) => (
-        <div key={index} className="p-4 bg-slate-500 rounded-lg shadow-lg">
-          <div className="flex float-right space-x-1 text-xl">
-            <button
-              title="Düzenle"
-              onClick={() => onEdit(project._id)}
-              className="btn btn-outline-warning"
-            >
-              <FaEdit className="text-2xl" />
-            </button>
-            <button
-              title="Sil"
-              onClick={() => onDelete(project._id)}
-              className="btn btn-outline-danger"
-            >
-              <FaMinusCircle className="text-2xl" />
-            </button>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
-            {project.title}
-          </h2>
-          {project.type ? (
-            <p className="text-slate-400 font-serif text-center">
-              ({project.type})
-            </p>
-          ) : (
-            ""
-          )}
-          <div className="my-4">
-            <Slider {...settings}>
-              {project.images.map((image: any, imgIndex: any) => (
-                <img
-                  key={imgIndex}
-                  className="w-full h-[300px]  object-cover rounded mb-2"
-                  src={image}
-                  alt={`${project.title} image ${imgIndex + 1}`}
-                />
-              ))}
-            </Slider>
-          </div>
-          <div className="text-gray-700 mb-4 ">
-            {project?.description?.length > 100
-              ? project?.description?.slice(0,100)+'...'
-              : project?.description}
-          </div>
-          <div className="flex justify-between items-center">
-            <Link
-              href={`admin/dashboard/projects/${project._id}`}
-              className="text-indigo-600 hover:text-indigo-800 font-bold text-sm"
-              style={{ textDecoration: "none" }}
-            >
-              İncele
-            </Link>
-            <div className="flex items-center justify-between space-x-4">
-              {project.repoLink && (
-                <a
-                  href={project.repoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center text-gray-700 hover:text-gray-900 text-sm"
-                >
-                  <FaGithub className="text-lg" />
-                </a>
-              )}
-              {project.liveDemoLink && (
-                <a
-                  href={project.liveDemoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center text-sky-500 hover:text-sky-700 text-sm"
-                >
-                  <FaGlobe className="text-lg" />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export default ProjectComponent;
+export default function ProjectComponent({ projects, setProjects }: { projects: PublicProject[]; setProjects: Dispatch<SetStateAction<PublicProject[]>> }) {
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  async function remove(project: PublicProject) {
+    if (deleting || !window.confirm(`${project.title} projesi silinsin mi?`)) return;
+    setDeleting(project._id); setError("");
+    try {
+      const response = await AdminProjectService.deleteProject(project._id);
+      if (response && response.status >= 200 && response.status < 300) setProjects(previous => previous.filter(item => item._id !== project._id));
+      else setError("Proje silinemedi. Lütfen yeniden deneyin.");
+    } catch { setError("Proje silinemedi. Lütfen yeniden deneyin."); }
+    finally { setDeleting(null); }
+  }
+  return <>{error && <p role="alert" className="mb-4 text-danger">{error}</p>}<div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">{projects.map(project => <article className="surface-card overflow-hidden" key={project._id}><PublicImage src={project.images[0]?.split(",")[0]?.trim()} alt="" width={640} height={360} sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 33vw" className="aspect-video w-full object-cover" /><div className="p-5"><h2 className="break-words text-xl font-bold">{project.title}</h2><p className="mt-2 text-sm text-quiet">{project.type}{project.isShowcasing ? " · Ana sayfada gösteriliyor" : ""}</p><p className="my-4 line-clamp-3 break-words text-quiet">{project.description}</p><div className="flex flex-wrap gap-3">{isSafeHttpUrl(project.repoLink) && <a href={project.repoLink} target="_blank" rel="noopener noreferrer" className="text-brand">Kaynak kod ↗</a>}{isSafeHttpUrl(project.liveDemoLink) && <a href={project.liveDemoLink} target="_blank" rel="noopener noreferrer" className="text-brand">Canlı demo ↗</a>}</div><div className="mt-5 flex flex-wrap gap-3"><Link href={`/admin/dashboard/projects/edit/${encodeURIComponent(project._id)}`} className="button-secondary" aria-label={`${project.title} düzenle`}>Düzenle</Link><button className="button-secondary" disabled={deleting !== null} onClick={() => remove(project)} aria-label={`${project.title} sil`}>{deleting === project._id ? "Siliniyor…" : "Sil"}</button></div></div></article>)}</div></>;
+}

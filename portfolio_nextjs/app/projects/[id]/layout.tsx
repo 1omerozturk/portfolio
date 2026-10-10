@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { createPageMetadata } from "../../seo";
-import { fetchPublicRecord } from "../../api/publicData";
+import { fetchPublicProjectRecord } from "../../api/publicData";
 
 
 
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   const path = `/projects/${encodeURIComponent(id)}`;
 
   try {
-    const result = await fetchPublicRecord<Record<string, unknown>>(`/user/projects/${encodeURIComponent(id)}`);
+    const result = await fetchPublicProjectRecord(id);
     if (result.status !== "ok") throw new Error("Metadata unavailable");
     const data = result.data;
     if (typeof data !== "object" || data === null || !("title" in data)) {
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
 
     const title = typeof data.title === "string" ? data.title.trim() : "";
     if (!title) throw new Error("Missing title");
-    const description = "description" in data ? String(data.description) : "";
+    const description = data.description;
     const image =
       "images" in data && Array.isArray(data.images) && data.images[0]
         ? String(data.images[0])

@@ -1,118 +1,25 @@
 "use client";
-import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import * as FaIcons from "react-icons/fa";
-import * as SiIcons from "react-icons/si";
+import { useState } from "react";
+import Link from "next/link";
 import { SkillService } from "../service/skillService";
-import Message from "../../components/Message";
 
-const AdminSkillProgress = ({ skills, setSkills }) => {
-  const navigate = useRouter();
-
-  const [progress, setProgress] = useState(
-    skills.map((skill) => ({ name: skill.name, value: 0 }))
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress.map((p, index) => {
-          const targetPercentage = skills[index].percentage;
-          if (p.value < targetPercentage) {
-            return { ...p, value: Math.min(p.value + 1, targetPercentage) };
-          }
-          return p; // Eğer hedef değere ulaşılmışsa olduğu gibi bırak
-        })
-      );
-    }, 50); // Hızını ayarlamak için burayı değiştirebilirsiniz
-    return () => clearInterval(interval); // Cleanup
-  }, [skills]);
-
-  const getColor = (percentage) => {
-    if (percentage >= 85) return "bg-green-700";
-    if (percentage >= 70) return "bg-green-500";
-    if (percentage >= 55) return "bg-orange-500";
-    if (percentage >= 40) return "bg-yellow-500";
-    return "bg-red-500";
-  };
-
-  const onEdit = (id) => {
-    navigate.push(`skills/edit/${id}`);
-  };
-
-  const onDelete = async (id) => {
-    await SkillService.deleteSkill(id).then((res) => {
-      if (res.status === 200) {
-        const updatedSkills = skills.filter((skill) => skill._id !== id);
-        setSkills(updatedSkills);
-      } else {
-        Message.ToastMessage("error", "Bir hata oluştu.");
-      }
-    });
-  };
-
-  const DynamicIcon = ({ iconName }) => {
-    if (!iconName) return null;
-
-    const [lib, icon] = iconName.match(/[A-Z][a-z]+|[0-9]+/g);
-    const iconLib = lib === "Fa" ? FaIcons : SiIcons;
-    const IconComponent = iconLib[iconName];
-
-    return IconComponent ? <IconComponent /> : null;
-  };
-
-  return (
-    <>
-      {/* <h2 className="text-center">Skills</h2> */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pt-5">
-        {skills.map((skill, index) => (
-          <div
-            key={index}
-            className="bg-gradient-to-t from-indigo-400 to-white p-4 rounded-lg shadow-md space-y-6"
-            style={{ margin: 0, padding: '1rem' }}
-          >
-            <div className="flex items-center justify-between md:justify-end space-x-2">
-              <div className="text-sm">
-                <button
-                  title="Düzenle"
-                  onClick={() => onEdit(skill._id)}
-                  className="btn btn-outline-warning"
-                >
-                  <FaIcons.FaEdit />
-                </button>
-              </div>
-              <div className="">
-                <button
-                  title="Sil"
-                  onClick={() => onDelete(skill._id)}
-                  className="btn btn-outline-danger"
-                >
-                  
-                  <FaIcons.FaMinusCircle />
-                </button>
-              </div>
-            </div>
-            <div className="md:text-2xl text-sm sm:text-xl flex text-center mt-5 gap-x-3 font-semibold">
-              {skill.name}
-              <div
-                className="bg-gradient-to-b from-white to-slate-500 flex items-center justify-center text-3xl rounded-full h-10 w-10"
-                style={{ color: skill.color }}
-              >
-                <DynamicIcon iconName={skill.icon} />
-              </div>
-            </div>
-            <div className="w-full bg-gray-400 rounded-full h-4 mb-2">
-              <div
-                className={`${getColor(progress[index].value)} h-4 rounded-full transition-all duration-200`}
-                style={{ width: `${progress[index].value}%` }}
-              ></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </>
-  );
-  
-};
-
-export default AdminSkillProgress;
+export default function AdminSkillProgress({ skills, setSkills }) {
+  const [deleting, setDeleting] = useState(null);
+  const [error, setError] = useState("");
+  async function remove(skill) {
+    if (deleting || !window.confirm(`${skill.name} yeteneği silinsin mi?`)) return;
+    setDeleting(skill._id);
+    setError("");
+    try {
+      const response = await SkillService.deleteSkill(skill._id);
+      if (response?.status === 200) setSkills(previous => previous.filter(item => item._id !== skill._id));
+      else setError("Yetenek silinemedi. Lütfen yeniden deneyin.");
+    } catch { setError("Yetenek silinemedi. Lütfen yeniden deneyin."); }
+    finally { setDeleting(null); }
+  }
+  return <>{error && <p role="alert" className="mb-4 text-danger">{error}</p>}<div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{skills.map(skill => {
+    const raw = Number(skill.percentage);
+    const percentage = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+    return <article key={skill._id} className="surface-card min-w-0 p-5"><h2 className="break-words text-xl font-bold">{skill.name}</h2><p className="my-4 text-quiet">Yetkinlik: %{percentage}</p><progress className="h-3 w-full accent-brand" value={percentage} max={100} aria-label={`${skill.name} yetkinliği`} /><div className="mt-5 flex flex-wrap gap-3"><Link className="button-secondary" href={`/admin/dashboard/skills/edit/${encodeURIComponent(skill._id)}`} aria-label={`${skill.name} düzenle`}>Düzenle</Link><button className="button-secondary" disabled={deleting !== null} onClick={() => remove(skill)} aria-label={`${skill.name} sil`}>{deleting === skill._id ? "Siliniyor…" : "Sil"}</button></div></article>;
+  })}</div></>;
+}

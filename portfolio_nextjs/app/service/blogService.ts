@@ -1,6 +1,5 @@
-import axios from "axios";
+import { normalizeBlogPage } from "../api/blogPayload";
 import { API_BASE_URL, PUBLIC_API_TIMEOUT_MS } from "../api/config";
-import { normalizeApiRecords, unwrapApiData } from "../api/payload";
 import type { BlogResponse } from "../models/blogs";
 
 export class BlogService {
@@ -10,27 +9,17 @@ export class BlogService {
     if (search) params.set("search", search);
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/user/blogs?${params.toString()}`, { timeout: PUBLIC_API_TIMEOUT_MS, signal });
-      const payload = unwrapApiData(response?.data);
-
-      if (Array.isArray(payload)) {
-        return { blogs: normalizeApiRecords(payload) as unknown as BlogResponse["blogs"], total: payload.length, pages: 1, currentPage: page };
-      }
-      if (typeof payload !== "object" || payload === null || !("blogs" in payload) || !Array.isArray(payload.blogs)) {
-        return null;
-      }
-
-      const result = payload as Partial<BlogResponse>;
-      const blogs = normalizeApiRecords(result.blogs ?? []) as unknown as BlogResponse["blogs"];
-      const pages = Number(result.pages);
-      return {
-        blogs,
-        total: Number.isFinite(Number(result.total)) ? Number(result.total) : blogs.length,
-        pages: Number.isFinite(pages) ? Math.max(1, Math.floor(pages)) : 1,
-        currentPage: Number.isFinite(Number(result.currentPage)) ? Number(result.currentPage) : page,
-      };
+      const timeoutSignal = AbortSignal.timeout(PUBLIC_API_TIMEOUT_MS);
+      const response = await fetch(`${API_BASE_URL}/user/blogs?${params.toString()}`, {
+        signal: signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal,
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      });
+      if (!response.ok) return null;
+      return normalizeBlogPage(await response.json(), page);
     } catch {
       return null;
     }
   }
 }
+

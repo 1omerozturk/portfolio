@@ -2,26 +2,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaArrowLeft, FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 import JsonLd from "../../components/JsonLd";
-import { fetchPublicRecord } from "../../api/publicData";
+import PublicImage from "../../components/PublicImage";
+import { fetchPublicProjectRecord } from "../../api/publicData";
 import { isSafeHttpUrl, isSafeImageSource } from "../../api/urlSafety";
 
-type Project = {
-  _id?: string;
-  title?: string;
-  description?: string;
-  type?: string;
-  technologies?: string[];
-  repoLink?: string;
-  liveDemoLink?: string;
-  images?: string[];
-};
-
 type RouteProps = { params: Promise<{ id: string }> };
-const siteUrl = "https://omerozturk.com.tr";
+import { siteConfig } from "../../siteConfig";
+const siteUrl = siteConfig.url;
 
 export default async function ProjectDetail({ params }: RouteProps) {
   const { id } = await params;
-  const result = await fetchPublicRecord<Project>(`/user/projects/${encodeURIComponent(id)}`);
+  const result = await fetchPublicProjectRecord(id);
   if (result.status === "not-found") notFound();
 
   if (result.status === "unavailable" || typeof result.data.title !== "string") {
@@ -112,7 +103,7 @@ export default async function ProjectDetail({ params }: RouteProps) {
               <div className="grid gap-4 sm:grid-cols-2">
                 {images.map((image, index) => (
                   <a className="project-gallery__item" key={`${image}-${index}`} href={image} target="_blank" rel="noopener noreferrer" aria-label={`${title} görselini yeni sekmede aç`}>
-                    <img src={image} alt={`${title} ekran görüntüsü ${index + 1}`} width="1200" height="800" loading="lazy" decoding="async" className="project-gallery__image" />
+                    <PublicImage src={image} alt={`${title} ekran görüntüsü ${index + 1}`} width={1200} height={800} sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 480px" className="project-gallery__image" />
                   </a>
                 ))}
               </div>

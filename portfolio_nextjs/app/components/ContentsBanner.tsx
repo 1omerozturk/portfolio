@@ -1,8 +1,10 @@
 import { FaMedium } from "react-icons/fa";
 import { fetchPublicList } from "../api/publicData";
-import { isSafeHttpUrl, isSafeImageSource } from "../api/urlSafety";
+import { isSafeImageSource } from "../api/urlSafety";
+import { normalizeContent } from "../api/profilePayload";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
+import PublicImage from "./PublicImage";
 
 type ContentItem = {
   _id?: string;
@@ -19,7 +21,7 @@ export default async function ContentsBanner({ size }: ContentSizeProps) {
   const CardHeading = size ? "h3" : "h2";
   const result = await fetchPublicList<ContentItem>("/user/contents", ["contents", "items"]);
   const contents = result.status === "ok"
-    ? result.items.filter((content) => content && typeof content.name === "string" && content.name.trim() && isSafeHttpUrl(content.link))
+    ? result.items.map(normalizeContent).filter(content => content !== null)
     : [];
   const visibleContents = size ? contents.slice(0, size) : contents;
 
@@ -33,7 +35,7 @@ export default async function ContentsBanner({ size }: ContentSizeProps) {
             {visibleContents.map((content, index) => (
               <a className="surface-card content-card group overflow-hidden" title={content.name} key={content._id ?? `${content.name}-${index}`} href={content.link} target="_blank" rel="noopener noreferrer">
                 {isSafeImageSource(content.image) ? (
-                  <img src={content.image} alt={content.name} width="480" height="320" loading="lazy" decoding="async" className="content-card__image" />
+                  <PublicImage src={content.image} alt={content.name} width={480} height={320} sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 25vw" className="content-card__image" />
                 ) : (
                   <div className="content-card__placeholder" aria-hidden="true"><FaMedium /></div>
                 )}

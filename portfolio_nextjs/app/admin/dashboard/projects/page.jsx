@@ -1,54 +1,24 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import ProjectComponent from "../../components/ProjectComponent";
+import Loading from "../../components/Loading";
 import { AdminProjectService } from "../../service/projectService";
-import { FaPlusCircle } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { normalizeProject } from "../../../api/projectPayload";
 
-const ProjectsDashboard = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const navigate = useRouter();
-  
-
-  const fetchProjects = useCallback(() => {
-    try {
-      setLoading(true);
-      AdminProjectService.getProjects()
-        .then((res) => {
-          setProjects(res.data);
-          console.log(res);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } catch (error) {
-      console.error(error?.message);
-    }
-  });
-
+export default function ProjectsDashboard() {
+  const [projects, setProjects] = useState(null);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const onAdd = () => {
-    navigate.push("/admin/dashboard/projects/add");
-  };
-
-  return (
-    <div className="grid grid-flow-row">
-      <div className="text-end">
-        <button
-          onClick={onAdd}
-          className="btn btn-outline-light w-fit text-center"
-        >
-          <FaPlusCircle className="md:text-2xl" />
-          <div>Add</div>
-        </button>
-      </div>
-      <ProjectComponent projects={projects} setProjects={setProjects} />
-    </div>
-  );
-};
-
-export default ProjectsDashboard;
+    let active = true;
+    AdminProjectService.getProjects().then(response => {
+      if (!active) return;
+      const valid = Array.isArray(response?.data);
+      setFailed(!valid);
+      setProjects(valid ? response.data.map(normalizeProject).filter(Boolean) : []);
+    }).catch(() => { if (active) { setFailed(true); setProjects([]); } });
+    return () => { active = false; };
+  }, [attempt]);
+  return <section><div className="mb-6 flex flex-wrap items-center justify-between gap-4"><h1 className="text-3xl font-bold">Projeler</h1><Link className="button-primary" href="/admin/dashboard/projects/add">Proje ekle</Link></div>{projects === null ? <Loading /> : failed ? <div className="surface-card p-6" role="status"><p>Projeler yüklenemedi.</p><button className="button-secondary mt-4" onClick={() => { setProjects(null); setAttempt(value => value + 1); }}>Yeniden dene</button></div> : projects.length ? <ProjectComponent projects={projects} setProjects={setProjects} /> : <p className="surface-card p-6 text-quiet" role="status">Henüz proje eklenmemiş.</p>}</section>;
+}

@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 
-export default function CopyLinkButton() {
+export default function CopyLinkButton({ url }: { url: string }) {
   const [status, setStatus] = useState("");
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(url);
       setStatus("Bağlantı kopyalandı.");
     } catch {
       setStatus("Bağlantı kopyalanamadı.");

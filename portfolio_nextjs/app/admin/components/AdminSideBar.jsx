@@ -1,117 +1,27 @@
 "use client";
-
-import React, { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import {
-  FaHome,
-  FaUser,
-  FaGraduationCap,
-  FaBriefcase,
-  FaShareAlt,
-  FaCode,
-  FaAward,
-  FaSpaceShuttle,
-  FaMediumM,
-  FaPenFancy,
-} from "react-icons/fa";
-import { MdMessage } from "react-icons/md";
+import { usePathname } from "next/navigation";
+import ThemeToggle from "../../components/ThemeToggle";
 
-const AdminSideBar = ({ onLogout }) => {
-  const [active, setActive] = useState("Dashboard");
+const links = [
+  ["Genel bakış", ""], ["Hakkımda", "/about"], ["Sosyal bağlantılar", "/social"],
+  ["Eğitim", "/educations"], ["Deneyim", "/experiences"], ["Projeler", "/projects"],
+  ["Yetenekler", "/skills"], ["İçerikler", "/contents"], ["Sertifikalar", "/certificates"],
+  ["Blog", "/blogs"], ["Diller", "/languages"], ["Hobiler", "/hobbies"], ["Mesajlar", "/contacts"],
+];
+
+export default function AdminSideBar({ onLogout }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const button = useRef(null);
+  return <aside className="admin-navigation" onKeyDown={event => { if (event.key === "Escape" && open) { setOpen(false); button.current?.focus(); } }}>
+    <div className="admin-navigation__header"><Link href="/admin/dashboard" className="font-bold text-ink">İçerik yönetimi</Link><ThemeToggle /><button ref={button} type="button" className="button-secondary md:hidden" aria-expanded={open} aria-controls="admin-menu" onClick={() => setOpen(value => !value)}>{open ? "Kapat" : "Menü"}</button></div>
+    <nav id="admin-menu" aria-label="Yönetim menüsü" className={`admin-navigation__links ${open ? "admin-navigation__links--open" : ""}`}>{links.map(([name, suffix]) => {
+      const href = `/admin/dashboard${suffix}`;
+      const active = pathname === href || Boolean(suffix && pathname.startsWith(`${href}/`));
+      return <Link key={href} href={href} className={`admin-navigation__link ${active ? "admin-navigation__link--active" : ""}`} aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>{name}</Link>;
+    })}<Link href="/" className="admin-navigation__link">Siteyi görüntüle ↗</Link><button type="button" className="button-secondary mt-3" onClick={onLogout}>Çıkış yap</button></nav>
+  </aside>;
+}
 
-  const links = [
-    { name: "Dashboard", path: "/admin/dashboard", icon: <FaHome className="text-white" />, },
-    { name: "About", path: "/admin/dashboard/about", icon: <FaUser className="text-gray-500" />, },
-    {
-      name: "Social",
-      path: "/admin/dashboard/social",
-      icon: <FaShareAlt className="text-violet-500" />,
-    },
-    {
-      name: "Educations",
-      path: "/admin/dashboard/educations",
-      icon: <FaGraduationCap className="text-red-500" />,
-    },
-    {
-      name: "Experiences",
-      path: "/admin/dashboard/experiences",
-      icon: <FaBriefcase className="text-teal-500" />,
-    },
-    {
-      name: "Projects",
-      path: "/admin/dashboard/projects",
-      icon:<FaSpaceShuttle className="text-sky-500" />,
-    },
-    {
-      name: "Skills",
-      path: "/admin/dashboard/skills",
-      icon: <FaCode className="text-lime-500" />,
-    },
-    {
-      name: "Contents",
-      path: "/admin/dashboard/contents",
-      icon: <FaMediumM className="text-slate-300" />,
-    },
-    {
-      name: "Certificates",
-      path: "/admin/dashboard/certificates",
-      icon: <FaAward className="text-yellow-500" />,
-    },
-    {
-      name: "Blogs",
-      path: "/admin/dashboard/blogs",
-      icon: <FaPenFancy className="text-pink-500" />,
-    },
-    {
-      name: "Contacts",
-      path: "/admin/dashboard/contacts",
-      icon: <MdMessage className="text-orange-500"/>,
-    }
-  ];
-
-  return (
-    <div
-      className={`h-auto bg-gray-900 pr-3  text-white transition-all duration-300 
-       ${open ? "w-36" : "w-16"}
-        md:${open ? "w-40" : "w-16"}`}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
-      <h6 className="text-center font-bold mt-2">Admin</h6>
-      <img
-      src="/ozturkomer.webp"
-      className="bg-cover h-16 w-16 rounded-full mx-auto"
-      />
-      <nav className="mt-5">
-        {links.map((link, index) => (
-          <Link
-            rel="noopener noreferrer"
-            key={index}
-            href={link.path}
-            className={`flex items-center py-2 px-3 my-2 rounded-md hover:bg-gray-700 transition ${
-              active === link.name ? "bg-gray-700" : ""
-            }`}
-            onClick={() => setActive(link.name)}
-          >
-            <span className="mr-2 text-lg">{link.icon}</span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              {link.name}
-            </span>
-          </Link>
-        ))}
-      </nav>
-      <div className="flex items-center justify-center">
-        <button
-          title="Logout"
-          onClick={onLogout}
-          className="mt-5 w-full mx-auto bg-red-500 hover:bg-red-700 py-2 rounded-md transition "
-        >
-          <i className="pi pi-sign-out"></i>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default AdminSideBar;

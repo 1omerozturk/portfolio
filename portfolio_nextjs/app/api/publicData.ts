@@ -1,5 +1,8 @@
 import { API_BASE_URL, PUBLIC_API_TIMEOUT_MS, PUBLIC_FETCH_OPTIONS } from "./config";
 import { normalizeApiRecord, normalizeApiRecords, unwrapApiData as unwrapData } from "./payload";
+import { normalizeBlog, normalizeBlogPage } from "./blogPayload";
+import type { Blog } from "../models/blogs";
+import { normalizeProject, type PublicProject } from "./projectPayload";
 
 function fetchPublicResponse(path: string) {
   return fetch(`${API_BASE_URL}${path}`, {
@@ -47,6 +50,20 @@ export async function fetchPublicCollection<T>(path: string): Promise<T[]> {
   }
 }
 
+export async function fetchPublicBlogRecord(id: string): Promise<PublicRecordResult<Blog>> {
+  const result = await fetchPublicRecord<unknown>(`/user/blogs/${encodeURIComponent(id)}`, { forbiddenAsNotFound: true });
+  if (result.status !== "ok") return result;
+  const blog = normalizeBlog(result.data);
+  return blog ? { status: "ok", data: blog } : { status: "unavailable" };
+}
+
+export async function fetchPublicProjectRecord(id: string): Promise<PublicRecordResult<PublicProject>> {
+  const result = await fetchPublicRecord<unknown>(`/user/projects/${encodeURIComponent(id)}`);
+  if (result.status !== "ok") return result;
+  const project = normalizeProject(result.data);
+  return project ? { status: "ok", data: project } : { status: "unavailable" };
+}
+
 export async function fetchPublicList<T>(path: string, collectionKeys: string[] = []): Promise<{ status: "ok"; items: T[] } | { status: "unavailable" }> {
   try {
     const response = await fetchPublicResponse(path);
@@ -75,17 +92,15 @@ export async function fetchPublicBlogPage(page: number, limit: number, category?
     const response = await fetchPublicResponse(`/user/blogs?${params.toString()}`);
     if (!response.ok) return { status: "unavailable" as const, blogs: [], totalPages: 1 };
 
-    const raw = unwrapData(await response.json());
-    const payload = Array.isArray(raw) ? { blogs: raw } : raw;
-    if (typeof payload !== "object" || payload === null || !("blogs" in payload) || !Array.isArray(payload.blogs)) {
+    const payload = normalizeBlogPage(await response.json(), page);
+    if (!payload) {
       return { status: "unavailable" as const, blogs: [], totalPages: 1 };
     }
 
-    const pages = Number("pages" in payload ? payload.pages : 1);
     return {
       status: "ok" as const,
-      blogs: normalizeApiRecords(payload.blogs) as unknown as import("../models/blogs").Blog[],
-      totalPages: Number.isFinite(pages) ? Math.max(1, Math.floor(pages)) : 1,
+      blogs: payload.blogs,
+      totalPages: payload.pages,
     };
   } catch {
     return { status: "unavailable" as const, blogs: [], totalPages: 1 };

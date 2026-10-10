@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
 import { API_BASE_URL, PUBLIC_API_TIMEOUT_MS, PUBLIC_FETCH_OPTIONS } from "./api/config";
 import { normalizeApiRecords } from "./api/payload";
+import { fetchPublicBlogPage } from "./api/publicData";
 
-const siteUrl = "https://omerozturk.com.tr";
+import { siteConfig } from "./siteConfig";
+const siteUrl = siteConfig.url;
 const publicRoutes = [
   "",
   "/about",
@@ -17,6 +19,18 @@ const publicRoutes = [
 ];
 
 const apiUrl = API_BASE_URL;
+
+async function getPublishedBlogs() {
+  const first = await fetchPublicBlogPage(1, 100);
+  if (first.status !== "ok") return [];
+  const blogs = [...first.blogs];
+  for (let page = 2; page <= first.totalPages; page++) {
+    const next = await fetchPublicBlogPage(page, 100);
+    if (next.status !== "ok") break;
+    blogs.push(...next.blogs);
+  }
+  return blogs.filter(blog => blog.isPublished !== false);
+}
 
 async function getPublicEntries(endpoint: string, collectionKey: string) {
   try {
@@ -49,7 +63,7 @@ async function getPublicEntries(endpoint: string, collectionKey: string) {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [projects, blogs] = await Promise.all([
     getPublicEntries("/user/projects", "projects"),
-    getPublicEntries("/user/blogs?page=1&limit=100", "blogs"),
+    getPublishedBlogs(),
   ]);
 
   const detailRoutes = [
@@ -63,8 +77,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (typeof record !== "object" || record === null || !("_id" in record)) {
       return [];
     }
-    const id = encodeURIComponent(String(record._id));
-    const isBlog = blogs.includes(record);
+    if (typeof record._id !== "string" || !record._id.trim()) return [];
+    const id = encodeURIComponent(record._id);
+    const isBlog = (blogs as unknown[]).includes(record);
     const updatedAt = "updatedAt" in record ? new Date(String(record.updatedAt)) : undefined;
     return [{
       url: `${siteUrl}/${isBlog ? "blog" : "projects"}/${id}`,
@@ -74,12 +89,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }];
   });
 
+  const seenUrls = new Set<string>();
   return [
     ...publicRoutes.map((route) => ({
       url: `${siteUrl}${route}`,
       changeFrequency: route === "" ? ("weekly" as const) : ("monthly" as const),
       priority: route === "" ? 1 : 0.6,
     })),
-    ...detailRoutes,
+    ...detailRoutes.filter(route => {
+      if (seenUrls.has(route.url)) return false;
+      seenUrls.add(route.url);
+      return true;
+    }),
   ];
 }

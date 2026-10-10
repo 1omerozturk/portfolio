@@ -1,84 +1,26 @@
-import {
-  createExperiences,
-  deleteExperiences,
-  getExperiences,
-  getOneExperiences,
-  updateExperiences,
-} from "../../api/api";
+import { createExperiences, deleteExperiences, getExperiences, getOneExperiences, updateExperiences } from "../../api/api";
 import Message from "../../components/Message";
-
+import { collectionResponse, recordResponse } from "./recordResponse";
+export type ExperienceInput = { company: string; position?: string; startDate?: string | Date; endDate?: string | Date; responsibilities?: string[]; companyLogo?: string };
 export class ExperienceService {
   static async getExperiences() {
-    try {
-      return await getExperiences().then((res) => {
-        return res;
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    try { return collectionResponse(await getExperiences()); }
+    catch { Message.ToastMessage("error", "Kayıtlar yüklenemedi."); return null; }
   }
-
-  static async getExperience(id: any) {
-    try {
-      return await getOneExperiences(id).then((res) => {
-        return res;
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  static async getExperience(id: string) {
+    try { return recordResponse(await getOneExperiences(id)); }
+    catch { Message.ToastMessage("error", "Kayıt yüklenemedi."); return null; }
   }
-
-  static async addExperience(data: any) {
-    try {
-      return await createExperiences(data).then((res) => {
-        if (Number(res.status) === 201) {
-          Message.ToastMessage(
-            "success",
-            data.company + " successfully added."
-          );
-        } else {
-          Message.ToastMessage("error", "An error ocurred.");
-        }
-        return res;
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  static async addExperience(data: ExperienceInput) {
+    try { const response = await createExperiences(data); Message.ToastMessage("success", "Kayıt eklendi."); return response; }
+    catch { Message.ToastMessage("error", "Kayıt eklenemedi."); return null; }
   }
-
-  static async deleteExperience(id: any) {
-    try {
-      return await deleteExperiences(id).then((res) => {
-        if (Number(res.status) === 200) {
-          Message.ToastMessage(
-            "success",
-            res.data.company + " sucessfully deleted."
-          );
-        } else {
-          Message.ToastMessage("error", "An error occurred");
-        }
-        return res;
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  static async updateExperience(id: string, data: Partial<ExperienceInput>) {
+    try { return await updateExperiences(id, data); }
+    catch { Message.ToastMessage("error", "Kayıt güncellenemedi."); return null; }
   }
-
-  static async updateExperience(id: any, data: any) {
-    try {
-      return await updateExperiences(id, data).then((res) => {
-        if (Number(res.status) === 200) {
-          Message.ToastMessage(
-            "success",
-            data.company + " successfully updated."
-          );
-        } else {
-          Message.ToastMessage("error", "An error occurred");
-        }
-        return res;
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  static async deleteExperience(id: string) {
+    try { return await deleteExperiences(id); }
+    catch { Message.ToastMessage("error", "Kayıt silinemedi."); return null; }
   }
 }

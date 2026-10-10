@@ -1,147 +1,57 @@
 "use client";
-import React, { useState } from "react";
-import { SkillService } from "../../../service/skillService";
+
+import { useState, type FormEvent } from "react";
+import { SkillService, type SkillInput } from "../../../service/skillService";
 import { useRouter } from "next/navigation";
-import Message from "../../../../components/Message";
-import BackIcon from "../../../components/BackIcon";
+import Link from "next/link";
 
-interface SkillAddProps {
-  skill?: any;
-}
+interface SkillAddProps { skill?: SkillInput & { _id: string } }
 
-const SkillAdd: React.FC<SkillAddProps> = ({ skill }) => {
-  const navigate = useRouter();
-  const [data, setData] = useState(
-    skill
-      ? skill
-      : {
-          name: "",
-          level: "",
-          percentage: 0,
-          icon: "",
-          color: "",
-        }
-  );
+export default function SkillAdd({ skill }: SkillAddProps) {
+  const router = useRouter();
+  const [data, setData] = useState<SkillInput>({ name: skill?.name ?? "", level: skill?.level ?? "", percentage: skill?.percentage ?? 0, icon: skill?.icon ?? "", color: skill?.color ?? "" });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const update = (name: keyof SkillInput, value: string) => setData(previous => ({ ...previous, [name]: value }));
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (skill) {
-      await SkillService.updateSkill(skill._id, data).then((res) => {
-        if (Number(res.status) == 200) {
-          Message.ToastMessage(
-            "success",
-            data.name + " başarıyla güncellendi."
-          );
-          navigate.back();
-        } else {
-          Message.ToastMessage("error", "Bir hata oluştu");
-          navigate.refresh();
-        }
-      });
-    } else {
-      await SkillService.addSkill(data).then((res) => {
-        if (Number(res) === 201) {
-          navigate.back();
-        } else {
-          navigate.refresh();
-        }
-      });
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (saving) return;
+    const percentage = Number(data.percentage);
+    if (!data.name.trim() || !Number.isFinite(percentage) || percentage < 0 || percentage > 100) {
+      setError("Yetenek adı ve 0–100 arasında bir yüzde girin.");
+      return;
     }
-  };
+    setSaving(true);
+    setError("");
+    try {
+      const payload = { ...data, name: data.name.trim(), percentage };
+      const result = skill ? await SkillService.updateSkill(skill._id, payload) : await SkillService.addSkill(payload);
+      const status = typeof result === "number" ? result : result?.status;
+      if (status === 200 || status === 201) {
+        router.push("/admin/dashboard/skills");
+        router.refresh();
+      } else setError("Yetenek kaydedilemedi. Lütfen yeniden deneyin.");
+    } catch {
+      setError("Yetenek kaydedilemedi. Lütfen yeniden deneyin.");
+    } finally { setSaving(false); }
+  }
 
   return (
-    <>
-      <BackIcon />
-      <div className="container mx-auto md:w-1/2 p-4">
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 gap-6 p-6 md:w-1/2 mx-auto bg-gray-900 text-white rounded-lg shadow-md"
-        >
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Name:
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={data.name}
-              onChange={handleChange}
-              required
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Level:
-            </label>
-            <select
-              name="level"
-              value={data.level}
-              onChange={handleChange}
-              required
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">Select Level</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
-              <option value="Expert">Expert</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Percentage:
-            </label>
-            <input
-              type="number"
-              name="percentage"
-              value={data.percentage}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Icon:
-            </label>
-            <input
-              type="text"
-              name="icon"
-              value={data.icon}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Color:
-            </label>
-            <input
-              type="text"
-              name="color"
-              value={data.color}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold"
-          >
-            {skill ? "Update Skill" : "Add Skill"}
-          </button>
-        </form>
-      </div>
-    </>
+    <section className="mx-auto max-w-2xl">
+      <Link href="/admin/dashboard/skills" className="button-secondary mb-6">Yeteneklere dön</Link>
+      <h1 className="mb-6 text-3xl font-bold text-ink">{skill ? "Yeteneği düzenle" : "Yetenek ekle"}</h1>
+      <form onSubmit={submit} className="surface-card grid gap-5 p-5 sm:p-8" aria-busy={saving}>
+        <fieldset disabled={saving} className="grid min-w-0 gap-5">
+          <legend className="sr-only">Yetenek bilgileri</legend>
+          <div><label htmlFor="skill-name" className="mb-2 block font-semibold">Yetenek adı</label><input id="skill-name" className="form-field" value={data.name} onChange={event => update("name", event.target.value)} required maxLength={100} /></div>
+          <div><label htmlFor="skill-level" className="mb-2 block font-semibold">Seviye</label><select id="skill-level" className="form-field" value={data.level} onChange={event => update("level", event.target.value)} required><option value="">Seviye seçin</option><option value="Beginner">Başlangıç</option><option value="Intermediate">Orta</option><option value="Advanced">İleri</option><option value="Expert">Uzman</option></select></div>
+          <div><label htmlFor="skill-percentage" className="mb-2 block font-semibold">Yetkinlik yüzdesi</label><input id="skill-percentage" className="form-field" type="number" min={0} max={100} step={1} value={data.percentage} onChange={event => update("percentage", event.target.value)} required /></div>
+          <div><label htmlFor="skill-icon" className="mb-2 block font-semibold">İkon</label><input id="skill-icon" className="form-field" value={data.icon} onChange={event => update("icon", event.target.value)} list="skill-icons" /><datalist id="skill-icons">{["SiJavascript", "SiTypescript", "FaReact", "FaJava", "FaCss3Alt", "FaHtml5", "FaNodeJs", "SiNextdotjs", "SiDotnet", "SiKotlin", "FaPython", "FaPhp", "SiFirebase", "SiMongodb", "SiExpress"].map(icon => <option key={icon} value={icon} />)}</datalist></div>
+        </fieldset>
+        {error && <p role="alert" className="text-danger">{error}</p>}
+        <button className="button-primary" type="submit" disabled={saving}>{saving ? "Kaydediliyor…" : "Kaydet"}</button>
+      </form>
+    </section>
   );
-};
-
-export default SkillAdd;
+}

@@ -2,6 +2,7 @@ import { FaBuilding, FaCalendarAlt } from "react-icons/fa";
 import { fetchPublicList } from "../api/publicData";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
+import { normalizeExperience } from "../api/profilePayload";
 
 function formatDate(value, fallback = "—") {
   if (!value) return fallback;
@@ -15,7 +16,7 @@ export default async function ExperiencesBanner({ size }) {
   const CardHeading = size ? "h3" : "h2";
   const result = await fetchPublicList("/user/experiences", ["experiences", "items"]);
   const experiences = result.status === "ok"
-    ? result.items.filter((experience) => experience && typeof experience === "object" && typeof experience.company === "string" && experience.company.trim())
+    ? result.items.map(normalizeExperience).filter(experience => experience !== null)
     : [];
   experiences.sort((first, second) => {
     const firstDate = Date.parse(first.startDate);

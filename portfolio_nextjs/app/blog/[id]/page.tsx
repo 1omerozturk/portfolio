@@ -1,24 +1,20 @@
 import Link from "next/link";
+import { BLOG_CATEGORY_STYLES as categoryStyles } from "../../blogConstants";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { MdArrowBack, MdAccessTime, MdVisibility, MdCalendarToday, MdPerson } from "react-icons/md";
 import CopyLinkButton from "../../components/CopyLinkButton";
 import ArticleBody from "../../components/ArticleBody";
+import PublicImage from "../../components/PublicImage";
 import JsonLd from "../../components/JsonLd";
 import RelatedBlogs from "../../components/RelatedBlogs";
-import { fetchPublicRecord } from "../../api/publicData";
+import { fetchPublicBlogRecord } from "../../api/publicData";
 import { isSafeHttpUrl } from "../../api/urlSafety";
-import type { Blog } from "../../models/blogs";
 
 type RouteProps = { params: Promise<{ id: string }> };
-const siteUrl = "https://omerozturk.com.tr";
-const categoryStyles: Record<string, string> = {
-  yazı: "blog-category--blue",
-  düşünce: "blog-category--violet",
-  "özlü söz": "blog-category--rose",
-  teknik: "blog-category--green",
-  diğer: "blog-category--gray",
-};
+import { siteConfig } from "../../siteConfig";
+const siteUrl = siteConfig.url;
+
 
 function formatDate(value?: string) {
   if (!value) return "—";
@@ -28,7 +24,7 @@ function formatDate(value?: string) {
 
 export default async function BlogDetailPage({ params }: RouteProps) {
   const { id } = await params;
-  const result = await fetchPublicRecord<Blog>(`/user/blogs/${encodeURIComponent(id)}`, { forbiddenAsNotFound: true });
+  const result = await fetchPublicBlogRecord(id);
   if (result.status === "not-found") notFound();
   if (result.status === "ok" && result.data.isPublished === false) notFound();
 
@@ -96,7 +92,7 @@ export default async function BlogDetailPage({ params }: RouteProps) {
       <div className="mx-auto max-w-4xl px-4 py-12">
         {image && (
           <div className="mb-8 overflow-hidden rounded-lg shadow-lg">
-            <img src={image} alt={blog.title} width="1200" height="675" fetchPriority="high" decoding="async" className="blog-detail__image" />
+            <PublicImage src={image} alt={blog.title} width={1200} height={675} sizes="(max-width: 895px) 100vw, 864px" loading="eager" fetchPriority="high" className="blog-detail__image" />
           </div>
         )}
 
@@ -131,7 +127,7 @@ export default async function BlogDetailPage({ params }: RouteProps) {
             <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${encodeURIComponent(blog.title)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">Twitter</a>
             <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">Facebook</a>
             <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">LinkedIn</a>
-            <CopyLinkButton />
+            <CopyLinkButton url={articleUrl} />
           </div>
         </section>
 
@@ -146,3 +142,4 @@ export default async function BlogDetailPage({ params }: RouteProps) {
     </main>
   );
 }
+

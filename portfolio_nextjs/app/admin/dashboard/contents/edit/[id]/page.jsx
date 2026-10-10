@@ -1,38 +1,20 @@
 "use client";
-
-import { ContentService } from "../../../../service/contentService";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
+import { ContentService } from "../../../../service/contentService";
 import Loading from "../../../../components/Loading";
-import React, { useEffect, useState } from "react";
 import AddContent from "../../add/page";
 
-const ContentEdit = () => {
-  const [data, setData] = useState(null);
+export default function ContentEdit() {
   const { id } = useParams();
-
-  const getData = async () => {
-    const response = await ContentService.getContent(id).then((res) => {
-      return res.data;
-    });
-    setData(response);
-  };
-
+  const [result, setResult] = useState(null);
   useEffect(() => {
-    getData();
-  }, []);
-
-  return (
-    <div>
-      {data ? (
-        <div>
-          <h3 className="text-center">{data.name}</h3>
-          <AddContent content={data} />
-        </div>
-      ) : (
-        <Loading />
-      )}
-    </div>
-  );
-};
-
-export default ContentEdit;
+    let active = true;
+    ContentService.getContent(id).then(response => { if (active) setResult({ id, data: response?.data ?? null }); }).catch(() => { if (active) setResult({ id, data: null }); });
+    return () => { active = false; };
+  }, [id]);
+  if (result?.id !== id) return <Loading />;
+  if (!result.data?._id || typeof result.data.name !== "string") return <section className="surface-card p-6"><h1 className="text-2xl font-bold">İçerik yüklenemedi</h1><p className="my-4 text-quiet">Kayıt bulunamıyor veya bağlantı kurulamadı.</p><Link href="/admin/dashboard/contents" className="button-secondary">İçeriklere dön</Link></section>;
+  return <AddContent key={id} content={result.data} />;
+}

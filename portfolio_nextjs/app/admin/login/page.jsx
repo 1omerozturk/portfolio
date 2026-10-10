@@ -1,124 +1,27 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AdminAuth } from "../auth";
+import ThemeToggle from "../../components/ThemeToggle";
 
-const Login = () => {
+export default function Login() {
+  const router = useRouter();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState("password");
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
-  const router = useRouter();
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const loginHandle = async (e) => {
-    setLoading(true);
-    e.preventDefault();
-    await AdminAuth.login(formData.username, formData.password)
-      .then((res) => {
-        if (res.status === 200) {
-          setLoading(false);
-          window.location.href = "/admin";
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      });
-  };
-
-  return (
-    <div className="min-h-max mt-5 w-2/3 md:w-2/5 mx-auto flex justify-center items-center">
-      <div className="bg-white border-2 border-indigo-300 p-10 rounded-md w-full shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-center select-none">
-          Login - (Admin){" "}
-        </h2>
-        <form method={"post"} onSubmit={loginHandle}>
-          <div className="mb-4">
-            <label
-              className="block select-none text-gray-700 text-sm font-bold mb-2"
-              htmlFor="username"
-            >
-              Username
-            </label>
-            <input
-              className="border rounded-md px-3 py-2 w-full"
-              type="text"
-              autoFocus
-              onChange={handleChange}
-              id="username"
-              name="username"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block select-none text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <div className="flex justify-center items-center space-x-2">
-              <input
-                className="border rounded-md px-3 py-2 w-full"
-                type={type}
-                id="password"
-                name="password"
-                onChange={handleChange}
-              />
-              {/* hide show password icon  */}
-              <div title="Show/Hide" className="cursor-pointer w-fit">
-                {show ? (
-                  <FaEye
-                    onClick={() => {
-                      setShow(false);
-                      setType("password");
-                    }}
-                    className="text-indigo-500"
-                  />
-                ) : (
-                  <FaEyeSlash
-                    onClick={() => {
-                      setShow(true);
-                      setType("text");
-                    }}
-                    className="text-gray-500"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-          <button
-            disabled={loading}
-            type="submit"
-            className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mx-auto block select-none"
-          >
-            {loading ? <i className="pi pi-spin pi-spinner"></i> : "Login"}
-          </button>
-        </form>
-        {/* reset password link
-         */}
-        <div>
-          <p
-            type="button"
-            onClick={() => {
-              router.push("admin/passwordReset");
-            }}
-            className="bg-slate-200 mt-2 hover:bg-slate-700 text-rose-500 font-bold py-1 rounded text-center px-4 w-fit mx-auto select-none"
-          >
-            I forgot password!
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Login;
+  const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  async function submit(event) {
+    event.preventDefault();
+    if (loading) return;
+    setLoading(true); setError("");
+    try {
+      const response = await AdminAuth.login(username.trim(), password);
+      if (response?.status === 200) { router.replace("/admin/dashboard"); router.refresh(); }
+      else setError("Giriş yapılamadı. Kullanıcı adı, şifre ve API bağlantısını kontrol edin.");
+    } catch { setError("Giriş yapılamadı. Lütfen yeniden deneyin."); }
+    finally { setLoading(false); }
+  }
+  return <main className="surface-page flex min-h-screen items-center justify-center px-4 py-10"><section className="surface-card w-full max-w-md p-6 sm:p-8"><div className="mb-6 flex items-center justify-between gap-3"><h1 className="text-2xl font-bold">Yönetim girişi</h1><ThemeToggle /></div><form onSubmit={submit} className="grid gap-5" aria-busy={loading}><fieldset className="grid min-w-0 gap-5" disabled={loading}><legend className="sr-only">Giriş bilgileri</legend><div><label htmlFor="admin-username" className="mb-2 block font-semibold">Kullanıcı adı</label><input id="admin-username" name="username" className="form-field" autoComplete="username" value={username} onChange={event => setUsername(event.target.value)} required maxLength={100} /></div><div><label htmlFor="admin-password" className="mb-2 block font-semibold">Şifre</label><div className="flex gap-2"><input id="admin-password" name="password" className="form-field min-w-0 flex-1" type={show ? "text" : "password"} autoComplete="current-password" value={password} onChange={event => setPassword(event.target.value)} required /><button className="button-secondary" type="button" aria-pressed={show} aria-controls="admin-password" onClick={() => setShow(value => !value)}>{show ? "Gizle" : "Göster"}</button></div></div></fieldset>{error && <p role="alert" className="text-danger">{error}</p>}<button className="button-primary" type="submit" disabled={loading}>{loading ? "Giriş yapılıyor…" : "Giriş yap"}</button></form><div className="mt-6 flex flex-wrap justify-between gap-3"><Link href="/admin/passwordReset" className="text-brand">Şifre değiştir</Link><Link href="/" className="text-brand">Siteye dön</Link></div></section></main>;
+}

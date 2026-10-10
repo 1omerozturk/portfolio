@@ -1,37 +1,27 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminProjectService } from "../../../../service/projectService";
 import Loading from "../../../../components/Loading";
 import ProjectAdd from "../../add/page";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
-const ProjectEdit = () => {
-  const { id } = useParams();
-  const [data, setData] = useState(null);
-
-  const getData = async () => {
-    const response = await AdminProjectService.getProject(id).then((res) => {
-      return res.data;
-    });
-    setData(response);
-  };
-
+export default function ProjectEdit() {
+  const { id } = useParams<{ id: string }>();
+  const [result, setResult] = useState<{ id: string; data: Record<string, unknown> | null } | null>(null);
   useEffect(() => {
-    getData();
-  }, []);
+    let active = true;
+    AdminProjectService.getProject(id).then(response => {
+      if (active) setResult({ id, data: response?.data ?? null });
+    });
+    return () => { active = false; };
+  }, [id]);
 
-  return (
-    <>
-      {data ? (
-        <>
-          <h3 className="text-center">{data.name}</h3>
-          <ProjectAdd project={data} />
-        </>
-      ) : (
-        <Loading />
-      )}
-    </>
-  );
-};
-
-export default ProjectEdit;
+  if (!result || result.id !== id) return <Loading />;
+  if (!result.data) return <section className="surface-card p-6" role="status">
+    <h1 className="text-xl font-bold">Proje yüklenemedi</h1>
+    <p className="mt-2">Bağlantınızı kontrol edip yeniden deneyin.</p>
+    <Link href="/admin/dashboard/projects" className="button-secondary mt-4">Projelere dön</Link>
+  </section>;
+  return <ProjectAdd project={result.data} />;
+}

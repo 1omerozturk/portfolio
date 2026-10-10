@@ -1,123 +1,32 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { Skeleton } from "@radix-ui/themes";
-import DonutChartCard from "../components/DonutChart";
+import Link from "next/link";
 import { SkillService } from "../service/skillService";
 import { AdminProjectService } from "../service/projectService";
 import { ContentService } from "../service/contentService";
 import { MessageService } from "../service/messageService";
 import { CertificationService } from "../service/certificationsService";
 
-const Dashboard = () => {
-  const [skills, setSkills] = useState(null);
-  const [projects, setProjects] = useState(null);
-  const [contents, setContents] = useState(null);
-  const [certificates, setCertificates] = useState(null);
-  const [messages, setMessages] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const getData = async () => {
-    try {
-      const skillData = await SkillService.getSkills();
-      const projectData = await AdminProjectService.getProjects();
-      const contentData = await ContentService.getContents();
-      const certificateData = await CertificationService.getCertifications();
-      const messageData = await MessageService.getMessages();
-
-      setSkills(skillData.data);
-      setProjects(projectData.data);
-      setContents(contentData.data);
-      setCertificates(certificateData);
-      setMessages(messageData.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+const sections = [
+  { name: "Projeler", path: "projects", load: () => AdminProjectService.getProjects() },
+  { name: "Yetenekler", path: "skills", load: () => SkillService.getSkills() },
+  { name: "İçerikler", path: "contents", load: () => ContentService.getContents() },
+  { name: "Sertifikalar", path: "certificates", load: () => CertificationService.getCertifications() },
+  { name: "Mesajlar", path: "contacts", load: () => MessageService.getMessages() },
+];
+export default function Dashboard() {
+  const [results, setResults] = useState(null);
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    getData();
-  }, []);
-
-  return (
-    <div>
-      <h2 className="text-center">Dashboard</h2>
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-        {isLoading ? (
-          <>
-            <div style={{ width: "250px", height: "250px" }}>
-              <Skeleton />
-            </div>
-            <div style={{ width: "250px", height: "250px" }}>
-              <Skeleton />
-            </div>
-            <div style={{ width: "250px", height: "250px" }}>
-              <Skeleton />
-            </div>
-            <div style={{ width: "250px", height: "250px" }}>
-              <Skeleton />
-            </div>
-          </>
-        ) : (
-          <>
-            {projects && (
-              <DonutChartCard
-                title="Projects"
-                data={[
-                  projects.filter((p) => p.type === "mobile").length,
-                  projects.filter((p) => p.type === "web").length,
-                ]} // Backend'den gelen veri
-                labels={["Mobile", "Web"]}
-                colors={["#FF0037FF", "#0099FFFF"]}
-                hoverColors={["#B20027FF", "#00588FFF"]}
-              />
-            )}
-            {skills && (
-              <DonutChartCard
-                title="Skills"
-                labels={["Skills"]}
-                data={[skills.length]} // Backend'den gelen veri
-                colors={["#00FFFFFF"]}
-                hoverColors={["#009898FF"]}
-              />
-            )}
-            {contents && (
-              <DonutChartCard
-                title="Contents"
-                labels={["Contents"]}
-                data={[contents.length]} // Backend'den gelen veri
-                colors={["#FF8000FF"]}
-                hoverColors={["#A05000FF"]}
-              />
-            )}
-            {certificates && (
-              <DonutChartCard
-                title="Certificates"
-                labels={["Certificates"]}
-                data={[certificates.length]} // Backend'den gelen veri
-                colors={["#00B7FFFF"]}
-                hoverColors={["#002A5BFF"]}
-              />
-            )}
-            {messages && (
-              <DonutChartCard
-                title="Messages"
-                labels={["Unread", "Read"]}
-                data={[
-                  messages.filter((msg) => msg.isRead === false).length,
-                  messages.filter((msg) => msg.isRead === true).length,
-                ]} // Backend'den gelen veri
-                colors={["#0DFE00FF", "#F86B00FF"]}
-                hoverColors={["#078900FF", "#A50101FF"]}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default Dashboard;
+    let active = true;
+    Promise.allSettled(sections.map(section => section.load())).then(values => {
+      if (active) setResults(values.map(result => {
+        const value = result.status === "fulfilled" ? result.value : null;
+        const records = Array.isArray(value) ? value : value?.data;
+        return Array.isArray(records) ? records.length : null;
+      }));
+    });
+    return () => { active = false; };
+  }, [attempt]);
+  return <section><h1 className="text-3xl font-bold">Genel bakış</h1><p className="mb-8 mt-3 text-quiet">İçeriklerinizi ve gelen mesajları yönetin.</p><div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">{sections.map((section, index) => <article key={section.path} className="surface-card p-6"><h2 className="text-xl font-bold">{section.name}</h2><p className="my-5 text-3xl font-bold text-brand" role="status">{results === null ? "Yükleniyor…" : results[index] === null ? "Yüklenemedi" : results[index]}</p><Link href={`/admin/dashboard/${section.path}`} className="button-secondary">{section.name} yönet</Link></article>)}</div>{results?.some(value => value === null) && <div className="mt-6" role="status"><p className="mb-3 text-quiet">Bazı bölümlere erişilemedi.</p><button className="button-primary" onClick={() => { setResults(null); setAttempt(value => value + 1); }}>Yeniden dene</button></div>}<div className="mt-8 flex flex-wrap gap-3"><Link className="button-secondary" href="/admin/dashboard/blogs">Blog yazıları</Link><Link className="button-secondary" href="/admin/passwordReset">Şifre değiştir</Link></div></section>;
+}

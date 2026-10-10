@@ -3,6 +3,8 @@ import { fetchPublicList } from "../api/publicData";
 import { isSafeHttpUrl } from "../api/urlSafety";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
+import PublicImage from "./PublicImage";
+import { normalizeCertificate } from "../api/profilePayload";
 
 interface CertificatesSizeProps {
   size?: number;
@@ -28,12 +30,7 @@ export default async function CertificatesSection({ size }: CertificatesSizeProp
   const CardHeading = size ? "h3" : "h2";
   const result = await fetchPublicList<Certificate>("/user/certifications", ["certificates", "certifications", "items"]);
   const certificates = result.status === "ok"
-    ? result.items.filter((certificate) => certificate && (typeof certificate.name === "string" && certificate.name.trim() || typeof certificate.issuingOrganization === "string" && certificate.issuingOrganization.trim()))
-      .map((certificate) => ({
-        ...certificate,
-        name: typeof certificate.name === "string" ? certificate.name.trim() : "",
-        issuingOrganization: typeof certificate.issuingOrganization === "string" ? certificate.issuingOrganization.trim() : "",
-      }))
+    ? result.items.map(normalizeCertificate).filter(certificate => certificate !== null)
     : [];
   const displayedCertificates = certificates.slice(0, size ?? certificates.length);
 
@@ -45,12 +42,12 @@ export default async function CertificatesSection({ size }: CertificatesSizeProp
           {displayedCertificates.map((certificate, index) => (
             <article key={certificate._id ?? `${certificate.name}-${index}`} className="surface-card flex min-h-52 flex-col items-center justify-center p-6 text-center">
               {isSafeHttpUrl(certificate.certificateImage) ? (
-                <img src={certificate.certificateImage} alt="" width="240" height="150" loading="lazy" decoding="async" className="mb-4 h-24 max-w-full object-contain" />
+                <PublicImage src={certificate.certificateImage} alt="" width={240} height={150} sizes="240px" className="mb-4 h-24 max-w-full object-contain" />
               ) : (
                 <FaAward aria-hidden="true" className="mb-4 text-4xl text-brand" />
               )}
               <CardHeading className="max-w-full break-words text-lg font-semibold text-ink">{certificate.name || certificate.issuingOrganization}</CardHeading>
-              {certificate.name && certificate.issuingOrganization && <p className="mt-1 text-sm text-quiet">{certificate.issuingOrganization}</p>}
+              {certificate.issuingOrganization && certificate.name !== certificate.issuingOrganization && <p className="mt-1 text-sm text-quiet">{certificate.issuingOrganization}</p>}
               {formatIssueDate(certificate.issueDate) && <time className="mt-2 text-sm text-quiet" dateTime={certificate.issueDate}>{formatIssueDate(certificate.issueDate)}</time>}
               {isSafeHttpUrl(certificate.certificateLink) && (
                 <a href={certificate.certificateLink} target="_blank" rel="noopener noreferrer" className="button-secondary mt-4">

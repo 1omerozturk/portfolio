@@ -1,3 +1,4 @@
+import { optimizedImageHosts } from "./app/api/imageHosts.mjs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,77 +12,11 @@ const nextConfig = {
     root: dirname(fileURLToPath(import.meta.url)),
   },
   images: {
-    remotePatterns: [
-      {
-          protocol: 'https',
-          hostname: 'www.neredeoku.com',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'raw.githubusercontent.com',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'www.toyayazilim.com.tr',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'github.com',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'pbs.twimg.com',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'img.notionusercontent.com',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'purring-comma-24b.notion.site',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'miro.medium.com',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'www.karabuk.edu.tr',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'www.firat.edu.tr',
-          port: '',
-          pathname: '**',
-      },
-      {
-          protocol: 'https',
-          hostname: 'encrypted-tbn0.gstatic.com',
-          port: '',
-          pathname: '**',
-      },
-  ],
+    remotePatterns: optimizedImageHosts.map(hostname => ({ protocol: "https", hostname, port: "", pathname: "**" })),
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 }
 
 export default nextConfig
+

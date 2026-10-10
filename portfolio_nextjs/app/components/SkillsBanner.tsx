@@ -3,6 +3,7 @@ import { fetchPublicList } from "../api/publicData";
 import PageHeader from "./PageHeader";
 import SkillProgress from "./SkillProgress";
 import SeeMore from "./SeeMore";
+import { normalizeSkill } from "../api/profilePayload";
 
 type Skill = {
   _id?: string;
@@ -19,7 +20,7 @@ interface PageProps {
 export default async function SkillsBanner({ size }: PageProps) {
   const result = await fetchPublicList<Skill>("/user/skills", ["skills", "items"]);
   const skills = result.status === "ok"
-    ? result.items.filter((skill) => skill && typeof skill.name === "string" && skill.name.trim())
+    ? result.items.map(normalizeSkill).filter(skill => skill !== null)
     : [];
   const displayedSkills = size ? skills.slice(0, size) : skills;
 

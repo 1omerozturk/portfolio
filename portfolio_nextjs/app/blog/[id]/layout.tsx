@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { createPageMetadata } from "../../seo";
-import { fetchPublicRecord } from "../../api/publicData";
+import { fetchPublicBlogRecord } from "../../api/publicData";
 
 
 
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   const path = `/blog/${encodeURIComponent(id)}`;
 
   try {
-    const result = await fetchPublicRecord<Record<string, unknown>>(`/user/blogs/${encodeURIComponent(id)}`, { forbiddenAsNotFound: true });
+    const result = await fetchPublicBlogRecord(id);
     if (result.status === "not-found") {
       return { title: "Yazı bulunamadı", robots: { index: false, follow: false } };
     }
@@ -27,12 +27,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
 
     const title = typeof data.title === "string" ? data.title.trim() : "";
     if (!title) throw new Error("Missing title");
-    const description =
-      "excerpt" in data
-        ? String(data.excerpt)
-        : "content" in data
-          ? String(data.content).slice(0, 180)
-          : "";
+    const description = data.excerpt.trim() || data.content.slice(0, 180);
     const image =
       "featuredImage" in data && data.featuredImage
         ? String(data.featuredImage)

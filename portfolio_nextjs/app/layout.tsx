@@ -5,13 +5,14 @@ import "./globals.css";
 import AppProviders from "./components/AppProviders";
 import Footer from "./components/Footer";
 
-const siteUrl = "https://omerozturk.com.tr";
+import { siteConfig } from "./siteConfig";
+const siteUrl = siteConfig.url;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Ömer Öztürk | Yazılım Mühendisi",
-    template: "%s | Ömer Öztürk",
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
   description:
     "Ömer Öztürk'ün yazılım mühendisliği, web ve mobil geliştirme projeleri, deneyimleri ve teknik yazıları.",

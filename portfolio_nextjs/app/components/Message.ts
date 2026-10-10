@@ -43,4 +43,6 @@ class Message {
 }
 
 
-export default new Message();
+const message = new Message();
+export default message;
+

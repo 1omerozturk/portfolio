@@ -3,20 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
+import { BLOG_CATEGORY_STYLES as categoryStyles, BLOG_CATEGORIES as categories } from "../blogConstants";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { MdAccessTime, MdCategory } from "react-icons/md";
 import type { Blog } from "../models/blogs";
 import { isSafeHttpUrl } from "../api/urlSafety";
 import { BlogService } from "../service/blogService";
+import PublicImage from "./PublicImage";
 
-const categories = ["yazı", "düşünce", "özlü söz", "teknik", "diğer"];
-const categoryStyles: Record<string, string> = {
-  yazı: "blog-category--blue",
-  düşünce: "blog-category--violet",
-  "özlü söz": "blog-category--rose",
-  teknik: "blog-category--green",
-  diğer: "blog-category--gray",
-};
+
+
 
 function formatDate(value?: string) {
   if (!value) return "—";
@@ -134,6 +130,15 @@ export default function BlogListing({ initialBlogs, initialTotalPages, initialFa
     setCategory(nextCategory);
   };
 
+  const pageUrl = (nextPage: number) => {
+    const params = new URLSearchParams();
+    if (nextPage > 1) params.set("page", String(nextPage));
+    if (category) params.set("category", category);
+    if (search) params.set("search", search);
+    const query = params.toString();
+    return `/blog${query ? `?${query}` : ""}`;
+  };
+
   return (
     <main className="surface-page min-h-screen">
       <header className="blog-hero py-12 sm:py-16">
@@ -207,13 +212,12 @@ export default function BlogListing({ initialBlogs, initialTotalPages, initialFa
               {blogs.map((blog) => (
                 <Link key={blog._id ?? `${blog.title}-${blog.createdAt}`} href={`/blog/${encodeURIComponent(blog._id ?? "")}`} className="surface-card blog-card group overflow-hidden">
                   {isSafeHttpUrl(blog.featuredImage) && (
-                    <img
+                    <PublicImage
                       src={blog.featuredImage}
                       alt={blog.title}
-                      width="640"
-                      height="360"
-                      loading="lazy"
-                      decoding="async"
+                      width={640}
+                      height={360}
+                      sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
                       className="blog-card__image"
                     />
                   )}
@@ -239,9 +243,9 @@ export default function BlogListing({ initialBlogs, initialTotalPages, initialFa
 
             {totalPages > 1 && (
               <nav className="mt-10 flex items-center justify-center gap-3" aria-label="Yazı sayfaları">
-                <button type="button" className="button-secondary" onClick={() => navigateFilter(Math.max(1, page - 1), category)} disabled={page === 1}>Önceki</button>
+                {page > 1 ? <Link className="button-secondary" href={pageUrl(page - 1)} prefetch={false}>Önceki</Link> : <span className="button-secondary opacity-50" aria-disabled="true">Önceki</span>}
                 <span className="text-sm font-semibold text-ink" aria-live="polite">Sayfa {page} / {totalPages}</span>
-                <button type="button" className="button-secondary" onClick={() => navigateFilter(Math.min(totalPages, page + 1), category)} disabled={page >= totalPages}>Sonraki</button>
+                {page < totalPages ? <Link className="button-secondary" href={pageUrl(page + 1)} prefetch={false}>Sonraki</Link> : <span className="button-secondary opacity-50" aria-disabled="true">Sonraki</span>}
               </nav>
             )}
           </>
@@ -250,3 +254,4 @@ export default function BlogListing({ initialBlogs, initialTotalPages, initialFa
     </main>
   );
 }
+

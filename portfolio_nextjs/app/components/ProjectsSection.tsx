@@ -1,9 +1,11 @@
+import { normalizeProject } from "../api/projectPayload";
 import Link from "next/link";
 import { FaGithub, FaGlobe, FaLightbulb } from "react-icons/fa";
 import { fetchPublicList } from "../api/publicData";
 import { isSafeHttpUrl } from "../api/urlSafety";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
+import PublicImage from "./PublicImage";
 
 type Project = {
   _id: string;
@@ -28,10 +30,10 @@ function getCoverImage(project: Project) {
 export default async function ProjectsSection({ size }: ProjectsProps) {
   const result = await fetchPublicList<Project>("/user/projects", ["projects", "items"]);
   const validProjects = result.status === "ok"
-    ? result.items.filter((project) => project && typeof project._id === "string" && project._id.trim() && typeof project.title === "string")
+    ? result.items.map(normalizeProject).filter((project) => project !== null)
     : [];
   const featuredProjects = validProjects.filter(
-    (project) => project.isShowcasing == null || project.isShowcasing === true || project.isShowcasing === "true",
+    (project) => project.isShowcasing,
   );
   const displayedProjects = (size ? featuredProjects : validProjects).slice(0, size ?? validProjects.length);
   const CardHeading = size ? "h3" : "h2";
@@ -49,7 +51,7 @@ export default async function ProjectsSection({ size }: ProjectsProps) {
                 <article className="surface-card group overflow-hidden" key={project._id}>
                   {coverImage ? (
                     <div className="project-card__image-wrap">
-                      <img src={coverImage} alt={`${project.title} proje önizlemesi`} width="960" height="540" className="project-card__image" loading="lazy" decoding="async" />
+                      <PublicImage src={coverImage} alt={`${project.title} proje önizlemesi`} width={960} height={540} sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw" className="project-card__image" />
                     </div>
                   ) : (
                     <div className="project-card__image-placeholder" aria-hidden="true"><FaLightbulb /></div>
@@ -90,3 +92,4 @@ export default async function ProjectsSection({ size }: ProjectsProps) {
     </section>
   );
 }
+

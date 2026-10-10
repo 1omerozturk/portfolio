@@ -1,225 +1,56 @@
 "use client";
-import React, { useState } from "react";
+import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Message from "../../../../components/Message";
 import { AdminProjectService } from "../../../service/projectService";
-import BackIcon from "../../../components/BackIcon";
+import { normalizeProject } from "../../../../api/projectPayload";
+import { isSafeHttpUrl, isSafeImageSource } from "../../../../api/urlSafety";
 
-interface ProjectAddProps {
-  project?: any;
-}
+const fields = [
+  { name: "title", label: "Proje başlığı", required: true },
+  { name: "description", label: "Açıklama", required: true, multiline: true },
+  { name: "technologies", label: "Teknolojiler (virgülle ayırın)" },
+  { name: "repoLink", label: "Kaynak kodu bağlantısı" },
+  { name: "liveDemoLink", label: "Canlı demo bağlantısı" },
+  { name: "images", label: "Görsel adresleri (her satıra bir adres)", multiline: true },
+] as const;
 
-const ProjectAdd: React.FC<ProjectAddProps> = ({ project }) => {
-  const navigate = useRouter();
-  const [data, setData] = useState(
-    project
-      ? project
-      : {
-          title: "",
-          description: "",
-          type: "",
-          technologies: [],
-          repoLink: "",
-          liveDemoLink: "",
-          images: [],
-          isShowcasing:"false",
-        }
-  );
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (project) {
-      await AdminProjectService.updateProject(project._id, data).then((res) => {
-        if (Number(res.status) === 200) {
-          Message.ToastMessage(
-            "success",
-            data.title + " başarıyla güncellendi."
-          );
-          navigate.back();
-        } else {
-          Message.ToastMessage("error", "Bir hata oluştu");
-          navigate.refresh();
-        }
-      });
-    } else {
-      await AdminProjectService.addProject(data).then((res) => {
-        console.log(res);
-        if (Number(res?.status) === 201) {
-          navigate.back();
-        } else {
-          navigate.refresh();
-        }
-      });
+export default function ProjectAdd({ project }: { project?: Record<string, unknown> }) {
+  const router = useRouter();
+  const initial = normalizeProject(project);
+  const [data, setData] = useState({ title: initial?.title ?? "", description: initial?.description ?? "", type: initial?.type ?? "web", technologies: initial?.technologies.join(", ") ?? "", repoLink: initial?.repoLink ?? "", liveDemoLink: initial?.liveDemoLink ?? "", images: initial?.images.join("\n") ?? "", isShowcasing: initial?.isShowcasing ?? false });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (saving) return;
+    const payload = { ...data, title: data.title.trim(), description: data.description.trim(), repoLink: data.repoLink.trim(), liveDemoLink: data.liveDemoLink.trim(), technologies: [...new Set(data.technologies.split(",").map(value => value.trim()).filter(Boolean))], images: [...new Set(data.images.split(/\r?\n/).map(value => value.trim()).filter(Boolean))] };
+    if (!payload.title || !payload.description || !["web", "mobile"].includes(payload.type) || [payload.repoLink, payload.liveDemoLink].some(value => value && !isSafeHttpUrl(value)) || payload.images.some(value => !isSafeImageSource(value))) {
+      setError("Başlık, açıklama ve proje türünü kontrol edin. Bağlantılar HTTP/HTTPS, görseller HTTP/HTTPS veya yerel dosya yolu olmalıdır."); return;
     }
-  };
-
-  return (
-    <>
-      <BackIcon />
-      <div className="mx-auto py-6">
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-6 p-6 md:w-1/2 mx-auto bg-gray-900 text-white rounded-lg shadow-md"
-        >
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Title:
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={data.title}
-              onChange={handleChange}
-              required
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Description:
-            </label>
-            <textarea
-              name="description"
-              value={data.description}
-              onChange={handleChange}
-              required
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Type:
-            </label>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="web"
-                name="type"
-                value="web"
-                checked={data.type === "web"}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <label htmlFor="web" className="mr-4">
-                Web
-              </label>
-              <input
-                type="radio"
-                id="mobile"
-                name="type"
-                value="mobile"
-                checked={data.type === "mobile"}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <label htmlFor="mobile">Mobile</label>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Technologies:
-            </label>
-            <input
-              type="text"
-              name="technologies"
-              value={data.technologies.join(", ")}
-              onChange={(e) =>
-                setData((prevData) => ({
-                  ...prevData,
-                  technologies: e.target.value.split(", "),
-                }))
-              }
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Repository Link:
-            </label>
-            <input
-              type="text"
-              name="repoLink"
-              value={data.repoLink}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Live Demo Link:
-            </label>
-            <input
-              type="text"
-              name="liveDemoLink"
-              value={data.liveDemoLink}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Images:
-            </label>
-            <input
-              type="text"
-              name="images"
-              value={data.images.join(", ")}
-              onChange={(e) =>
-                setData((prevData) => ({
-                  ...prevData,
-                  images: e.target.value.split(", "),
-                }))
-              }
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Showcasing
-            </label>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="true"
-                name="isShowcasing"
-                value={"true"}
-                checked={data.isShowcasing === "true"}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <label htmlFor="true" className="mr-4">
-                True
-              </label>
-              <input
-                type="radio"
-                id="false"
-                name="isShowcasing"
-                value={"false"}
-                checked={data.isShowcasing === "false"}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <label htmlFor="false">False</label>
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-bold"
-          >
-            {project ? "Update Project" : "Add Project"}
-          </button>
-        </form>
-      </div>
-    </>
-  );
-};
-
-export default ProjectAdd;
+    if (project && !initial) { setError("Proje bilgileri geçersiz. Listeye dönüp yeniden açın."); return; }
+    setSaving(true); setError("");
+    try {
+      const response = initial ? await AdminProjectService.updateProject(initial._id, payload) : await AdminProjectService.addProject(payload);
+      if (response && response.status >= 200 && response.status < 300) { router.push("/admin/dashboard/projects"); router.refresh(); }
+      else setError("Proje kaydedilemedi. Lütfen yeniden deneyin.");
+    } catch { setError("Proje kaydedilemedi. Lütfen yeniden deneyin."); }
+    finally { setSaving(false); }
+  }
+  return <section className="mx-auto max-w-2xl">
+    <Link href="/admin/dashboard/projects" className="button-secondary mb-6">Projelere dön</Link>
+    <h1 className="mb-6 text-3xl font-bold">{project ? "Projeyi düzenle" : "Proje ekle"}</h1>
+    <form className="surface-card grid gap-5 p-5 sm:p-8" onSubmit={submit} aria-busy={saving}>
+      <fieldset disabled={saving} className="grid min-w-0 gap-5"><legend className="sr-only">Proje bilgileri</legend>
+        {fields.map(field => <div key={field.name}>
+          <label htmlFor={"project-" + field.name} className="mb-2 block font-semibold">{field.label}</label>
+          {"multiline" in field && field.multiline ? <textarea id={"project-" + field.name} className="form-field" rows={5} required={"required" in field && field.required} value={data[field.name]} onChange={event => setData(previous => ({ ...previous, [field.name]: event.target.value }))} /> : <input id={"project-" + field.name} className="form-field" type={field.name.endsWith("Link") ? "url" : "text"} maxLength={field.name === "title" ? 200 : 2048} required={"required" in field && field.required} value={data[field.name]} onChange={event => setData(previous => ({ ...previous, [field.name]: event.target.value }))} />}
+        </div>)}
+        <div><label htmlFor="project-type" className="mb-2 block font-semibold">Proje türü</label><select id="project-type" className="form-field" value={data.type} required onChange={event => setData(previous => ({ ...previous, type: event.target.value }))}><option value="web">Web</option><option value="mobile">Mobil</option></select></div>
+        <label className="flex items-center gap-3" htmlFor="project-showcase"><input id="project-showcase" type="checkbox" checked={data.isShowcasing} onChange={event => setData(previous => ({ ...previous, isShowcasing: event.target.checked }))} />Projeyi vitrinde göster</label>
+      </fieldset>
+      {error && <p className="text-danger" role="alert">{error}</p>}
+      <button type="submit" className="button-primary" disabled={saving}>{saving ? "Kaydediliyor…" : "Kaydet"}</button>
+    </form>
+  </section>;
+}

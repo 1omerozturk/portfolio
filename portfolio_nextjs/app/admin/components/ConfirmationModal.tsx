@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { toast } from "react-toastify";
+
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -48,3 +48,4 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   );
 };
 export default ConfirmationModal;
+

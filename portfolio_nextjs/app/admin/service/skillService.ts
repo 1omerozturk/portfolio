@@ -6,9 +6,12 @@ import {
   updateSkills,
 } from "../../api/api";
 import Message from "../../components/Message";
+import { normalizeApiRecord, normalizeApiRecords, unwrapApiData } from "../../api/payload";
+
+export type SkillInput = { name: string; level?: string; percentage?: number | string; icon?: string; color?: string };
 
 export class SkillService {
-  static async addSkill(data: any) {
+  static async addSkill(data: SkillInput) {
     try {
       const response = await createSkills(data).then((res) => {
         if (res?.status == 201) {
@@ -19,8 +22,8 @@ export class SkillService {
         }
       });
       return response;
-    } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+    } catch {
+      Message.ToastMessage("error", "Yetenek eklenemedi.");
     }
   }
 
@@ -30,41 +33,43 @@ export class SkillService {
         return res;
       });
       if (response) {
-        return response;
+        const records = unwrapApiData(response.data);
+        if (!Array.isArray(records)) throw new Error("Invalid skill collection");
+        return { ...response, data: normalizeApiRecords(records) };
       } else {
         return 0;
       }
-    } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+    } catch {
+      Message.ToastMessage("error", "Yetenekler yüklenemedi.");
     }
   }
 
-  static async getSkill(id: any) {
+  static async getSkill(id: string) {
     try {
       return await getOneSkills(id).then((res) => {
-        return res;
+        return { ...res, data: normalizeApiRecord(unwrapApiData(res.data)) };
       });
-    } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+    } catch {
+      Message.ToastMessage("error", "Yetenek yüklenemedi.");
     }
   }
 
-  static async updateSkill(id: any, data: any) {
+  static async updateSkill(id: string, data: Partial<SkillInput>) {
     try {
       return await updateSkills(id, data).then((res) => {
         return res;
       });
-    } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+    } catch {
+      Message.ToastMessage("error", "Yetenek güncellenemedi.");
     }
   }
-  static async deleteSkill(id: any) {
+  static async deleteSkill(id: string) {
     try {
       return await deleteSkills(id).then((res) => {
         return res;
       });
-    } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+    } catch {
+      Message.ToastMessage("error", "Yetenek silinemedi.");
     }
   }
 }

@@ -3,6 +3,8 @@ import { fetchPublicList } from "../api/publicData";
 import { isSafeHttpUrl } from "../api/urlSafety";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
+import PublicImage from "./PublicImage";
+import { normalizeEducation } from "../api/profilePayload";
 
 type Education = {
   _id?: string;
@@ -31,7 +33,7 @@ export default async function EducationsBanner({ size }: EducationSizeProps) {
   const CardHeading = size ? "h3" : "h2";
   const result = await fetchPublicList<Education>("/user/educations", ["educations", "items"]);
   const educations = result.status === "ok"
-    ? result.items.filter((education) => education && typeof education.institution === "string")
+    ? result.items.map(normalizeEducation).filter(education => education !== null)
     : [];
   const orderedEducations = [...educations].sort((first, second) => {
     const firstDate = new Date(first.startDate || 0).valueOf();
@@ -50,7 +52,7 @@ export default async function EducationsBanner({ size }: EducationSizeProps) {
             {displayedEducations.map((education, index) => (
               <article className="surface-card flex flex-col gap-5 p-5 sm:flex-row sm:p-6" key={education._id ?? `${education.institution}-${index}`}>
                 {isSafeHttpUrl(education.institutionLogo) && (
-                  <img src={education.institutionLogo} alt={`${education.institution} logosu`} width="96" height="96" loading="lazy" decoding="async" className="education-card__logo" />
+                  <PublicImage src={education.institutionLogo} alt={`${education.institution} logosu`} width={96} height={96} sizes="96px" className="education-card__logo" />
                 )}
                 <div className="min-w-0 flex-1">
                   <CardHeading className="text-xl font-bold text-ink">{education.institution}</CardHeading>

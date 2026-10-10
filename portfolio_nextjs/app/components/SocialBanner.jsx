@@ -1,11 +1,11 @@
 import { fetchPublicList } from "../api/publicData";
-import { isSafeHttpUrl } from "../api/urlSafety";
+import { normalizeSocial } from "../api/profilePayload";
 import { DynamicIcon } from "./DynamicIcon";
 
 export default async function SocialBanner() {
   const result = await fetchPublicList("/user/social-links", ["socialLinks", "items"]);
   const records = result.status === "ok" ? result.items : [];
-  const socialLinks = records.filter((social) => social && isSafeHttpUrl(social.url));
+  const socialLinks = records.map(normalizeSocial).filter(social => social !== null);
 
   return (
     <ul className="social-links" aria-label="Sosyal medya profilleri">

@@ -1,137 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SocialService } from "../../../service/socialService";
-import Message from "../../../../components/Message";
-import BackIcon from "../../../components/BackIcon";
+import { SocialService, type SocialInput } from "../../../service/socialService";
+import { isSafeHttpUrl } from "../../../../api/urlSafety";
 
-interface SocialAddProps {
-  social?: any;
+const icons = ["LinkedIn", "GitHub", "YouTube", "Instagram", "Twitter", "Facebook", "HackerRank", "Medium"];
+export default function SocialAdd({ social }: { social?: SocialInput & { _id: string } }) {
+  const router = useRouter();
+  const [data, setData] = useState<SocialInput>({ name: social?.name ?? "", url: social?.url ?? "", icon: social?.icon ?? "" });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (saving) return;
+    const payload = { name: data.name.trim(), url: data.url.trim(), icon: data.icon?.trim() ?? "" };
+    if (!payload.name || !isSafeHttpUrl(payload.url)) { setError("Ad ve geçerli bir HTTP/HTTPS bağlantısı girin."); return; }
+    setSaving(true); setError("");
+    try {
+      const response = social ? await SocialService.updateSocialLink(social._id, payload) : await SocialService.addSocialLink(payload);
+      if (response?.status === 200 || response?.status === 201) { router.push("/admin/dashboard/social"); router.refresh(); }
+      else setError("Bağlantı kaydedilemedi. Lütfen yeniden deneyin.");
+    } catch { setError("Bağlantı kaydedilemedi. Lütfen yeniden deneyin."); }
+    finally { setSaving(false); }
+  }
+  return <section className="mx-auto max-w-2xl"><Link className="button-secondary mb-6" href="/admin/dashboard/social">Sosyal bağlantılara dön</Link><h1 className="mb-6 text-3xl font-bold">{social ? "Sosyal bağlantıyı düzenle" : "Sosyal bağlantı ekle"}</h1><form onSubmit={submit} className="surface-card grid gap-5 p-5 sm:p-8" aria-busy={saving}><fieldset disabled={saving} className="grid min-w-0 gap-5"><legend className="sr-only">Sosyal bağlantı bilgileri</legend><div><label className="mb-2 block font-semibold" htmlFor="social-name">Ad</label><input className="form-field" id="social-name" value={data.name} maxLength={100} required onChange={event => setData(previous => ({ ...previous, name: event.target.value }))} /></div><div><label className="mb-2 block font-semibold" htmlFor="social-url">Profil bağlantısı</label><input className="form-field" id="social-url" type="url" value={data.url} maxLength={2048} required onChange={event => setData(previous => ({ ...previous, url: event.target.value }))} /></div><div><label className="mb-2 block font-semibold" htmlFor="social-icon">İkon</label><input className="form-field" id="social-icon" value={data.icon} list="social-icons" onChange={event => setData(previous => ({ ...previous, icon: event.target.value }))} /><datalist id="social-icons">{icons.map(icon => <option key={icon} value={icon} />)}</datalist></div></fieldset>{error && <p role="alert" className="text-danger">{error}</p>}<button type="submit" disabled={saving} className="button-primary">{saving ? "Kaydediliyor…" : "Kaydet"}</button></form></section>;
 }
-const SocialAdd: React.FC<SocialAddProps> = ({ social }) => {
-  const navigate = useRouter();
-  const [data, setData] = useState(
-    social
-      ? social
-      : {
-          name: "",
-          url: "",
-          icon: "",
-        }
-  );
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (social) {
-      console.log(social);
-      try {
-        await SocialService.updateSocialLink(social._id, data).then((res) => {
-          if (res.status == 200) {
-            Message.ToastMessage(
-              "success",
-              data.name + " updated successfully."
-            );
-            navigate.back();
-          } else {
-            Message.ToastMessage(
-              "error",
-              data.name + " An error occured. Try again."
-            );
-            navigate.refresh();
-          }
-        });
-      } catch (error) {
-        Message.ToastMessage(
-          "error",
-          data.name + " An error occured. Try again."
-        );
-        console.error(error.message);
-      }
-    } else {
-      try {
-        await SocialService.addSocialLink(data).then((res) => {
-          console.log(res);
-          if (Number(res.status) === 201) {
-            Message.ToastMessage(
-              "success",
-              data.name + " created successfully."
-            );
-            navigate.back();
-          } else {
-            Message.ToastMessage("error", "Bir hata oluştu");
-            navigate.refresh();
-          }
-        });
-      } catch (error) {
-        Message.ToastMessage(
-          "error",
-          data.name + " An error occured. Try again."
-        );
-        console.error(error.message);
-      }
-    }
-  };
-
-  return (
-    <>
-      <BackIcon />
-      <div className="container mx-auto md:w-1/2 p-4">
-        <h2 className="text-2xl font-bold mb-4 text-center">
-          {!social && "Add Social Link"}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Name:
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={data.name}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Icon:
-            </label>
-            <input
-              type="text"
-              name="icon"
-              value={data.icon}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-300">
-              Url:
-            </label>
-            <input
-              type="text"
-              name="url"
-              value={data.url}
-              onChange={handleChange}
-              className="p-2 bg-gray-800 border border-gray-700 rounded focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
-          <div className="flex items-center justify-center mt-2">
-            <button type="submit" className="btn btn-outline-light">
-              {social ? "Update" : "Save"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
-  );
-};
-export default SocialAdd;

@@ -1,9 +1,11 @@
+import type { BlogCategory } from "../blogConstants";
+
 export interface Blog {
   _id?: string;
   title: string;
   content: string;
   author: string;
-  category: 'yazı' | 'düşünce' | 'özlü söz' | 'teknik' | 'diğer';
+  category: BlogCategory;
   tags: string[];
   excerpt: string;
   views: number;

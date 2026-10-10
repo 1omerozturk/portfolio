@@ -1,153 +1,29 @@
 "use client";
-import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AdminAuth } from "../auth";
-import Message from "../../components/Message";
+import ThemeToggle from "../../components/ThemeToggle";
 
-const passwordReset = () => {
+export default function PasswordResetPage() {
+  const router = useRouter();
   const [show, setShow] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [type, setType] = useState("password");
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    rePassword: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const updatePasswordHandle = async (e) => {
-    setLoading(true);
-    e.preventDefault();
-    await AdminAuth.resetPassword(
-      formData.username,
-      formData.password,
-      formData.rePassword,
-    )
-      .then((res) => {
-        console.log(res)
-        if (res.status === 200) {
-          setLoading(false);
-           Message.ToastMessage("success",res.data.message)
-          window.location.href = "/admin";
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      });
-  };
-
-  return (
-    <div className="min-h-max mt-5 w-2/3 md:w-2/5 mx-auto flex justify-center items-center">
-      <div className="bg-white border-2 border-indigo-300 p-10 rounded-md w-full shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-center select-none">
-          Reset Password - (Admin){" "}
-        </h2>
-        <form method={"post"} onSubmit={updatePasswordHandle}>
-          <div className="mb-4">
-            <label
-              className="block select-none text-gray-700 text-sm font-bold mb-2"
-              htmlFor="username"
-            >
-              Username
-            </label>
-            <input
-              className="border rounded-md px-3 py-2 w-full"
-              type="text"
-              autoFocus
-              onChange={handleChange}
-              id="username"
-              name="username"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block select-none text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <div className="flex justify-center items-center space-x-2">
-              <input
-                className="border rounded-md px-3 py-2 w-full"
-                type={type}
-                id="password"
-                name="password"
-                onChange={handleChange}
-              />
-              {/* hide show password icon  */}
-              <div title="Show/Hide" className="cursor-pointer w-fit">
-                {show ? (
-                  <FaEye
-                    onClick={() => {
-                      setShow(false);
-                      setType("password");
-                    }}
-                    className="text-indigo-500"
-                  />
-                ) : (
-                  <FaEyeSlash
-                    onClick={() => {
-                      setShow(true);
-                      setType("text");
-                    }}
-                    className="text-gray-500"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="mb-4">
-            <label
-              className="block select-none text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password Again
-            </label>
-            <div className="flex justify-center items-center space-x-2">
-              <input
-                className="border rounded-md px-3 py-2 w-full"
-                type={type}
-                id="rePassword"
-                name="rePassword"
-                onChange={handleChange}
-              />
-              {/* hide show password icon  */}
-              <div title="Show/Hide" className="cursor-pointer w-fit">
-                {show ? (
-                  <FaEye
-                    onClick={() => {
-                      setShow(false);
-                      setType("password");
-                    }}
-                    className="text-indigo-500"
-                  />
-                ) : (
-                  <FaEyeSlash
-                    onClick={() => {
-                      setShow(true);
-                      setType("text");
-                    }}
-                    className="text-gray-500"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-          <button
-            disabled={loading}
-            type="submit"
-            className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mx-auto block select-none"
-          >
-            {loading ? <i className="pi pi-spin pi-spinner"></i> : "Reset Password"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-export default passwordReset;
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [done, setDone] = useState(false);
+  const [form, setForm] = useState({ username: "", password: "", rePassword: "", confirmation: "" });
+  async function submit(event) {
+    event.preventDefault();
+    if (saving) return;
+    if (form.rePassword !== form.confirmation) { setError("Yeni şifreler eşleşmiyor."); return; }
+    if (form.rePassword.length < 8) { setError("Yeni şifre en az 8 karakter olmalıdır."); return; }
+    setSaving(true); setError("");
+    try {
+      const response = await AdminAuth.resetPassword(form.username.trim(), form.password, form.rePassword);
+      if (response?.status === 200) { setDone(true); setForm({ username: "", password: "", rePassword: "", confirmation: "" }); }
+      else setError("Şifre değiştirilemedi. Mevcut şifrenizi ve API bağlantısını kontrol edin.");
+    } catch { setError("Şifre değiştirilemedi. Lütfen yeniden deneyin."); }
+    finally { setSaving(false); }
+  }
+  return <main className="surface-page px-4 py-10"><section className="surface-card mx-auto max-w-lg p-6 sm:p-8"><div className="mb-4 flex items-center justify-between gap-3"><h1 className="text-2xl font-bold">Şifre değiştir</h1><ThemeToggle /></div>{done ? <div role="status"><p className="my-5">Şifreniz güncellendi. Yeni şifrenizle tekrar giriş yapın.</p><button className="button-primary" onClick={() => { router.replace("/admin/login"); router.refresh(); }}>Girişe dön</button></div> : <><p className="mb-6 text-quiet">Mevcut şifrenizi doğrulayın. Şifre değiştiğinde açık oturumlar sonlandırılır.</p><form className="grid gap-5" onSubmit={submit} aria-busy={saving}><fieldset disabled={saving} className="grid min-w-0 gap-5"><legend className="sr-only">Şifre bilgileri</legend>{[{ name: "username", label: "Kullanıcı adı", autoComplete: "username" }, { name: "password", label: "Mevcut şifre", autoComplete: "current-password" }, { name: "rePassword", label: "Yeni şifre", autoComplete: "new-password" }, { name: "confirmation", label: "Yeni şifre tekrar", autoComplete: "new-password" }].map(field => <div key={field.name}><label htmlFor={`password-${field.name}`} className="mb-2 block font-semibold">{field.label}</label><input id={`password-${field.name}`} className="form-field" name={field.name} type={field.name === "username" || show ? "text" : "password"} autoComplete={field.autoComplete} value={form[field.name]} onChange={event => setForm(previous => ({ ...previous, [field.name]: event.target.value }))} minLength={field.autoComplete === "new-password" ? 8 : undefined} required /></div>)}<button type="button" className="button-secondary" aria-pressed={show} onClick={() => setShow(value => !value)}>{show ? "Şifreleri gizle" : "Şifreleri göster"}</button></fieldset>{error && <p role="alert" className="text-danger">{error}</p>}<button type="submit" className="button-primary" disabled={saving}>{saving ? "Güncelleniyor…" : "Şifreyi güncelle"}</button></form></>}<Link href="/admin/login" className="mt-6 inline-block text-brand">Giriş sayfası</Link></section></main>;
+}

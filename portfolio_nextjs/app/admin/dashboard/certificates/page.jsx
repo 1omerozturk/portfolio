@@ -1,94 +1,31 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { CertificationService } from "../../service/certificationsService";
 import Loading from "../../components/Loading";
-import { useRouter } from "next/navigation";
-import { FaEdit, FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { isSafeHttpUrl } from "../../../api/urlSafety";
+import PublicImage from "../../../components/PublicImage";
 
-const Certificates = () => {
-  const [certificates, setCertificates] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useRouter();
-
-  const onEdit = (id) => () => {
-    navigate.push(`/admin/dashboard/certificates/edit/${id}`);
-  };
-
-  const onDelete = async (id) => {
-    try {
-      await CertificationService.deleteCertification(id);
-      fetchCertificates();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onAdd = () => {
-    navigate.push("/admin/dashboard/certificates/add");
-  };
-
-  const fetchCertificates = async () => {
-    try {
-      const response = await CertificationService.getCertifications();
-      setCertificates(Array.isArray(response) ? response : []);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function Certificates() {
+  const [records, setRecords] = useState(null);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const [deleting, setDeleting] = useState(null);
+  const [error, setError] = useState("");
   useEffect(() => {
-    fetchCertificates();
-  }, []);
-
-  return (
-    <div className="p-4">
-      <div className="flex justify-around items-center mb-6">
-        <h1 className="text-2xl font-bold">Certificates</h1>
-        <button
-          onClick={onAdd}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center"
-        >
-          <FaPlusCircle className="mr-2" />
-          Ekle
-        </button>
-      </div>
-      {loading ? (
-        <Loading />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {certificates.map((certificate) => (
-            <div key={certificate._id} className="surface-card rounded-lg p-5 shadow-md">
-              {isSafeHttpUrl(certificate.certificateImage) ? (
-                <img src={certificate.certificateImage} alt="" className="h-40 w-full rounded object-contain" loading="lazy" />
-              ) : (
-                <div className="flex h-40 items-center justify-center text-lg font-semibold">{certificate.name || certificate.issuingOrganization}</div>
-              )}
-              <p className="mt-3 font-semibold">{certificate.name || "Sertifika"}</p>
-              <p className="text-sm text-gray-500">{certificate.issuingOrganization}</p>
-              {isSafeHttpUrl(certificate.certificateLink) && <a href={certificate.certificateLink} target="_blank" rel="noopener noreferrer" className="button-secondary mt-3">Sertifikayı aç</a>}
-              <div className="mt-4 flex justify-between">
-                <button
-                  onClick={onEdit(certificate._id)}
-                  className="text-blue-500 hover:text-blue-700"
-                >
-                  <FaEdit />
-                </button>
-                <button
-                  onClick={() => onDelete(certificate._id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <FaMinusCircle />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Certificates;
+    let active = true;
+    CertificationService.getCertifications().then(items => { if (active) { setRecords(items.filter(item => typeof item._id === "string")); setFailed(false); } }).catch(() => { if (active) { setRecords([]); setFailed(true); } });
+    return () => { active = false; };
+  }, [attempt]);
+  async function remove(item) {
+    if (deleting || !window.confirm(`${item.name || "Sertifika"} silinsin mi?`)) return;
+    setDeleting(item._id); setError("");
+    try {
+      const response = await CertificationService.deleteCertification(item._id);
+      if (response.status >= 200 && response.status < 300) setRecords(previous => previous.filter(record => record._id !== item._id));
+      else setError("Sertifika silinemedi.");
+    } catch { setError("Sertifika silinemedi. Lütfen yeniden deneyin."); }
+    finally { setDeleting(null); }
+  }
+  return <section><div className="mb-6 flex flex-wrap items-center justify-between gap-4"><h1 className="text-3xl font-bold">Sertifikalar</h1><Link className="button-primary" href="/admin/dashboard/certificates/add">Sertifika ekle</Link></div>{error && <p className="mb-4 text-danger" role="alert">{error}</p>}{records === null ? <Loading /> : failed ? <div className="surface-card p-6" role="status"><p>Sertifikalar yüklenemedi.</p><button className="button-secondary mt-4" onClick={() => { setRecords(null); setAttempt(value => value + 1); }}>Yeniden dene</button></div> : records.length === 0 ? <p className="surface-card p-6 text-quiet" role="status">Henüz sertifika eklenmemiş.</p> : <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">{records.map(item => <article key={item._id} className="surface-card min-w-0 p-5"><PublicImage src={item.certificateImage} alt="" width={640} height={360} sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 33vw" className="mb-4 aspect-video w-full object-contain" /><h2 className="break-words text-xl font-bold">{typeof item.name === "string" ? item.name : "Sertifika"}</h2>{typeof item.issuingOrganization === "string" && <p className="mt-2 break-words text-quiet">{item.issuingOrganization}</p>}{isSafeHttpUrl(item.certificateLink) && <a href={item.certificateLink} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-brand">Sertifikayı aç ↗</a>}<div className="mt-5 flex flex-wrap gap-3"><Link className="button-secondary" href={`/admin/dashboard/certificates/edit/${encodeURIComponent(item._id)}`} aria-label={`${item.name || "Sertifika"} düzenle`}>Düzenle</Link><button className="button-secondary" disabled={deleting !== null} onClick={() => remove(item)} aria-label={`${item.name || "Sertifika"} sil`}>{deleting === item._id ? "Siliniyor…" : "Sil"}</button></div></article>)}</div>}</section>;
+}

@@ -1,25 +1,24 @@
 import { login, getAdminAuth, updatePassword } from "../api/api";
 import Message from "../components/Message";
+import { isAxiosError } from "axios";
 
 export class AdminAuth {
   // login
   static async login(username: string, password: string) {
     try {
       const response = await login(username, password);
-      console.log(response);
       const admin = response.data;
       if (admin) {
         // login message
         Message.ToastMessage("success", "Giriş Başarılı");
         localStorage.setItem("token", admin.token);
         localStorage.setItem("admin", JSON.stringify(admin));
-        console.log(admin);
         return response;
       }
       return null;
-    } catch (error) {
+    } catch {
       // login failed message
-      Message.ToastMessage("error", error.response.data.message);
+      Message.ToastMessage("error", "İşlem tamamlanamadı. Bilgilerinizi kontrol edin.");
       return null;
     }
   }
@@ -39,11 +38,10 @@ export class AdminAuth {
   ) {
     try {
       const response=await updatePassword(username,password,rePassword);
-      console.log(response);
-      const data=response.data;
-      console.log(data);
-    } catch (error) {
-      Message.ToastMessage("error", error.response.data.message);
+      if (response.status === 200) { localStorage.removeItem("token"); localStorage.removeItem("admin"); }
+      return response;
+    } catch {
+      Message.ToastMessage("error", "İşlem tamamlanamadı. Bilgilerinizi kontrol edin.");
       return null;
     }
   }
@@ -57,6 +55,17 @@ export class AdminAuth {
     return null;
   }
   static async isLoggedIn() {
-    return localStorage.getItem("token") ? true : false;
+    if (!localStorage.getItem("token")) return false;
+    try {
+      return (await getAdminAuth()).status === 200;
+    } catch (error) {
+      if (isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("admin");
+        return false;
+      }
+      throw error;
+    }
   }
 }
+

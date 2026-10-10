@@ -1,19 +1,14 @@
 import Link from "next/link";
+import { BLOG_CATEGORY_STYLES as categoryStyles } from "../blogConstants";
 import { FaComment } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
-import type { Blog } from "../models/blogs";
 import { fetchPublicBlogPage } from "../api/publicData";
 import { isSafeHttpUrl } from "../api/urlSafety";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
+import PublicImage from "./PublicImage";
 
-const categoryStyles: Record<string, string> = {
-  yazı: "blog-category--blue",
-  düşünce: "blog-category--violet",
-  "özlü söz": "blog-category--rose",
-  teknik: "blog-category--green",
-  diğer: "blog-category--gray",
-};
+
 
 export default async function BlogsSection() {
   const result = await fetchPublicBlogPage(1, 3);
@@ -29,7 +24,7 @@ export default async function BlogsSection() {
             {blogs.map((blog) => (
               <Link href={`/blog/${encodeURIComponent(blog._id!)}`} key={blog._id} className="surface-card blog-card group overflow-hidden">
                 {isSafeHttpUrl(blog.featuredImage) ? (
-                  <img src={blog.featuredImage} alt={blog.title} width="640" height="360" loading="lazy" decoding="async" className="blog-card__image" />
+                  <PublicImage src={blog.featuredImage} alt={blog.title} width={640} height={360} sizes="(max-width: 767px) 100vw, 33vw" className="blog-card__image" />
                 ) : (
                   <div className="blog-card__image-placeholder" aria-hidden="true">Aa</div>
                 )}
@@ -58,3 +53,4 @@ export default async function BlogsSection() {
     </section>
   );
 }
+
