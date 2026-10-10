@@ -280,12 +280,7 @@ exports.getBlogById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Views sayısını artır
-    const blog = await getCollectionDocs("blogs",
-      id,
-      { $inc: { views: 1 } },
-      { new: true },
-    );
+    const blog = await getDocById("blogs", id);
 
     if (!blog) {
       return res.status(404).json({ message: "Blog bulunamadı" });
