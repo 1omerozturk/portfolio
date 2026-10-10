@@ -51,6 +51,11 @@ const {
 } = require('../controller/adminController')
 
 const router = express.Router()
+const { validId, objectBody, validateBlog, validateCredentials } = require('../middleware/validation')
+const rateLimit = require('../middleware/rateLimit')
+const authLimit = rateLimit({ limit: 10, windowMs: 15 * 60 * 1000 })
+router.param('id', validId)
+router.use(objectBody)
 
 // admin login
 router.get('/admin', admin, getAdmin)
@@ -58,7 +63,7 @@ router.get('/admin', admin, getAdmin)
 router.get('/messages', admin, getMessages)
 
 // put routes
-router.put('/update-password',updatePassword)
+router.put('/update-password', authLimit, validateCredentials, updatePassword)
 router.put('/personal-info/:id', admin, updatePersonalInfo)
 router.put('/educations/:id', admin, updateEducations)
 router.put('/experiences/:id', admin, updateExperiences)
@@ -87,7 +92,7 @@ router.delete('/messages/:id', admin, deleteMessage)
 
 // post routes
 
-router.post('/login', login)
+router.post('/login', authLimit, validateCredentials, login)
 router.post('/personal-info', admin, createPersonalInfo)
 router.post('/social-links', admin, createSocialLinks)
 router.post('/educations', admin, createEducations)
@@ -100,10 +105,13 @@ router.post('/projects', admin, createProjects)
 router.post('/certifications', admin, createCertifications)
 
 // Blog routes
-router.post('/blogs', admin, createBlog)
+router.post('/blogs', admin, validateBlog, createBlog)
 router.get('/blogs', admin, getAdminBlogs)
 router.get('/blogs/:id', admin, getAdminBlogById)
-router.put('/blogs/:id', admin, updateBlog)
+router.put('/blogs/:id', admin, validateBlog, updateBlog)
 router.delete('/blogs/:id', admin, deleteBlog)
 
 module.exports = router
+
+
+

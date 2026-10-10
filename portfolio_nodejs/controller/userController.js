@@ -1,6 +1,5 @@
 const {
   getCollectionDocs,
-  getCountFromServer,
   getDocById,
   createDoc,
   updateDoc,
@@ -11,10 +10,18 @@ const {
 // message post
 exports.postMessage = async (req, res) => {
   try {
-    const message = await createDoc("messages", req.body);
+    const fields = { name: 100, lastName: 100, email: 254, phone: 40, message: 10000 }
+    const payload = {}
+    for (const [field, max] of Object.entries(fields)) {
+      const value = req.body[field] ?? ''
+      if (typeof value !== 'string' || value.length > max) return res.status(400).json({ message: 'Mesaj alanlarını kontrol edin.' })
+      payload[field] = value.trim()
+    }
+    if (!payload.name || !payload.lastName || !/^\S+@\S+\.\S+$/.test(payload.email) || !/^\d{10,15}$/.test(payload.phone.replace(/\D/g, ''))) return res.status(400).json({ message: 'İletişim bilgilerini kontrol edin.' })
+    await createDoc('messages', { ...payload, isRead: false, sentAt: new Date() });
     res.status(201).json("Message send successfully");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -23,7 +30,7 @@ exports.getPersonalInfo = async (req, res) => {
     const personalInfo = await getCollectionDocs("personalInfo");
     res.status(200).json(personalInfo);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -32,7 +39,7 @@ exports.getSocialLinks = async (req, res) => {
     const socialLinks = await getCollectionDocs("socialLinks");
     res.status(200).json(socialLinks);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -45,7 +52,7 @@ exports.getEducations = async (req, res) => {
     );
     res.status(200).json(educations);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -58,7 +65,7 @@ exports.getExperiences = async (req, res) => {
     );
     res.status(200).json(experiences);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 exports.getContents = async (req, res) => {
@@ -66,7 +73,7 @@ exports.getContents = async (req, res) => {
     const contents = await getCollectionDocs("contents");
     res.status(200).json(contents);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -75,7 +82,7 @@ exports.getSkills = async (req, res) => {
     const skills = await getCollectionDocs("skills");
     res.status(200).json(skills);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -88,7 +95,7 @@ exports.getProjects = async (req, res) => {
     );
     res.status(200).json(projects);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -97,7 +104,7 @@ exports.getCertifications = async (req, res) => {
     const certifications = await getCollectionDocs("certifications");
     res.status(200).json(certifications);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -106,7 +113,7 @@ exports.getLanguages = async (req, res) => {
     const languages = await getCollectionDocs("languages");
     res.status(200).json(languages);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -115,7 +122,7 @@ exports.getReferences = async (req, res) => {
     const references = await getCollectionDocs("references");
     res.status(200).json(references);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -124,7 +131,7 @@ exports.getHobbies = async (req, res) => {
     const hobbies = await getCollectionDocs("hobbies");
     res.status(200).json(hobbies);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -136,7 +143,7 @@ exports.getOnePersonalInfo = async (req, res) => {
     const personalInfo = await getDocById("personalInfo", id);
     res.status(200).json(personalInfo);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -146,7 +153,7 @@ exports.getOneSocialLinks = async (req, res) => {
     const socialLinks = await getDocById("socialLinks", id);
     res.status(200).json(socialLinks);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -156,7 +163,7 @@ exports.getOneEducations = async (req, res) => {
     const educations = await getDocById("educations", id);
     res.status(200).json(educations);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -166,7 +173,7 @@ exports.getOneExperiences = async (req, res) => {
     const experiences = await getDocById("experiences", id);
     res.status(200).json(experiences);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -176,7 +183,7 @@ exports.getOneContents = async (req, res) => {
     const contents = await getDocById("contents", id);
     res.status(200).json(contents);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -186,7 +193,7 @@ exports.getOneSkills = async (req, res) => {
     const skills = await getDocById("skills", id);
     res.status(200).json(skills);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -196,7 +203,7 @@ exports.getOneProjects = async (req, res) => {
     const projects = await getDocById("projects", id);
     res.status(200).json(projects);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -206,7 +213,7 @@ exports.getOneCertifications = async (req, res) => {
     const certifications = await getDocById("certifications", id);
     res.status(200).json(certifications);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -216,7 +223,7 @@ exports.getOneLanguages = async (req, res) => {
     const languages = await getDocById("languages", id);
     res.status(200).json(languages);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -226,7 +233,7 @@ exports.getOneReferences = async (req, res) => {
     const references = await getDocById("references", id);
     res.status(200).json(references);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
@@ -236,119 +243,36 @@ exports.getOneHobbies = async (req, res) => {
     const hobbies = await getDocById("hobbies", id);
     res.status(200).json(hobbies);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
   }
 };
 
 // Blog endpoints for users
+const { parseOptions, listBlogs, isPublished, respondError } = require('../service/blogQuery')
+
 exports.getBlogs = async (req, res) => {
-  try {
-    const { page = 1, limit = 6, category, search } = req.query;
-    const allBlogs = sortDocs(
-      await getCollectionDocs("blogs"),
-      "createdAt",
-      "desc",
-    );
-    const filtered = allBlogs.filter((blog) => {
-      if (!blog.isPublished) return false;
-      if (category && blog.category !== category) return false;
-      if (search) {
-        const haystack =
-          `${blog.title || ""} ${blog.content || ""} ${blog.tags?.join(" ") || ""}`.toLowerCase();
-        if (!haystack.includes(search.toLowerCase())) return false;
-      }
-      return true;
-    });
-
-    const skip = (page - 1) * limit;
-    const blogs = filtered.slice(skip, skip + parseInt(limit));
-    const totalBlogs = await getCollectionDocs("blogs");
-    const total = totalBlogs?.length;
-    res.status(200).json({
-      blogs,
-      total,
-      pages: Math.ceil(total / limit),
-      currentPage: parseInt(page),
-    });
-  } catch (error) {
-    console.error("Get Blogs Error:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
+  try { res.status(200).json(await listBlogs(parseOptions(req.query))) }
+  catch (error) { respondError(res, error) }
+}
 exports.getBlogById = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const blog = await getDocById("blogs", id);
-
-    if (!blog) {
-      return res.status(404).json({ message: "Blog bulunamadı" });
-    }
-
-    if (!blog.isPublished) {
-      return res.status(403).json({ message: "Bu blog yayınlanmamış" });
-    }
-
-    res.status(200).json(blog);
-  } catch (error) {
-    console.error("Get Blog Error:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
+    const blog = await getDocById('blogs', req.params.id)
+    if (!blog || !isPublished(blog)) return res.status(404).json({ message: 'Blog bulunamadı' })
+    res.status(200).json(blog)
+  } catch (error) { respondError(res, error) }
+}
 exports.getBlogsByCategory = async (req, res) => {
   try {
-    const { category } = req.params;
-    const { page = 1, limit = 6 } = req.query;
-
-    const skip = (page - 1) * limit;
-
-    const blogs = await Blogs.find({
-      category,
-      isPublished: true,
-    })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit));
-
-    const total = await Blogs.countDocuments({
-      category,
-      isPublished: true,
-    });
-
-    res.status(200).json({
-      blogs,
-      total,
-      pages: Math.ceil(total / limit),
-      currentPage: parseInt(page),
-    });
-  } catch (error) {
-    console.error("Get Blogs By Category Error:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
+    const options = parseOptions({ ...req.query, category: req.params.category })
+    res.status(200).json(await listBlogs(options))
+  } catch (error) { respondError(res, error) }
+}
 exports.searchBlogs = async (req, res) => {
   try {
-    const { query } = req.query;
+    const options = parseOptions({ ...req.query, search: req.query.query })
+    if (!options.search) return res.status(400).json({ message: 'Arama terimi gereklidir' })
+    const result = await listBlogs(options)
+    res.status(200).json(result.blogs)
+  } catch (error) { respondError(res, error) }
+}
 
-    if (!query || query.trim() === "") {
-      return res.status(400).json({ message: "Arama terimi gereklidir" });
-    }
-
-    const blogs = await Blogs.find({
-      isPublished: true,
-      $or: [
-        { title: { $regex: query, $options: "i" } },
-        { content: { $regex: query, $options: "i" } },
-        { tags: { $in: [new RegExp(query, "i")] } },
-      ],
-    }).sort({ createdAt: -1 });
-
-    res.status(200).json(blogs);
-  } catch (error) {
-    console.error("Search Blogs Error:", error);
-    res.status(500).json({ message: error.message });
-  }
-};

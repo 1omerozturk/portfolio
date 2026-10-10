@@ -9,6 +9,7 @@ const {
   getProjects,
   getCertifications,
   getHobbies,
+  getLanguages,
   getReferences,
   getOnePersonalInfo,
   getOneSocialLinks,
@@ -28,6 +29,10 @@ const {
 } = require('../controller/userController')
 
 const router = express.Router()
+const { validId, objectBody } = require('../middleware/validation')
+const rateLimit = require('../middleware/rateLimit')
+router.param('id', validId)
+router.use(objectBody)
 
 router.get('/personal-info', getPersonalInfo)
 router.get('/social-links', getSocialLinks)
@@ -38,6 +43,7 @@ router.get('/skills', getSkills)
 router.get('/projects', getProjects)
 router.get('/certifications', getCertifications)
 router.get('/hobbies', getHobbies)
+router.get('/languages', getLanguages)
 router.get('/references', getReferences)
 router.get('/personal-info/:id', getOnePersonalInfo)
 router.get('/social-links/:id', getOneSocialLinks)
@@ -57,6 +63,8 @@ router.get('/blogs/category/:category', getBlogsByCategory)
 router.get('/blogs/:id', getBlogById)
 
 // message posting
-router.post('/messages', postMessage)
+router.post('/messages', rateLimit({ limit: 5, windowMs: 60 * 1000 }), postMessage)
 
 module.exports = router
+
+
