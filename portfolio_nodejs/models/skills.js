@@ -1,5 +1,6 @@
 const createSkillPayload = (input = {}) => ({
   name: input.name || '',
+  nameEn: input.nameEn || '',
   level: input.level || 'Beginner',
   percentage: input.percentage || 0,
   icon: input.icon || '',
@@ -12,3 +13,4 @@ module.exports = {
   collectionName: 'skills',
   createSkillPayload,
 }
+

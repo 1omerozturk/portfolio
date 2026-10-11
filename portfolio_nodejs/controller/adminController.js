@@ -459,7 +459,7 @@ exports.markMessage = async (req, res) => {
 // Blog Management
 exports.createBlog = async (req, res) => {
   try {
-    const { title, content, author, category, tags, excerpt, featuredImage, isPublished } = req.body
+    const { title, titleEn, content, contentEn, author, category, tags, excerpt, excerptEn, featuredImage, isPublished } = req.body
     
     if (!title || !content || !author) {
       return res.status(400).json({ message: 'Title, content ve author gereklidir' })
@@ -467,7 +467,10 @@ exports.createBlog = async (req, res) => {
 
     const blog = await createDoc('blogs', {
       title,
+      titleEn,
       content,
+      contentEn,
+      excerptEn,
       author,
       category: category || 'yazı',
       tags: tags || [],
@@ -488,11 +491,14 @@ exports.createBlog = async (req, res) => {
 exports.updateBlog = async (req, res) => {
   try {
     const { id } = req.params
-    const { title, content, author, category, tags, excerpt, featuredImage, isPublished } = req.body
+    const { title, titleEn, content, contentEn, author, category, tags, excerpt, excerptEn, featuredImage, isPublished } = req.body
     
     const blog = await updateDoc('blogs', id, {
       title,
+      titleEn,
       content,
+      contentEn,
+      excerptEn,
       author,
       category,
       tags,
@@ -542,5 +548,6 @@ exports.getAdminBlogById = async (req, res) => {
     res.status(200).json(blog)
   } catch (error) { respondError(res, error) }
 }
+
 
 

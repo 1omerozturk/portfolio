@@ -5,6 +5,9 @@ const createBlogPayload = (input = {}) => {
 
   return {
     title: input.title || '',
+    titleEn: input.titleEn || '',
+    contentEn: input.contentEn || '',
+    excerptEn: input.excerptEn || '',
     content,
     author: input.author || '',
     category: input.category || 'yazı',
@@ -23,3 +26,4 @@ module.exports = {
   collectionName: 'blogs',
   createBlogPayload,
 }
+

@@ -31,7 +31,7 @@ async function listBlogs(options, admin = false) {
     if (!admin && !published) return false
     if (admin && options.status && published !== (options.status === 'published')) return false
     const tags = Array.isArray(blog.tags) ? blog.tags.filter(tag => typeof tag === 'string').join(' ') : ''
-    return !needle || [blog.title, blog.content, tags].filter(value => typeof value === 'string').join(' ').toLocaleLowerCase('tr-TR').includes(needle)
+    return !needle || [blog.title, blog.titleEn, blog.content, blog.contentEn, blog.excerpt, blog.excerptEn, tags].filter(value => typeof value === 'string').join(' ').toLocaleLowerCase('tr-TR').includes(needle)
   }), 'createdAt', 'desc')
   const total = filtered.length
   const start = (options.page - 1) * options.limit
@@ -43,3 +43,4 @@ function respondError(res, error) {
   return res.status(500).json({ message: 'İçerikler yüklenemedi. Lütfen yeniden deneyin.' })
 }
 module.exports = { parseOptions, listBlogs, isPublished, respondError }
+

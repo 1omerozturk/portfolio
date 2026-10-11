@@ -10,7 +10,7 @@ function objectBody(req, res, next) {
 }
 function validateBlog(req, res, next) {
   const body = req.body
-  for (const [field, max] of Object.entries({ title: 200, content: 100000, author: 200, category: 100, excerpt: 2000, featuredImage: 2048 })) {
+  for (const [field, max] of Object.entries({ title: 200, titleEn: 200, content: 100000, contentEn: 100000, author: 200, category: 100, excerpt: 2000, excerptEn: 2000, featuredImage: 2048 })) {
     const value = body[field]
     const required = req.method === 'POST' && ['title', 'content', 'author'].includes(field)
     if ((required && !value) || (value !== undefined && (typeof value !== 'string' || value.length > max || (['title', 'content', 'author'].includes(field) && !value.trim())))) return res.status(400).json({ message: 'Blog alanlarını kontrol edin.' })
@@ -27,16 +27,16 @@ function validateCredentials(req, res, next) {
 module.exports = { validId, objectBody, validateBlog, validateCredentials }
 
 const schemas = {
-  'personal-info': { required: ['fullName', 'jobTitle', 'email'], strings: ['fullName', 'jobTitle', 'email', 'phone', 'address', 'about', 'profilePicture'] },
+  'personal-info': { required: ['fullName', 'jobTitle', 'email'], strings: ['fullName', 'jobTitle', 'jobTitleEn', 'email', 'phone', 'address', 'about', 'aboutEn', 'profilePicture'] },
   'social-links': { required: ['name', 'url'], strings: ['name', 'url', 'icon'] },
-  educations: { required: ['institution', 'degree', 'fieldOfStudy', 'startDate'], strings: ['institution', 'degree', 'fieldOfStudy', 'startDate', 'endDate', 'grade', 'description', 'institutionLogo'], lists: ['activities'] },
-  experiences: { required: ['company', 'position', 'startDate'], strings: ['company', 'position', 'startDate', 'endDate', 'companyLogo'], lists: ['responsibilities'] },
-  contents: { required: ['name', 'link'], strings: ['name', 'link', 'image'] },
-  skills: { required: ['name', 'level'], strings: ['name', 'level', 'icon', 'color'], numbers: ['percentage'] },
-  projects: { required: ['title', 'description', 'type'], strings: ['title', 'description', 'type', 'repoLink', 'liveDemoLink'], lists: ['technologies', 'images'], booleans: ['isShowcasing'] },
-  certifications: { required: ['name', 'issuingOrganization', 'issueDate'], strings: ['name', 'issuingOrganization', 'issueDate', 'expirationDate', 'certificateLink', 'certificateImage', 'type'] },
-  languages: { required: ['name'], strings: ['name', 'proficiency'] },
-  hobbies: { required: ['name'], strings: ['name', 'description', 'icon'] },
+  educations: { required: ['institution', 'degree', 'fieldOfStudy', 'startDate'], strings: ['institutionEn', 'degreeEn', 'fieldOfStudyEn', 'descriptionEn', 'institution', 'degree', 'fieldOfStudy', 'startDate', 'endDate', 'grade', 'description', 'institutionLogo'], lists: ['activities', 'activitiesEn'] },
+  experiences: { required: ['company', 'position', 'startDate'], strings: ['companyEn', 'positionEn', 'company', 'position', 'startDate', 'endDate', 'companyLogo'], lists: ['responsibilities', 'responsibilitiesEn'] },
+  contents: { required: ['name', 'link'], strings: ['name', 'nameEn', 'link', 'image'] },
+  skills: { required: ['name', 'level'], strings: ['name', 'nameEn', 'level', 'icon', 'color'], numbers: ['percentage'] },
+  projects: { required: ['title', 'description', 'type'], strings: ['title', 'titleEn', 'description', 'descriptionEn', 'type', 'repoLink', 'liveDemoLink'], lists: ['technologies', 'images'], booleans: ['isShowcasing'] },
+  certifications: { required: ['name', 'issuingOrganization', 'issueDate'], strings: ['name', 'nameEn', 'issuingOrganizationEn', 'issuingOrganization', 'issueDate', 'expirationDate', 'certificateLink', 'certificateImage', 'certificatePdf', 'type'] },
+  languages: { required: ['name'], strings: ['name', 'nameEn', 'proficiency', 'proficiencyEn'] },
+  hobbies: { required: ['name'], strings: ['name', 'nameEn', 'description', 'descriptionEn', 'icon'] },
 }
 function httpUrl(value) {
   try { return ['http:', 'https:'].includes(new URL(value).protocol) } catch { return false }
@@ -54,7 +54,7 @@ function validateRecord(req, res, next) {
   const invalid = () => res.status(400).json({ message: 'Kayıt alanlarını kontrol edin.' })
   for (const field of schema.strings || []) {
     if (body[field] === undefined) continue
-    const max = ['description', 'about'].includes(field) ? 10000 : 2048
+    const max = ['description', 'descriptionEn', 'about', 'aboutEn'].includes(field) ? 10000 : 2048
     if (typeof body[field] !== 'string' || body[field].length > max) return invalid()
     payload[field] = body[field].trim()
   }
@@ -81,7 +81,7 @@ function validateRecord(req, res, next) {
   if (!Object.keys(payload).length) return invalid()
   for (const field of ['startDate', 'endDate', 'issueDate', 'expirationDate']) if (payload[field] && !Number.isFinite(Date.parse(payload[field]))) return invalid()
   if (payload.startDate && payload.endDate && Date.parse(payload.endDate) < Date.parse(payload.startDate)) return invalid()
-  for (const field of ['url', 'link', 'repoLink', 'liveDemoLink', 'certificateLink']) if (payload[field] && !httpUrl(payload[field])) return invalid()
+  for (const field of ['url', 'link', 'repoLink', 'liveDemoLink', 'certificateLink', 'certificatePdf']) if (payload[field] && !httpUrl(payload[field])) return invalid()
   for (const field of ['image', 'institutionLogo', 'companyLogo', 'profilePicture', 'certificateImage']) if (payload[field] && !imageUrl(payload[field])) return invalid()
   if (payload.images?.some(value => !imageUrl(value))) return invalid()
   if (payload.email && !/^\S+@\S+\.\S+$/.test(payload.email)) return invalid()
@@ -90,4 +90,13 @@ function validateRecord(req, res, next) {
   next()
 }
 module.exports.validateRecord = validateRecord
+
+
+
+
+
+
+
+
+
 

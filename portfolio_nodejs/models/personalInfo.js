@@ -1,6 +1,8 @@
 const createPersonalInfoPayload = (input = {}) => ({
   fullName: input.fullName || '',
   jobTitle: input.jobTitle || '',
+  jobTitleEn: input.jobTitleEn || '',
+  aboutEn: input.aboutEn || '',
   email: input.email || '',
   phone: input.phone || '',
   address: input.address || '',
@@ -14,3 +16,4 @@ module.exports = {
   collectionName: 'personalInfo',
   createPersonalInfoPayload,
 }
+

@@ -40,17 +40,16 @@ async function getDocById(collectionName, id) {
 }
 
 async function createDoc(collectionName, payload) {
+  const now = new Date()
   const data = {
-    ...payload,
-    createdAt: payload.createdAt || new Date(),
-    updatedAt: payload.updatedAt || new Date()
+    ...Object.fromEntries(Object.entries(payload).filter(([key, value]) => value !== undefined && !['id', '_id', 'createdAt', 'updatedAt'].includes(key))),
+    createdAt: now,
+    updatedAt: now
   }
-
   const ref = db.collection(collectionName).doc()
   await ref.set(data)
   return { ...data, id: ref.id }
 }
-
 async function updateDoc(collectionName, id, payload) {
   const ref = db.collection(collectionName).doc(id)
   const snapshot = await ref.get()
@@ -78,5 +77,6 @@ module.exports = {
   updateDoc,
   deleteDoc
 }
+
 
 
