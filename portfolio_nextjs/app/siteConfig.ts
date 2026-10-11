@@ -1,5 +1,5 @@
 export const siteConfig = {
-  url: "https://omerozturk.com.tr",
+  url: "https://ozturkomer.com",
   name: "Ömer Öztürk",
   title: "Ömer Öztürk | Yazılım Mühendisi",
   locale: "tr_TR",
