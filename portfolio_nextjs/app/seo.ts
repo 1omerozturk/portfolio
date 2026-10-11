@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { isSafeImageSource } from "./api/urlSafety";
+import { normalizeImageSource } from "./api/urlSafety";
 
 import { siteConfig } from "./siteConfig";
 
@@ -9,9 +9,7 @@ export function createPageMetadata(
   path: string,
   image: string = siteConfig.defaultImage,
 ): Metadata {
-  const safeImage = isSafeImageSource(image)
-    ? image
-    : siteConfig.defaultImage;
+  const safeImage = normalizeImageSource(image) || siteConfig.defaultImage;
   return {
     title,
     description,

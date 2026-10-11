@@ -6,9 +6,11 @@ import AppProviders from "./components/AppProviders";
 import Footer from "./components/Footer";
 
 import { siteConfig } from "./siteConfig";
+import { getLocale } from "./i18n/server";
+import { createLocalizedPageMetadata } from "./i18n/metadata";
 const siteUrl = siteConfig.url;
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: siteConfig.title,
@@ -56,6 +58,16 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const localized = await createLocalizedPageMetadata(
+    locale === "en" ? "Software Engineer" : "Yazılım Mühendisi",
+    locale === "en" ? "Ömer Öztürk's web and mobile projects, experience, skills and technical articles." : "Ömer Öztürk'ün yazılım mühendisliği, web ve mobil geliştirme projeleri, deneyimleri ve teknik yazıları.",
+    "/",
+  );
+  return { ...baseMetadata, ...localized, title: { default: locale === "en" ? "Ömer Öztürk | Software Engineer" : siteConfig.title, template: `%s | ${siteConfig.name}` } };
+}
+
 const themeInitialization = `
   try {
     var savedTheme = localStorage.getItem('portfolio-theme');
@@ -85,11 +97,12 @@ const structuredData = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  const locale = await getLocale();
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitialization }} />
       </head>

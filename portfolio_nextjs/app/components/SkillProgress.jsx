@@ -30,7 +30,7 @@ const icons = {
   FaCss3: FaCss3Alt,
 };
 
-function DynamicIcon({ iconName }) {
+export function DynamicIcon({ iconName }) {
   const Icon = Object.hasOwn(icons, iconName) ? icons[iconName] : FaCode;
   return <Icon aria-hidden="true" />;
 }

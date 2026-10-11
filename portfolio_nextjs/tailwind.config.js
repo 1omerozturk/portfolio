@@ -19,6 +19,7 @@ module.exports = {
         line: "var(--color-border)",
         brand: "var(--color-primary)",
         accent: "var(--color-accent)",
+        danger: "var(--color-danger-text)",
       },
     },
   },

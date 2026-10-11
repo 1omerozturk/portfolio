@@ -1,4 +1,5 @@
 "use client";
+import AdminPageHeading from "./components/AdminPageHeading";
 import { useEffect, useState } from "react";
 import { AdminAuth } from "./auth";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,7 +24,8 @@ export default function AdminLayout({ children }) {
     router.replace("/admin/login");
   }
   if (result?.key !== key) return <Loading />;
-  if (result.status === "unavailable") return <main className="surface-page min-h-screen p-6"><section className="surface-card mx-auto max-w-xl p-6" role="status"><h1 className="text-2xl font-bold">Yönetim bağlantısı kurulamadı</h1><p className="my-4 text-quiet">API erişimini kontrol edip yeniden deneyin.</p><button className="button-primary" onClick={() => setAttempt(value => value + 1)}>Yeniden dene</button></section></main>;
+  if (result.status === "unavailable") return <main className="surface-page min-h-screen p-6"><section className="surface-card mx-auto max-w-xl p-6" role="status"><AdminPageHeading className="text-2xl font-bold">Yönetim bağlantısı kurulamadı</AdminPageHeading><p className="my-4 text-quiet">API erişimini kontrol edip yeniden deneyin.</p><button className="button-primary" onClick={() => setAttempt(value => value + 1)}>Yeniden dene</button></section></main>;
   if (result.status === "anonymous") return pathname === "/admin/passwordReset" ? children : <Login />;
-  return <div className="surface-page flex min-h-screen flex-col text-ink md:flex-row"><AdminSideBar onLogout={logout} /><div className="min-w-0 flex-1 p-4 sm:p-6">{children}</div></div>;
+  return <div className="surface-page flex min-h-screen flex-col text-ink md:flex-row"><a className="skip-link" href="#admin-content">Yönetim içeriğine geç</a><AdminSideBar onLogout={logout} /><main id="admin-content" tabIndex={-1} className="min-w-0 flex-1 p-4 sm:p-6">{children}</main></div>;
 }
+

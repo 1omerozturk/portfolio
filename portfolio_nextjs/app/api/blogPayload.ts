@@ -16,8 +16,11 @@ export function normalizeBlog(payload: unknown): Blog | null {
   return {
     _id: record._id,
     title: text("title").trim(),
+    titleEn: text("titleEn").trim(),
     content: text("content"),
+    contentEn: text("contentEn"),
     excerpt: text("excerpt"),
+    excerptEn: text("excerptEn"),
     author: text("author").trim() || "Ömer Öztürk",
     category: categories.has(category) ? category as Blog["category"] : "diğer",
     tags: Array.isArray(record.tags) ? [...new Set(record.tags.filter((tag): tag is string => typeof tag === "string" && Boolean(tag.trim())).map(tag => tag.trim()))] : [],

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { optimizedImageHosts } from "../api/imageHosts.mjs";
-import { isSafeImageSource } from "../api/urlSafety";
+import { normalizeImageSource } from "../api/urlSafety";
 
 type Props = {
   src: unknown;
@@ -14,9 +14,10 @@ type Props = {
 };
 
 export default function PublicImage({ src, alt, width, height, sizes, className, loading = "lazy", fetchPriority }: Props) {
-  if (!isSafeImageSource(src)) return null;
-  const local = src.startsWith("/");
-  const url = local ? null : new URL(src);
+  const source = normalizeImageSource(src);
+  if (!source) return null;
+  const local = source.startsWith("/");
+  const url = local ? null : new URL(source);
   const optimize = local || (url?.protocol === "https:" && !url.port && optimizedImageHosts.includes(url.hostname));
-  return <Image src={src} alt={alt} width={width} height={height} sizes={sizes} unoptimized={!optimize} loading={loading} fetchPriority={fetchPriority} className={className} />;
+  return <Image src={source} alt={alt} width={width} height={height} sizes={sizes} unoptimized={!optimize} loading={loading} fetchPriority={fetchPriority} className={className} />;
 }

@@ -1,4 +1,5 @@
 "use client";
+import AdminPageHeading from "../../../components/AdminPageHeading";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -18,6 +19,6 @@ export default function EditBlogPage() {
     return () => { active = false; };
   }, [id, key]);
   if (!result || result.key !== key) return <Loading />;
-  if (!result.blog) return <section className="surface-card p-6"><h1 className="text-2xl font-bold">Blog yüklenemedi</h1><button className="button-secondary mt-4" onClick={() => setAttempt(value => value + 1)}>Yeniden dene</button><Link href="/admin/dashboard/blogs" className="button-secondary mt-4">Bloglara dön</Link></section>;
+  if (!result.blog) return <section className="surface-card p-6"><AdminPageHeading className="text-2xl font-bold">Blog yüklenemedi</AdminPageHeading><button className="button-secondary mt-4" onClick={() => setAttempt(value => value + 1)}>Yeniden dene</button><Link href="/admin/dashboard/blogs" className="button-secondary mt-4">Bloglara dön</Link></section>;
   return <BlogForm key={id} blog={result.blog} />;
 }

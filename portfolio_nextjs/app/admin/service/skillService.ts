@@ -8,7 +8,7 @@ import {
 import Message from "../../components/Message";
 import { normalizeApiRecord, normalizeApiRecords, unwrapApiData } from "../../api/payload";
 
-export type SkillInput = { name: string; level?: string; percentage?: number | string; icon?: string; color?: string };
+export type SkillInput = { name: string; nameEn?: string; level?: string; percentage?: number | string; icon?: string; color?: string };
 
 export class SkillService {
   static async addSkill(data: SkillInput) {
@@ -73,3 +73,4 @@ export class SkillService {
     }
   }
 }
+

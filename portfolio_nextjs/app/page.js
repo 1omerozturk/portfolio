@@ -8,14 +8,14 @@ import SkillsBanner from "./components/SkillsBanner";
 import ProjectsSection from "./components/ProjectsSection";
 import CertificatesSection from "./components/CertificatesSection";
 import BlogsSection from "./components/BlogsSection";
-import { createPageMetadata } from "./seo";
+import { createLocalizedPageMetadata } from "./i18n/metadata";
 import "./styles/youtube-section.css";
 
-export const metadata = createPageMetadata(
+export async function generateMetadata() { return createLocalizedPageMetadata(
   "Ana Sayfa",
   "Ömer Öztürk'ün yazılım projeleri, yetkinlikleri, deneyimleri ve teknik yazıları.",
   "/",
-);
+); }
 
 export default function Home() {
   return (
@@ -31,3 +31,4 @@ export default function Home() {
     </main>
   );
 }
+

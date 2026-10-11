@@ -1,3 +1,5 @@
+import { getLocale } from "../i18n/server";
+import { localizedPath } from "../i18n/config";
 import { normalizeProject } from "../api/projectPayload";
 import Link from "next/link";
 import { FaGithub, FaGlobe, FaLightbulb } from "react-icons/fa";
@@ -23,12 +25,14 @@ interface ProjectsProps {
 
 function getCoverImage(project: Project) {
   const source = Array.isArray(project.images) ? project.images.find((image) => typeof image === "string") : undefined;
-  const image = source?.split(",")[0]?.trim();
+  const image = source?.trim();
   return isSafeHttpUrl(image) || Boolean(image?.startsWith("/") && !image.startsWith("//")) ? image : "";
 }
 
 export default async function ProjectsSection({ size }: ProjectsProps) {
-  const result = await fetchPublicList<Project>("/user/projects", ["projects", "items"]);
+  const locale = await getLocale();
+  const en = locale === "en";
+  const result = await fetchPublicList("/user/projects", ["projects", "items"]);
   const validProjects = result.status === "ok"
     ? result.items.map(normalizeProject).filter((project) => project !== null)
     : [];
@@ -41,35 +45,37 @@ export default async function ProjectsSection({ size }: ProjectsProps) {
   return (
     <section className="surface-page px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <PageHeader title="Projeler" level={size ? 2 : 1} icon={<FaLightbulb />} />
+        <PageHeader title={en ? "Projects" : "Projeler"} level={size ? 2 : 1} icon={<FaLightbulb />} />
 
         {displayedProjects.length ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {displayedProjects.map((project) => {
               const coverImage = getCoverImage(project);
+              const title = en && project.titleEn ? project.titleEn : project.title;
+              const description = en && project.descriptionEn ? project.descriptionEn : project.description;
               return (
                 <article className="surface-card group overflow-hidden" key={project._id}>
                   {coverImage ? (
-                    <div className="project-card__image-wrap">
-                      <PublicImage src={coverImage} alt={`${project.title} proje önizlemesi`} width={960} height={540} sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw" className="project-card__image" />
-                    </div>
+                    <Link href={localizedPath(`/projects/${encodeURIComponent(project._id)}`, locale)} className="project-card__image-wrap block" aria-label={en ? `${title} details` : `${title} detayları`}>
+                      <PublicImage src={coverImage} alt={en ? `${title} project preview` : `${title} proje önizlemesi`} width={960} height={540} sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw" className="project-card__image" />
+                    </Link>
                   ) : (
                     <div className="project-card__image-placeholder" aria-hidden="true"><FaLightbulb /></div>
                   )}
 
-                  <div className="flex h-full flex-col p-5 sm:p-6">
-                    <CardHeading className="mb-2 text-xl font-bold text-ink transition-colors group-hover:text-brand">{project.title}</CardHeading>
-                    <p className="mb-5 line-clamp-3 flex-1 text-quiet">{project.description || "Proje ayrıntılarını proje sayfasında inceleyebilirsiniz."}</p>
+                  <div className="flex flex-col p-5 sm:p-6">
+                    <CardHeading className="mb-2 text-xl font-bold text-ink transition-colors group-hover:text-brand"><Link href={localizedPath(`/projects/${encodeURIComponent(project._id)}`, locale)}>{title}</Link></CardHeading>
+                    <p className="mb-5 line-clamp-3 flex-1 text-quiet">{description || (en ? "Explore this project in detail." : "Proje ayrıntılarını proje sayfasında inceleyebilirsiniz.")}</p>
                     <div className="flex items-center justify-between gap-4 border-t border-line pt-4">
-                      <Link href={`/projects/${encodeURIComponent(project._id)}`} className="font-semibold text-brand hover:underline">
-                        Proje ayrıntıları <span aria-hidden="true">→</span>
+                      <Link href={localizedPath(`/projects/${encodeURIComponent(project._id)}`, locale)} className="button-secondary">
+                        {en ? "Project details" : "Proje ayrıntıları"} <span aria-hidden="true">→</span>
                       </Link>
                       <div className="flex items-center gap-3">
                         {isSafeHttpUrl(project.repoLink) && (
-                          <a aria-label={`${project.title} GitHub deposu`} href={project.repoLink} target="_blank" rel="noopener noreferrer" className="project-card__icon-link"><FaGithub aria-hidden="true" /></a>
+                          <a aria-label={en ? `${title} GitHub repository` : `${title} GitHub deposu`} href={project.repoLink} target="_blank" rel="noopener noreferrer" className="project-card__icon-link"><FaGithub aria-hidden="true" /></a>
                         )}
                         {isSafeHttpUrl(project.liveDemoLink) && (
-                          <a aria-label={`${project.title} canlı demosu`} href={project.liveDemoLink} target="_blank" rel="noopener noreferrer" className="project-card__icon-link"><FaGlobe aria-hidden="true" /></a>
+                          <a aria-label={en ? `${title} live demo` : `${title} canlı demosu`} href={project.liveDemoLink} target="_blank" rel="noopener noreferrer" className="project-card__icon-link"><FaGlobe aria-hidden="true" /></a>
                         )}
                       </div>
                     </div>
@@ -81,9 +87,9 @@ export default async function ProjectsSection({ size }: ProjectsProps) {
         ) : (
           <div className="surface-card mx-auto max-w-2xl p-8 text-center" role="status">
             <p className="text-lg font-semibold text-ink">
-              {result.status === "unavailable" ? "Projeler şu anda yüklenemiyor." : "Henüz gösterilecek proje bulunmuyor."}
+              {result.status === "unavailable" ? (en ? "Projects could not be loaded." : "Projeler şu anda yüklenemiyor.") : (en ? "No projects yet." : "Henüz gösterilecek proje bulunmuyor.")}
             </p>
-            {result.status === "unavailable" && <p className="mt-2 text-quiet">Lütfen biraz sonra yeniden deneyin.</p>}
+            {result.status === "unavailable" && <p className="mt-2 text-quiet">{en ? "Please try again later." : "Lütfen biraz sonra yeniden deneyin."}</p>}
           </div>
         )}
 
@@ -92,4 +98,6 @@ export default async function ProjectsSection({ size }: ProjectsProps) {
     </section>
   );
 }
+
+
 

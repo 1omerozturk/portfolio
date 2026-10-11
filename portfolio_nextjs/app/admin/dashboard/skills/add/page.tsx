@@ -1,4 +1,5 @@
 "use client";
+import AdminPageHeading from "../../../components/AdminPageHeading";
 
 import { useState, type FormEvent } from "react";
 import { SkillService, type SkillInput } from "../../../service/skillService";
@@ -9,7 +10,7 @@ interface SkillAddProps { skill?: SkillInput & { _id: string } }
 
 export default function SkillAdd({ skill }: SkillAddProps) {
   const router = useRouter();
-  const [data, setData] = useState<SkillInput>({ name: skill?.name ?? "", level: skill?.level ?? "", percentage: skill?.percentage ?? 0, icon: skill?.icon ?? "", color: skill?.color ?? "" });
+  const [data, setData] = useState<SkillInput>({ name: skill?.name ?? "", nameEn: skill?.nameEn ?? "", level: skill?.level ?? "", percentage: skill?.percentage ?? 0, icon: skill?.icon ?? "", color: skill?.color ?? "" });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const update = (name: keyof SkillInput, value: string) => setData(previous => ({ ...previous, [name]: value }));
@@ -40,10 +41,10 @@ export default function SkillAdd({ skill }: SkillAddProps) {
   return (
     <section className="mx-auto max-w-2xl">
       <Link href="/admin/dashboard/skills" className="button-secondary mb-6">Yeteneklere dön</Link>
-      <h1 className="mb-6 text-3xl font-bold text-ink">{skill ? "Yeteneği düzenle" : "Yetenek ekle"}</h1>
+      <AdminPageHeading className="mb-6 text-3xl font-bold text-ink">{skill ? "Yeteneği düzenle" : "Yetenek ekle"}</AdminPageHeading>
       <form onSubmit={submit} className="surface-card grid gap-5 p-5 sm:p-8" aria-busy={saving}>
         <fieldset disabled={saving} className="grid min-w-0 gap-5">
-          <legend className="sr-only">Yetenek bilgileri</legend>
+          <legend className="sr-only">Yetenek bilgileri</legend><div><label htmlFor="skill-name-en" className="mb-2 block font-semibold">İngilizce yetenek adı (boşsa Türkçe gösterilir)</label><input id="skill-name-en" className="form-field" value={data.nameEn ?? ""} onChange={event => update("nameEn", event.target.value)} maxLength={100} /></div>
           <div><label htmlFor="skill-name" className="mb-2 block font-semibold">Yetenek adı</label><input id="skill-name" className="form-field" value={data.name} onChange={event => update("name", event.target.value)} required maxLength={100} /></div>
           <div><label htmlFor="skill-level" className="mb-2 block font-semibold">Seviye</label><select id="skill-level" className="form-field" value={data.level} onChange={event => update("level", event.target.value)} required><option value="">Seviye seçin</option><option value="Beginner">Başlangıç</option><option value="Intermediate">Orta</option><option value="Advanced">İleri</option><option value="Expert">Uzman</option></select></div>
           <div><label htmlFor="skill-percentage" className="mb-2 block font-semibold">Yetkinlik yüzdesi</label><input id="skill-percentage" className="form-field" type="number" min={0} max={100} step={1} value={data.percentage} onChange={event => update("percentage", event.target.value)} required /></div>
@@ -55,3 +56,4 @@ export default function SkillAdd({ skill }: SkillAddProps) {
     </section>
   );
 }
+

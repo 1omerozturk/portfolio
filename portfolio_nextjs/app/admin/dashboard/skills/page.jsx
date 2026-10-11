@@ -1,4 +1,5 @@
 "use client";
+import AdminPageHeading from "../../components/AdminPageHeading";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Loading from "../../components/Loading";
@@ -19,5 +20,5 @@ export default function SkillsDashboard() {
     }).catch(() => { if (active) { setFailed(true); setSkills([]); } });
     return () => { active = false; };
   }, [attempt]);
-  return <section><div className="mb-6 flex flex-wrap items-center justify-between gap-4"><h1 className="text-3xl font-bold">Yetenekler</h1><Link href="/admin/dashboard/skills/add" className="button-primary">Yetenek ekle</Link></div>{skills === null ? <Loading /> : failed ? <div className="surface-card p-6" role="status"><p>Yetenekler yüklenemedi.</p><button className="button-secondary mt-4" onClick={() => { setSkills(null); setAttempt(value => value + 1); }}>Yeniden dene</button></div> : skills.length ? <AdminSkillProgress skills={skills} setSkills={setSkills} /> : <p className="surface-card p-6 text-quiet" role="status">Henüz yetenek eklenmemiş.</p>}</section>;
+  return <section><div className="mb-6 flex flex-wrap items-center justify-between gap-4"><AdminPageHeading className="text-3xl font-bold">Yetenekler</AdminPageHeading><Link href="/admin/dashboard/skills/add" className="button-primary">Yetenek ekle</Link></div>{skills === null ? <Loading /> : failed ? <div className="surface-card p-6" role="status"><p>Yetenekler yüklenemedi.</p><button className="button-secondary mt-4" onClick={() => { setSkills(null); setAttempt(value => value + 1); }}>Yeniden dene</button></div> : skills.length ? <AdminSkillProgress skills={skills} setSkills={setSkills} /> : <p className="surface-card p-6 text-quiet" role="status">Henüz yetenek eklenmemiş.</p>}</section>;
 }

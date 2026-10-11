@@ -80,3 +80,8 @@
   transform: translateY(-2px);
   box-shadow: 0 10px 25px color-mix(in srgb, var(--color-youtube-brand) 40%, transparent);
 }
+
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .youtube-preview:hover .youtube-preview__play,
+  .subscribe-btn:hover { transform: none; }
+}

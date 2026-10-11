@@ -4,10 +4,13 @@ import { normalizeApiRecords } from "./api/payload";
 import { fetchPublicBlogPage } from "./api/publicData";
 
 import { siteConfig } from "./siteConfig";
+import { localizedPath } from "./i18n/config";
 const siteUrl = siteConfig.url;
 const publicRoutes = [
   "",
   "/about",
+  "/languages",
+  "/hobbies",
   "/skills",
   "/projects",
   "/educations",
@@ -90,7 +93,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   const seenUrls = new Set<string>();
-  return [
+  const entries = [
     ...publicRoutes.map((route) => ({
       url: `${siteUrl}${route}`,
       changeFrequency: route === "" ? ("weekly" as const) : ("monthly" as const),
@@ -102,4 +105,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return true;
     }),
   ];
+  return entries.flatMap(entry => {
+    const path = entry.url.slice(siteUrl.length) || "/";
+    const tr = `${siteUrl}${localizedPath(path, "tr")}`;
+    const en = `${siteUrl}${localizedPath(path, "en")}`;
+    const alternates = { languages: { "tr-TR": tr, en, "x-default": tr } };
+    return [{ ...entry, url: tr, alternates }, { ...entry, url: en, alternates }];
+  });
 }

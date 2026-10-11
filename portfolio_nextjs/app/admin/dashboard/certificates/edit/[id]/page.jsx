@@ -1,4 +1,5 @@
 "use client";
+import AdminPageHeading from "../../../../components/AdminPageHeading";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -14,6 +15,6 @@ export default function EditCertification() {
     return () => { active = false; };
   }, [id]);
   if (result?.id !== id) return <Loading />;
-  if (!result.data?._id) return <section className="surface-card p-6"><h1 className="text-2xl font-bold">Sertifika yüklenemedi</h1><Link className="button-secondary mt-4" href="/admin/dashboard/certificates">Sertifikalara dön</Link></section>;
+  if (!result.data?._id) return <section className="surface-card p-6"><AdminPageHeading className="text-2xl font-bold">Sertifika yüklenemedi</AdminPageHeading><Link className="button-secondary mt-4" href="/admin/dashboard/certificates">Sertifikalara dön</Link></section>;
   return <AddCertification key={id} certification={result.data} />;
 }

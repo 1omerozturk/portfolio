@@ -1,3 +1,6 @@
+import { getLocale } from "../../i18n/server";
+import { localizedPath } from "../../i18n/config";
+import { localizeBlog, blogCategoryLabel } from "../../i18n/blog";
 import Link from "next/link";
 import { BLOG_CATEGORY_STYLES as categoryStyles } from "../../blogConstants";
 import { notFound } from "next/navigation";
@@ -16,14 +19,16 @@ import { siteConfig } from "../../siteConfig";
 const siteUrl = siteConfig.url;
 
 
-function formatDate(value?: string) {
+function formatDate(value: string | undefined, en: boolean) {
   if (!value) return "—";
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul" });
+  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString(en ? "en-GB" : "tr-TR", { timeZone: "Europe/Istanbul" });
 }
 
 export default async function BlogDetailPage({ params }: RouteProps) {
   const { id } = await params;
+  const locale = await getLocale();
+  const en = locale === "en";
   const result = await fetchPublicBlogRecord(id);
   if (result.status === "not-found") notFound();
   if (result.status === "ok" && result.data.isPublished === false) notFound();
@@ -32,16 +37,16 @@ export default async function BlogDetailPage({ params }: RouteProps) {
     return (
       <main className="surface-page flex min-h-[60vh] items-center justify-center p-6">
         <section className="surface-card max-w-lg p-8 text-center" role="status">
-          <h1 className="mb-4 text-lg font-semibold text-ink">Yazı şu anda yüklenemiyor.</h1>
-          <p className="text-quiet">Lütfen biraz sonra yeniden deneyin.</p>
-          <Link href="/blog" className="button-primary mt-6">Tüm yazılara dön</Link>
+          <h1 className="mb-4 text-lg font-semibold text-ink">{en ? "Article could not be loaded." : "Yazı şu anda yüklenemiyor."}</h1>
+          <p className="text-quiet">{en ? "Please try again later." : "Lütfen biraz sonra yeniden deneyin."}</p>
+          <Link href={localizedPath("/blog", locale)} className="button-primary mt-6">{en ? "All articles" : "Tüm yazılara dön"}</Link>
         </section>
       </main>
     );
   }
 
-  const blog = result.data;
-  const articleUrl = `${siteUrl}/blog/${encodeURIComponent(id)}`;
+  const blog = localizeBlog(result.data, locale);
+  const articleUrl = `${siteUrl}${localizedPath(`/blog/${encodeURIComponent(id)}`, locale)}`;
   const category = typeof blog.category === "string" ? blog.category : "diğer";
   const tags = Array.isArray(blog.tags) ? blog.tags.filter((tag): tag is string => typeof tag === "string" && Boolean(tag.trim())) : [];
   const content = typeof blog.content === "string" ? blog.content : "";
@@ -70,8 +75,8 @@ export default async function BlogDetailPage({ params }: RouteProps) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
+      { "@type": "ListItem", position: 1, name: en ? "Home" : "Ana Sayfa", item: `${siteUrl}${localizedPath("/", locale)}` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}${localizedPath("/blog", locale)}` },
       { "@type": "ListItem", position: 3, name: blog.title, item: articleUrl },
     ],
   };
@@ -82,8 +87,8 @@ export default async function BlogDetailPage({ params }: RouteProps) {
       <JsonLd value={breadcrumb} />
       <header className="blog-hero py-8">
         <div className="mx-auto max-w-4xl px-4">
-          <Link href="/blog" className="mb-4 inline-flex items-center gap-2 font-semibold text-brand hover:underline">
-            <MdArrowBack aria-hidden="true" size={20} /> Blog yazılarına dön
+          <Link href={localizedPath("/blog", locale)} className="mb-4 inline-flex items-center gap-2 font-semibold text-brand hover:underline">
+            <MdArrowBack aria-hidden="true" size={20} /> {en ? "Back to articles" : "Blog yazılarına dön"}
           </Link>
           <h1 className="break-words text-3xl font-bold text-ink sm:text-4xl">{blog.title}</h1>
         </div>
@@ -96,13 +101,13 @@ export default async function BlogDetailPage({ params }: RouteProps) {
           </div>
         )}
 
-        <section className="surface-card mb-8 rounded-lg p-6" aria-label="Yazı bilgileri">
+        <section className="surface-card mb-8 rounded-lg p-6" aria-label={en ? "Article information" : "Yazı bilgileri"}>
           <div className="grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 md:grid-cols-5 [&>div]:min-w-0 [&>div]:break-words [&_svg]:shrink-0">
-            <div className="flex items-center gap-2"><MdPerson aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">Yazar</p><p className="font-semibold text-ink">{blog.author || "Ömer Öztürk"}</p></div></div>
-            <div className="flex items-center gap-2"><MdCalendarToday aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">Tarih</p><time className="font-semibold text-ink" dateTime={blog.createdAt}>{formatDate(blog.createdAt)}</time></div></div>
-            <div className="flex items-center gap-2"><MdAccessTime aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">Okuma</p><p className="font-semibold text-ink">{blog.readingTime || 1} dk</p></div></div>
-            <div className="flex items-center gap-2"><MdVisibility aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">Görüntülenme</p><p className="font-semibold text-ink">{Number.isFinite(Number(blog.views)) ? Number(blog.views) : 0}</p></div></div>
-            <div><span className={`content-tag ${categoryStyles[category] || categoryStyles.diğer}`}>{category}</span></div>
+            <div className="flex items-center gap-2"><MdPerson aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">{en ? "Author" : "Yazar"}</p><p className="font-semibold text-ink">{blog.author || "Ömer Öztürk"}</p></div></div>
+            <div className="flex items-center gap-2"><MdCalendarToday aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">{en ? "Date" : "Tarih"}</p><time className="font-semibold text-ink" dateTime={blog.createdAt}>{formatDate(blog.createdAt, en)}</time></div></div>
+            <div className="flex items-center gap-2"><MdAccessTime aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">{en ? "Reading time" : "Okuma"}</p><p className="font-semibold text-ink">{blog.readingTime || 1} {en ? "min" : "dk"}</p></div></div>
+            <div className="flex items-center gap-2"><MdVisibility aria-hidden="true" className="text-brand" size={20} /><div><p className="text-sm text-quiet">{en ? "Views" : "Görüntülenme"}</p><p className="font-semibold text-ink">{Number.isFinite(Number(blog.views)) ? Number(blog.views) : 0}</p></div></div>
+            <div><span className={`content-tag ${categoryStyles[category] || categoryStyles.diğer}`}>{blogCategoryLabel(category, locale)}</span></div>
           </div>
         </section>
 
@@ -113,16 +118,16 @@ export default async function BlogDetailPage({ params }: RouteProps) {
         </article>
 
         {tags.length > 0 && (
-          <section className="mb-8 border-y border-line py-6" aria-label="Yazı etiketleri">
-            <p className="mb-3 text-sm font-semibold text-quiet">Etiketler:</p>
+          <section className="mb-8 border-y border-line py-6" aria-label={en ? "Article tags" : "Yazı etiketleri"}>
+            <p className="mb-3 text-sm font-semibold text-quiet">{en ? "Tags:" : "Etiketler:"}</p>
             <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => <Link key={tag} href={`/blog?search=${encodeURIComponent(tag)}`} className="content-tag hover:border-brand hover:text-brand">#{tag}</Link>)}
+              {tags.map((tag) => <Link key={tag} href={localizedPath(`/blog?search=${encodeURIComponent(tag)}`, locale)} className="content-tag hover:border-brand hover:text-brand">#{tag}</Link>)}
             </div>
           </section>
         )}
 
-        <section className="surface-card mb-12 rounded-lg p-6" aria-label="Yazıyı paylaş">
-          <p className="mb-4 text-sm font-semibold text-ink">Paylaş:</p>
+        <section className="surface-card mb-12 rounded-lg p-6" aria-label={en ? "Share article" : "Yazıyı paylaş"}>
+          <p className="mb-4 text-sm font-semibold text-ink">{en ? "Share:" : "Paylaş:"}</p>
           <div className="flex flex-wrap gap-3">
             <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${encodeURIComponent(blog.title)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">Twitter</a>
             <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">Facebook</a>
@@ -136,10 +141,11 @@ export default async function BlogDetailPage({ params }: RouteProps) {
         </Suspense>
 
         <div className="mt-12 border-t border-line pt-8 text-center">
-          <Link href="/blog" className="button-primary"><MdArrowBack aria-hidden="true" /> Tüm yazılara dön</Link>
+          <Link href={localizedPath("/blog", locale)} className="button-primary"><MdArrowBack aria-hidden="true" /> {en ? "All articles" : "Tüm yazılara dön"}</Link>
         </div>
       </div>
     </main>
   );
 }
+
 

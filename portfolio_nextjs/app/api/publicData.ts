@@ -1,5 +1,13 @@
-import { API_BASE_URL, PUBLIC_API_TIMEOUT_MS, PUBLIC_FETCH_OPTIONS } from "./config";
-import { normalizeApiRecord, normalizeApiRecords, unwrapApiData as unwrapData } from "./payload";
+import {
+  API_BASE_URL,
+  PUBLIC_API_TIMEOUT_MS,
+  PUBLIC_FETCH_OPTIONS,
+} from "./config";
+import {
+  normalizeApiRecord,
+  normalizeApiRecords,
+  unwrapApiData as unwrapData,
+} from "./payload";
 import { normalizeBlog, normalizeBlogPage } from "./blogPayload";
 import type { Blog } from "../models/blogs";
 import { normalizeProject, type PublicProject } from "./projectPayload";
@@ -16,11 +24,18 @@ export type PublicRecordResult<T> =
   | { status: "not-found" }
   | { status: "unavailable" };
 
-export async function fetchPublicRecord<T>(path: string, options: { forbiddenAsNotFound?: boolean } = {}): Promise<PublicRecordResult<T>> {
+export async function fetchPublicRecord(
+  path: string,
+  options: { forbiddenAsNotFound?: boolean } = {},
+): Promise<PublicRecordResult<Record<string, unknown>>> {
   try {
     const response = await fetchPublicResponse(path);
 
-    if (response.status === 404 || (response.status === 403 && options.forbiddenAsNotFound)) return { status: "not-found" };
+    if (
+      response.status === 404 ||
+      (response.status === 403 && options.forbiddenAsNotFound)
+    )
+      return { status: "not-found" };
     if (!response.ok) return { status: "unavailable" };
 
     const data = unwrapData(await response.json());
@@ -28,21 +43,28 @@ export async function fetchPublicRecord<T>(path: string, options: { forbiddenAsN
     const record = normalizeApiRecord(data);
     if (!record) return { status: "unavailable" };
 
-    return { status: "ok", data: record as T };
+    return { status: "ok", data: record };
   } catch {
     return { status: "unavailable" };
   }
 }
 
-export async function fetchPublicCollection<T>(path: string): Promise<T[]> {
+export async function fetchPublicCollection(
+  path: string,
+): Promise<Record<string, unknown>[]> {
   try {
     const response = await fetchPublicResponse(path);
     if (!response.ok) return [];
 
     const data = unwrapData(await response.json());
-    if (Array.isArray(data)) return normalizeApiRecords(data) as T[];
-    if (typeof data === "object" && data !== null && "blogs" in data && Array.isArray(data.blogs)) {
-      return normalizeApiRecords(data.blogs) as T[];
+    if (Array.isArray(data)) return normalizeApiRecords(data);
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "blogs" in data &&
+      Array.isArray(data.blogs)
+    ) {
+      return normalizeApiRecords(data.blogs);
     }
     return [];
   } catch {
@@ -50,31 +72,47 @@ export async function fetchPublicCollection<T>(path: string): Promise<T[]> {
   }
 }
 
-export async function fetchPublicBlogRecord(id: string): Promise<PublicRecordResult<Blog>> {
-  const result = await fetchPublicRecord<unknown>(`/user/blogs/${encodeURIComponent(id)}`, { forbiddenAsNotFound: true });
+export async function fetchPublicBlogRecord(
+  id: string,
+): Promise<PublicRecordResult<Blog>> {
+  const result = await fetchPublicRecord(
+    `/user/blogs/${encodeURIComponent(id)}`,
+    { forbiddenAsNotFound: true },
+  );
   if (result.status !== "ok") return result;
   const blog = normalizeBlog(result.data);
   return blog ? { status: "ok", data: blog } : { status: "unavailable" };
 }
 
-export async function fetchPublicProjectRecord(id: string): Promise<PublicRecordResult<PublicProject>> {
-  const result = await fetchPublicRecord<unknown>(`/user/projects/${encodeURIComponent(id)}`);
+export async function fetchPublicProjectRecord(
+  id: string,
+): Promise<PublicRecordResult<PublicProject>> {
+  const result = await fetchPublicRecord(
+    `/user/projects/${encodeURIComponent(id)}`,
+  );
   if (result.status !== "ok") return result;
   const project = normalizeProject(result.data);
   return project ? { status: "ok", data: project } : { status: "unavailable" };
 }
 
-export async function fetchPublicList<T>(path: string, collectionKeys: string[] = []): Promise<{ status: "ok"; items: T[] } | { status: "unavailable" }> {
+export async function fetchPublicList(
+  path: string,
+  collectionKeys: string[] = [],
+): Promise<
+  { status: "ok"; items: Record<string, unknown>[] } | { status: "unavailable" }
+> {
   try {
     const response = await fetchPublicResponse(path);
     if (!response.ok) return { status: "unavailable" };
 
     const data = unwrapData(await response.json());
-    if (Array.isArray(data)) return { status: "ok", items: normalizeApiRecords(data) as T[] };
+    if (Array.isArray(data))
+      return { status: "ok", items: normalizeApiRecords(data) };
 
     if (typeof data === "object" && data !== null) {
       for (const key of collectionKeys) {
-        if (key in data && Array.isArray(data[key])) return { status: "ok", items: normalizeApiRecords(data[key]) as T[] };
+        if (key in data && Array.isArray(data[key]))
+          return { status: "ok", items: normalizeApiRecords(data[key]) };
       }
     }
     return { status: "unavailable" };
@@ -83,14 +121,25 @@ export async function fetchPublicList<T>(path: string, collectionKeys: string[] 
   }
 }
 
-export async function fetchPublicBlogPage(page: number, limit: number, category?: string, search?: string) {
-  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+export async function fetchPublicBlogPage(
+  page: number,
+  limit: number,
+  category?: string,
+  search?: string,
+) {
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
   if (category) params.set("category", category);
   if (search) params.set("search", search);
 
   try {
-    const response = await fetchPublicResponse(`/user/blogs?${params.toString()}`);
-    if (!response.ok) return { status: "unavailable" as const, blogs: [], totalPages: 1 };
+    const response = await fetchPublicResponse(
+      `/user/blogs?${params.toString()}`,
+    );
+    if (!response.ok)
+      return { status: "unavailable" as const, blogs: [], totalPages: 1 };
 
     const payload = normalizeBlogPage(await response.json(), page);
     if (!payload) {
@@ -110,4 +159,3 @@ export async function fetchPublicBlogPage(page: number, limit: number, category?
 export function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
-

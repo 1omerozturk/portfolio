@@ -1,4 +1,4 @@
-import { login, getAdminAuth, updatePassword } from "../api/api";
+import { login, getAdminAuth, updatePassword, getToken } from "../api/api";
 import Message from "../components/Message";
 import { isAxiosError } from "axios";
 
@@ -24,8 +24,7 @@ export class AdminAuth {
   }
   // logout
   static async logout() {
-    localStorage.removeItem("admin");
-    localStorage.removeItem("token");
+    try { localStorage.removeItem("admin"); localStorage.removeItem("token"); } catch { /* Storage may be disabled. */ }
     // Logout Message
     Message.ToastMessage("warning", "Çıkış Başarılı");
   }
@@ -55,7 +54,7 @@ export class AdminAuth {
     return null;
   }
   static async isLoggedIn() {
-    if (!localStorage.getItem("token")) return false;
+    if (!getToken()) return false;
     try {
       return (await getAdminAuth()).status === 200;
     } catch (error) {
@@ -68,4 +67,5 @@ export class AdminAuth {
     }
   }
 }
+
 

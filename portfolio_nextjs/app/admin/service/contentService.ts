@@ -8,7 +8,7 @@ import {
 import Message from "../../components/Message";
 import { normalizeApiRecord, normalizeApiRecords, unwrapApiData } from "../../api/payload";
 
-export type ContentInput = { name: string; link: string; image?: string };
+export type ContentInput = { name: string; nameEn?: string; link: string; image?: string };
 
 export class ContentService {
   static async getContents() {
@@ -74,3 +74,4 @@ export class ContentService {
     }
   }
 }
+

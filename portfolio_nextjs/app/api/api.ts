@@ -4,6 +4,13 @@ import { API_BASE_URL, PUBLIC_API_TIMEOUT_MS } from "./config";
 const api = API_BASE_URL;
 const http = axios.create({ timeout: PUBLIC_API_TIMEOUT_MS, headers: { Accept: "application/json" } });
 
+export async function uploadCertificationPdf(file: File) {
+  return http.post<{ url: string; size: number }>(`${api}/admin/certification-pdf`, file, {
+    ...getAdminConfig(), timeout: 45000,
+    headers: { ...getAdminConfig()?.headers, "Content-Type": "application/pdf" },
+  });
+}
+
 // User Log check function
 export const getToken = () => {
   try {

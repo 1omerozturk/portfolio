@@ -1,8 +1,7 @@
 const localApiUrl = "http://localhost:5040/api";
-const productionApiUrl = "https://portfolio-m5zz.onrender.com/api";
 
 const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-const defaultApiUrl = process.env.NODE_ENV === "development" ? localApiUrl : productionApiUrl;
+const defaultApiUrl = process.env.NODE_ENV === "development" ? localApiUrl :configuredApiUrl;
 
 export const API_BASE_URL = (configuredApiUrl || defaultApiUrl).replace(/\/+$/, "");
 

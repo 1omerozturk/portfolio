@@ -1,8 +1,10 @@
 "use client";
+import AdminPageHeading from "../../components/AdminPageHeading";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BLOG_CATEGORIES } from "../../../blogConstants";
 import type { BlogResponse } from "../../../models/blogs";
+import AdminContentIcon from "../../components/AdminContentIcon";
 import { BlogAdminService } from "../../service/blogAdminService";
 
 export default function BlogDashboard() {
@@ -35,7 +37,7 @@ export default function BlogDashboard() {
     } catch { setError("Blog silinemedi."); }
     finally { setDeleting(""); }
   }
-  return <section><div className="mb-6 flex flex-wrap items-center justify-between gap-4"><h1 className="text-3xl font-bold">Blog yönetimi</h1><Link href="/admin/dashboard/blogs/create" className="button-primary">Blog oluştur</Link></div>
+  return <section><div className="mb-6 flex flex-wrap items-center justify-between gap-4"><AdminPageHeading className="text-3xl font-bold">Blog yönetimi</AdminPageHeading><Link href="/admin/dashboard/blogs/create" className="button-primary">Blog oluştur</Link></div>
     <div className="surface-card mb-6 grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-4">
       <div><label className="mb-2 block font-semibold" htmlFor="admin-blog-search">Ara</label><input id="admin-blog-search" className="form-field" value={search} maxLength={200} onChange={event => { setSearch(event.target.value); setPage(1); }} /></div>
       <div><label className="mb-2 block font-semibold" htmlFor="admin-blog-category">Kategori</label><select id="admin-blog-category" className="form-field" value={category} onChange={event => { setCategory(event.target.value); setPage(1); }}><option value="">Tüm kategoriler</option>{BLOG_CATEGORIES.map(value => <option key={value} value={value}>{value}</option>)}</select></div>
@@ -43,7 +45,8 @@ export default function BlogDashboard() {
       <button className="button-secondary self-end" onClick={() => { setSearch(""); setCategory(""); setStatus(""); setPage(1); }}>Filtreleri temizle</button>
     </div>
     {error && <p role="alert" className="mb-4 text-danger">{error}</p>}
-    {loading ? <p role="status">Bloglar yükleniyor…</p> : !data ? <div role="alert" className="surface-card p-6"><p>Bloglar yüklenemedi.</p><button className="button-secondary mt-4" onClick={() => setAttempt(value => value + 1)}>Yeniden dene</button></div> : data.blogs.length === 0 ? <p className="surface-card p-6">Bu filtrelerle blog bulunamadı.</p> : <div className="grid gap-4">{data.blogs.map(blog => <article key={blog._id} className="surface-card flex flex-wrap items-start justify-between gap-4 p-5"><div className="min-w-0 flex-1"><h2 className="break-words text-xl font-bold">{blog.title}</h2><p className="mt-2 text-quiet">{blog.category} · {blog.isPublished ? "Yayınlanmış" : "Taslak"} · {blog.author}</p></div><div className="flex flex-wrap gap-3"><Link href={"/admin/dashboard/blogs/" + encodeURIComponent(blog._id ?? "")} className="button-secondary" aria-label={blog.title + " blogunu düzenle"}>Düzenle</Link><button className="button-secondary" disabled={Boolean(deleting)} onClick={() => remove(blog._id ?? "")} aria-label={blog.title + " blogunu sil"}>{deleting === blog._id ? "Siliniyor…" : "Sil"}</button></div></article>)}</div>}
+    {loading ? <p role="status">Bloglar yükleniyor…</p> : !data ? <div role="alert" className="surface-card p-6"><p>Bloglar yüklenemedi.</p><button className="button-secondary mt-4" onClick={() => setAttempt(value => value + 1)}>Yeniden dene</button></div> : data.blogs.length === 0 ? <p className="surface-card p-6">Bu filtrelerle blog bulunamadı.</p> : <div className="grid gap-4">{data.blogs.map(blog => <article key={blog._id} className="surface-card flex flex-wrap items-start justify-between gap-4 p-5"><AdminContentIcon kind="blogs" image={blog.featuredImage} /><div className="min-w-0 flex-1"><h2 className="break-words text-xl font-bold">{blog.title}</h2><p className="mt-2 text-quiet">{blog.category} · {blog.isPublished ? "Yayınlanmış" : "Taslak"} · {blog.author}</p></div><div className="flex flex-wrap gap-3"><Link href={"/admin/dashboard/blogs/" + encodeURIComponent(blog._id ?? "")} className="button-secondary" aria-label={blog.title + " blogunu düzenle"}>Düzenle</Link><button className="button-secondary" disabled={Boolean(deleting)} onClick={() => remove(blog._id ?? "")} aria-label={blog.title + " blogunu sil"}>{deleting === blog._id ? "Siliniyor…" : "Sil"}</button></div></article>)}</div>}
     {data && data.pages > 1 && <nav aria-label="Blog sayfaları" className="mt-6 flex flex-wrap items-center gap-4"><button className="button-secondary" disabled={page <= 1 || Boolean(deleting)} onClick={() => setPage(value => value - 1)}>Önceki</button><span>{page} / {data.pages}</span><button className="button-secondary" disabled={page >= data.pages || Boolean(deleting)} onClick={() => setPage(value => value + 1)}>Sonraki</button></nav>}
   </section>;
 }
+

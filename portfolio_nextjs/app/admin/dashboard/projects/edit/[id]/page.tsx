@@ -1,4 +1,5 @@
 "use client";
+import AdminPageHeading from "../../../../components/AdminPageHeading";
 import { useEffect, useState } from "react";
 import { AdminProjectService } from "../../../../service/projectService";
 import Loading from "../../../../components/Loading";
@@ -19,7 +20,7 @@ export default function ProjectEdit() {
 
   if (!result || result.id !== id) return <Loading />;
   if (!result.data) return <section className="surface-card p-6" role="status">
-    <h1 className="text-xl font-bold">Proje yüklenemedi</h1>
+    <AdminPageHeading className="text-xl font-bold">Proje yüklenemedi</AdminPageHeading>
     <p className="mt-2">Bağlantınızı kontrol edip yeniden deneyin.</p>
     <Link href="/admin/dashboard/projects" className="button-secondary mt-4">Projelere dön</Link>
   </section>;

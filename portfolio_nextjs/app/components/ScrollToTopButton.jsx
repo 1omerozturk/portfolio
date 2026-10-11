@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { localeFromPath } from "../i18n/config";
 import { FaArrowUp } from "react-icons/fa";
 
 const ScrollToTopButton = () => {
+  const en = localeFromPath(usePathname()) === "en";
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -21,7 +24,7 @@ const ScrollToTopButton = () => {
   return (
     <button
       type="button"
-      aria-label="Sayfa başına dön"
+      aria-label={en ? "Back to top" : "Sayfa başına dön"}
       aria-hidden={!isVisible}
       tabIndex={isVisible ? 0 : -1}
       disabled={!isVisible}

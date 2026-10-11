@@ -4,7 +4,9 @@ import Message from "../../components/Message";
 
 type ProjectInput = {
   title: string;
+  titleEn?: string;
   description?: string;
+  descriptionEn?: string;
   type?: string;
   technologies?: string[];
   images?: string[];

@@ -1,25 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { localeFromPath } from "../i18n/config";
 
 export default function CopyLinkButton({ url }: { url: string }) {
-  const [status, setStatus] = useState("");
+  const en = localeFromPath(usePathname()) === "en";
+  const [status, setStatus] = useState<"" | "success" | "error">("");
 
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(url);
-      setStatus("Bağlantı kopyalandı.");
+      setStatus("success");
     } catch {
-      setStatus("Bağlantı kopyalanamadı.");
+      setStatus("error");
     }
   };
 
   return (
     <>
       <button type="button" onClick={copyLink} className="button-secondary">
-        {status === "Bağlantı kopyalandı." ? "Kopyalandı" : "Bağlantıyı kopyala"}
+        {status === "success" ? (en ? "Copied" : "Kopyalandı") : (en ? "Copy link" : "Bağlantıyı kopyala")}
       </button>
-      <span className="sr-only" role="status" aria-live="polite">{status}</span>
+      <span className="sr-only" role="status" aria-live="polite">{status === "success" ? (en ? "Link copied." : "Bağlantı kopyalandı.") : status === "error" ? (en ? "Link could not be copied." : "Bağlantı kopyalanamadı.") : ""}</span>
     </>
   );
 }

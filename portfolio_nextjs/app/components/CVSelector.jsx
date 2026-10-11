@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { localeFromPath } from "../i18n/config";
 import { FaDownload, FaTimes } from "react-icons/fa";
 
 export default function CVSelector() {
+  const en = localeFromPath(usePathname()) === "en";
   const [isOpen, setIsOpen] = useState(false);
   const closeRef = useRef(null);
 
@@ -55,7 +58,7 @@ export default function CVSelector() {
   return (
     <div className="cv-selector">
       <button type="button" className="button-primary" onClick={() => setIsOpen(true)}>
-        Özgeçmişi indir <FaDownload aria-hidden="true" />
+        {en ? "Download CV" : "Özgeçmişi indir"} <FaDownload aria-hidden="true" />
       </button>
 
       {isOpen && (
@@ -76,20 +79,20 @@ export default function CVSelector() {
               ref={closeRef}
               onClick={() => setIsOpen(false)}
               className="cv-dialog__close"
-              aria-label="Özgeçmiş dil seçimini kapat"
+              aria-label={en ? "Close CV language selection" : "Özgeçmiş dil seçimini kapat"}
             >
               <FaTimes aria-hidden="true" />
             </button>
             <h2 id="cv-dialog-title" className="mb-3 text-xl font-bold text-ink">
-              Özgeçmiş dilini seçin
+              {en ? "Choose your CV language" : "Özgeçmiş dilini seçin"}
             </h2>
-            <p className="mb-6 text-quiet">İndirmek istediğiniz dil sürümünü seçin.</p>
+            <p className="mb-6 text-quiet">{en ? "Choose the version you would like to download." : "İndirmek istediğiniz dil sürümünü seçin."}</p>
             <div className="grid gap-3">
               <button type="button" className="button-primary w-full" onClick={() => download("en")}>
-                İngilizce sürüm
+                {en ? "English version" : "İngilizce sürüm"}
               </button>
               <button type="button" className="button-secondary w-full" onClick={() => download("tr")}>
-                Türkçe sürüm
+                {en ? "Turkish version" : "Türkçe sürüm"}
               </button>
             </div>
           </section>
@@ -98,3 +101,4 @@ export default function CVSelector() {
     </div>
   );
 }
+

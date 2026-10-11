@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { MdArrowForward } from "react-icons/md";
+import { getLocale } from "../i18n/server";
+import { getDictionary } from "../i18n/dictionaries";
+import { localizedPath } from "../i18n/config";
 
 const pageNames = {
   blog: "yazıları",
@@ -11,7 +14,9 @@ const pageNames = {
   skills: "yetenekleri",
 };
 
-const SeeMore = ({ path }) => {
+const SeeMore = async ({ path }) => {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
   if (!path) return null;
 
   const label = pageNames[path];
@@ -19,9 +24,9 @@ const SeeMore = ({ path }) => {
 
   return (
     <div className="text-center">
-      <Link href={`/${path}`} className="button-secondary">
+      <Link href={localizedPath(`/${path}`, locale)} className="button-secondary">
         <span>
-          <span>Tüm {label} gör</span>
+          <span>{locale === "en" ? `View all ${dictionary.nav[path].toLowerCase()}` : `Tüm ${label} gör`}</span>
           <MdArrowForward
             size={18}
             className="transition-transform duration-300 ease-out group-hover:translate-x-1.5"
