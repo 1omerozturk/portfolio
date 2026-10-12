@@ -1,5 +1,7 @@
 const createCertificationPayload = (input = {}) => ({
   name: input.name || '',
+  isVisible: input.isVisible === true,
+  driveFileId: input.driveFileId || '',
   nameEn: input.nameEn || '',
   issuingOrganizationEn: input.issuingOrganizationEn || '',
   issuingOrganization: input.issuingOrganization || '',
@@ -17,5 +19,6 @@ module.exports = {
   collectionName: 'certifications',
   createCertificationPayload,
 }
+
 
 

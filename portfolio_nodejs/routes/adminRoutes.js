@@ -55,8 +55,12 @@ const { validId, objectBody, validateBlog, validateCredentials } = require('../m
 const rateLimit = require('../middleware/rateLimit')
 const authLimit = rateLimit({ limit: 10, windowMs: 15 * 60 * 1000 })
 router.param('id', validId)
-router.post('/certification-pdf', admin, rateLimit({ limit: 20, windowMs: 60 * 1000 }), express.raw({ type: 'application/pdf', limit: '5mb' }), require('../service/certificateUpload').uploadCertificatePdf)
 router.use(objectBody)
+const driveCertificates = require('../service/driveCertificates')
+router.get('/certification-drive', admin, driveCertificates.list)
+router.post('/certification-drive/:id', admin, driveCertificates.select)
+router.get('/certifications', admin, driveCertificates.adminList)
+router.get('/certifications/:id', admin, driveCertificates.adminOne)
 
 // admin login
 router.get('/admin', admin, getAdmin)
@@ -113,6 +117,7 @@ router.put('/blogs/:id', admin, validateBlog, updateBlog)
 router.delete('/blogs/:id', admin, deleteBlog)
 
 module.exports = router
+
 
 
 

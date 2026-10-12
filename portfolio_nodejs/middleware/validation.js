@@ -34,7 +34,7 @@ const schemas = {
   contents: { required: ['name', 'link'], strings: ['name', 'nameEn', 'link', 'image'] },
   skills: { required: ['name', 'level'], strings: ['name', 'nameEn', 'level', 'icon', 'color'], numbers: ['percentage'] },
   projects: { required: ['title', 'description', 'type'], strings: ['title', 'titleEn', 'description', 'descriptionEn', 'type', 'repoLink', 'liveDemoLink'], lists: ['technologies', 'images'], booleans: ['isShowcasing'] },
-  certifications: { required: ['name', 'issuingOrganization', 'issueDate'], strings: ['name', 'nameEn', 'issuingOrganizationEn', 'issuingOrganization', 'issueDate', 'expirationDate', 'certificateLink', 'certificateImage', 'certificatePdf', 'type'] },
+  certifications: { required: ['name'], strings: ['name', 'nameEn', 'issuingOrganizationEn', 'issuingOrganization', 'issueDate', 'expirationDate', 'certificateLink', 'certificateImage', 'certificatePdf', 'type'], booleans: ['isVisible'] },
   languages: { required: ['name'], strings: ['name', 'nameEn', 'proficiency', 'proficiencyEn'] },
   hobbies: { required: ['name'], strings: ['name', 'nameEn', 'description', 'descriptionEn', 'icon'] },
 }
@@ -90,6 +90,8 @@ function validateRecord(req, res, next) {
   next()
 }
 module.exports.validateRecord = validateRecord
+
+
 
 
 

@@ -102,6 +102,8 @@ exports.getProjects = async (req, res) => {
 exports.getCertifications = async (req, res) => {
   try {
     const certifications = await getCollectionDocs("certifications");
+    if (Array.isArray(certifications)) return res.status(200).json(certifications.filter(item => item.isVisible !== false && item.isVisible !== "false"));
+    if (!certifications || certifications.isVisible === false || certifications.isVisible === "false") return res.status(404).json({ message: "Sertifika bulunamadı." });
     res.status(200).json(certifications);
   } catch (error) {
     res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
@@ -211,6 +213,8 @@ exports.getOneCertifications = async (req, res) => {
   try {
     const id = req.params.id;
     const certifications = await getDocById("certifications", id);
+    if (Array.isArray(certifications)) return res.status(200).json(certifications.filter(item => item.isVisible !== false && item.isVisible !== "false"));
+    if (!certifications || certifications.isVisible === false || certifications.isVisible === "false") return res.status(404).json({ message: "Sertifika bulunamadı." });
     res.status(200).json(certifications);
   } catch (error) {
     res.status(500).json({ message: "İşlem tamamlanamadı. Lütfen yeniden deneyin." });
@@ -275,4 +279,5 @@ exports.searchBlogs = async (req, res) => {
     res.status(200).json(result.blogs)
   } catch (error) { respondError(res, error) }
 }
+
 
