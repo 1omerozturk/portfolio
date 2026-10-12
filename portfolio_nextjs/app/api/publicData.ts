@@ -14,7 +14,7 @@ import { normalizeProject, type PublicProject } from "./projectPayload";
 
 function fetchPublicResponse(path: string) {
   return fetch(`${API_BASE_URL}${path}`, {
-    ...PUBLIC_FETCH_OPTIONS,
+    ...(path.startsWith("/user/certifications") ? { cache: "no-store" as const } : PUBLIC_FETCH_OPTIONS),
     signal: AbortSignal.timeout(PUBLIC_API_TIMEOUT_MS),
   });
 }
@@ -159,3 +159,4 @@ export async function fetchPublicBlogPage(
 export function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
+

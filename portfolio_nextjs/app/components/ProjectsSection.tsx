@@ -7,7 +7,7 @@ import { fetchPublicList } from "../api/publicData";
 import { isSafeHttpUrl } from "../api/urlSafety";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
-import PublicImage from "./PublicImage";
+import ContentMark from "./ContentMark";
 
 type Project = {
   _id: string;
@@ -55,18 +55,12 @@ export default async function ProjectsSection({ size }: ProjectsProps) {
               const description = en && project.descriptionEn ? project.descriptionEn : project.description;
               return (
                 <article className="surface-card group overflow-hidden" key={project._id}>
-                  {coverImage ? (
-                    <Link href={localizedPath(`/projects/${encodeURIComponent(project._id)}`, locale)} className="project-card__image-wrap block" aria-label={en ? `${title} details` : `${title} detayları`}>
-                      <PublicImage src={coverImage} alt={en ? `${title} project preview` : `${title} proje önizlemesi`} width={960} height={540} sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw" className="project-card__image" />
-                    </Link>
-                  ) : (
-                    <div className="project-card__image-placeholder" aria-hidden="true"><FaLightbulb /></div>
-                  )}
+                  
 
-                  <div className="flex flex-col p-5 sm:p-6">
+                  <div className="flex flex-col p-5 sm:p-6"><div className="mb-3"><ContentMark kind="projects" image={coverImage} /></div>
                     <CardHeading className="mb-2 text-xl font-bold text-ink transition-colors group-hover:text-brand"><Link href={localizedPath(`/projects/${encodeURIComponent(project._id)}`, locale)}>{title}</Link></CardHeading>
                     <p className="mb-5 line-clamp-3 flex-1 text-quiet">{description || (en ? "Explore this project in detail." : "Proje ayrıntılarını proje sayfasında inceleyebilirsiniz.")}</p>
-                    <div className="flex items-center justify-between gap-4 border-t border-line pt-4">
+                    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-4">
                       <Link href={localizedPath(`/projects/${encodeURIComponent(project._id)}`, locale)} className="button-secondary">
                         {en ? "Project details" : "Proje ayrıntıları"} <span aria-hidden="true">→</span>
                       </Link>
@@ -98,6 +92,7 @@ export default async function ProjectsSection({ size }: ProjectsProps) {
     </section>
   );
 }
+
 
 
 

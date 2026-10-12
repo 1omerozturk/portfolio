@@ -2,10 +2,10 @@ import { getLocale } from "../i18n/server";
 import { translatedText } from "../i18n/config";
 import { FaGraduationCap } from "react-icons/fa";
 import { fetchPublicList } from "../api/publicData";
-import { isSafeHttpUrl } from "../api/urlSafety";
+
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
-import PublicImage from "./PublicImage";
+import ContentMark from "./ContentMark";
 import { normalizeEducation } from "../api/profilePayload";
 
 interface EducationSizeProps {
@@ -42,9 +42,7 @@ export default async function EducationsBanner({ size }: EducationSizeProps) {
           <div className="grid gap-5 md:grid-cols-2">
             {displayedEducations.map((education, index) => (
               <article className="surface-card flex flex-col gap-5 p-5 sm:flex-row sm:p-6" key={education._id ?? `${translatedText(education, "institution", locale)}-${index}`}>
-                {isSafeHttpUrl(education.institutionLogo) && (
-                  <PublicImage src={education.institutionLogo} alt={`${translatedText(education, "institution", locale)} ${en ? "logo" : "logosu"}`} width={96} height={96} sizes="96px" className="education-card__logo" />
-                )}
+                <ContentMark kind="educations" image={education.institutionLogo} />
                 <div className="min-w-0 flex-1">
                   <CardHeading className="text-xl font-bold text-ink">{translatedText(education, "institution", locale)}</CardHeading>
                   {education.degree && <p className="mt-1 font-medium text-brand">{translatedText(education, "degree", locale)}</p>}
@@ -74,6 +72,7 @@ export default async function EducationsBanner({ size }: EducationSizeProps) {
     </section>
   );
 }
+
 
 
 

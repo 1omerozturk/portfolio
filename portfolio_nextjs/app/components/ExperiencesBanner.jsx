@@ -1,3 +1,4 @@
+import ContentMark from "./ContentMark";
 import { getLocale } from "../i18n/server";
 import { translatedText } from "../i18n/config";
 import { FaBuilding, FaCalendarAlt } from "react-icons/fa";
@@ -44,7 +45,7 @@ export default async function ExperiencesBanner({ size }) {
               return (
                 <article className="surface-card p-6" key={experience._id ?? experience.id ?? `${translatedText(experience, "company", locale)}-${index}`}>
                   <div className="mb-4 flex items-start gap-3">
-                    <span className="section-icon"><FaBuilding aria-hidden="true" /></span>
+                    <ContentMark kind="experiences" image={experience.companyLogo} />
                     <div className="min-w-0 break-words">
                       <CardHeading className="text-xl font-bold text-ink">{translatedText(experience, "position", locale) || (en ? "Position" : "Pozisyon")}</CardHeading>
                       <p className="font-medium text-brand">{translatedText(experience, "company", locale)}</p>
@@ -74,5 +75,6 @@ export default async function ExperiencesBanner({ size }) {
     </section>
   );
 }
+
 
 

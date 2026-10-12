@@ -2,11 +2,11 @@ import { getLocale } from "../i18n/server";
 import { translatedText } from "../i18n/config";
 import { FaMedium } from "react-icons/fa";
 import { fetchPublicList } from "../api/publicData";
-import { isSafeImageSource } from "../api/urlSafety";
+
 import { normalizeContent } from "../api/profilePayload";
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
-import PublicImage from "./PublicImage";
+import ContentMark from "./ContentMark";
 
 interface ContentSizeProps {
   size?: number;
@@ -31,12 +31,8 @@ export default async function ContentsBanner({ size }: ContentSizeProps) {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {visibleContents.map((content, index) => (
               <a className="surface-card content-card group overflow-hidden" title={translatedText(content, "name", locale)} key={content._id ?? `${content.name}-${index}`} href={content.link} target="_blank" rel="noopener noreferrer">
-                {isSafeImageSource(content.image) ? (
-                  <PublicImage src={content.image} alt={translatedText(content, "name", locale)} width={480} height={320} sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 25vw" className="content-card__image" />
-                ) : (
-                  <div className="content-card__placeholder" aria-hidden="true"><FaMedium /></div>
-                )}
-                <div className="p-5">
+                
+                <div className="p-5"><div className="mb-3"><ContentMark kind="contents" image={content.image} /></div>
                   <CardHeading className="line-clamp-2 break-words text-lg font-bold text-ink">{translatedText(content, "name", locale)}</CardHeading>
                   <span className="mt-4 inline-flex items-center gap-2 font-semibold text-brand">
                     {en ? "Read more" : "İçeriği oku"} <span aria-hidden="true">↗</span>
@@ -56,5 +52,6 @@ export default async function ContentsBanner({ size }: ContentSizeProps) {
     </section>
   );
 }
+
 
 

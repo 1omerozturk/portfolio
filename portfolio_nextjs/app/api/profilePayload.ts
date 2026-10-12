@@ -71,7 +71,7 @@ export function normalizeEducation(value: unknown) {
 export function normalizeExperience(value: unknown) {
   const fields = textFields(
     value,
-    ["company", "companyEn", "position", "positionEn", "startDate", "endDate"],
+    ["company", "companyEn", "companyLogo", "position", "positionEn", "startDate", "endDate"],
     "company",
   );
   return fields
@@ -123,7 +123,7 @@ export function normalizeCertificate(value: unknown) {
     typeof record.name === "string" && record.name.trim()
       ? record.name
       : record.issuingOrganization;
-  return textFields(
+  const fields = textFields(
     { ...record, name },
     [
       "name",
@@ -138,4 +138,6 @@ export function normalizeCertificate(value: unknown) {
     ],
     "name",
   );
+  return fields ? { ...fields, isVisible: record.isVisible !== false && record.isVisible !== "false" } : null;
 }
+

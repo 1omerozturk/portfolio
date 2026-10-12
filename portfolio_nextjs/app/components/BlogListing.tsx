@@ -10,8 +10,8 @@ import { BLOG_CATEGORY_STYLES as categoryStyles, BLOG_CATEGORIES as categories }
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { MdAccessTime, MdCategory } from "react-icons/md";
 import type { Blog } from "../models/blogs";
-import { isSafeHttpUrl } from "../api/urlSafety";
-import PublicImage from "./PublicImage";
+
+import ContentMark from "./ContentMark";
 import { BLOG_SEARCH_MAX_LENGTH, normalizeBlogQuery } from "../blogQuery";
 
 
@@ -176,17 +176,8 @@ export default function BlogListing({ initialBlogs, initialTotalPages, initialFa
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {blogs.map((blog) => (
                 <Link key={blog._id ?? `${blog.title}-${blog.createdAt}`} href={localizedPath(`/blog/${encodeURIComponent(blog._id ?? "")}`, locale)} className="surface-card blog-card group overflow-hidden">
-                  {isSafeHttpUrl(blog.featuredImage) && (
-                    <PublicImage
-                      src={blog.featuredImage}
-                      alt={blog.title}
-                      width={640}
-                      height={360}
-                      sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
-                      className="blog-card__image"
-                    />
-                  )}
-                  <div className="flex h-full flex-col p-5">
+                  
+                  <div className="flex flex-col p-5"><div className="mb-3"><ContentMark kind="blogs" image={blog.featuredImage} /></div>
                     <span className={`mb-3 inline-flex w-fit items-center gap-1 rounded-full px-3 py-1 text-xs font-bold ${categoryStyles[blog.category] || categoryStyles.diğer}`}>
                       <MdCategory aria-hidden="true" /> {blogCategoryLabel(blog.category, locale)}
                     </span>
@@ -219,5 +210,6 @@ export default function BlogListing({ initialBlogs, initialTotalPages, initialFa
     </main>
   );
 }
+
 
 

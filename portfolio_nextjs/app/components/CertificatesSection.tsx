@@ -1,3 +1,4 @@
+import ContentMark from "./ContentMark";
 import { getLocale } from "../i18n/server";
 import { FaAward, FaExternalLinkAlt } from "react-icons/fa";
 import { fetchPublicList } from "../api/publicData";
@@ -22,7 +23,7 @@ export default async function CertificatesSection({ size }: CertificatesSizeProp
   const CardHeading = size ? "h3" : "h2";
   const result = await fetchPublicList("/user/certifications", ["certificates", "certifications", "items"]);
   const records = result.status === "ok"
-    ? result.items.map(normalizeCertificate).filter(certificate => certificate !== null)
+    ? result.items.map(normalizeCertificate).filter(certificate => certificate !== null).filter(certificate => certificate.isVisible)
     : [];
   const certificates = records.map(certificate => ({ ...certificate, name: en && certificate.nameEn.trim() ? certificate.nameEn : certificate.name, issuingOrganization: en && certificate.issuingOrganizationEn.trim() ? certificate.issuingOrganizationEn : certificate.issuingOrganization }));
   const displayedCertificates = certificates.slice(0, size ?? certificates.length);
@@ -34,7 +35,7 @@ export default async function CertificatesSection({ size }: CertificatesSizeProp
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {displayedCertificates.map((certificate, index) => (
             <article key={certificate._id ?? `${certificate.name}-${index}`} className="surface-card flex min-h-52 flex-col items-center justify-center p-6 text-center">
-              <FaAward aria-hidden="true" className="mb-4 text-4xl text-brand" />
+              <div className="mb-4"><ContentMark kind="certificates" /></div>
               <CardHeading className="max-w-full break-words text-lg font-semibold text-ink">{certificate.name || certificate.issuingOrganization}</CardHeading>
               {certificate.issuingOrganization && certificate.name !== certificate.issuingOrganization && <p className="mt-1 text-sm text-quiet">{certificate.issuingOrganization}</p>}
               {formatIssueDate(certificate.issueDate, en) && <time className="mt-2 text-sm text-quiet" dateTime={certificate.issueDate}>{formatIssueDate(certificate.issueDate, en)}</time>}
@@ -57,6 +58,7 @@ export default async function CertificatesSection({ size }: CertificatesSizeProp
     </section>
   );
 }
+
 
 
 

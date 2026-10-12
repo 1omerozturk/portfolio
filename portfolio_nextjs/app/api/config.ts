@@ -1,7 +1,7 @@
 const localApiUrl = "http://localhost:5040/api";
 
 const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-const productionApiUrl = configuredApiUrl;
+const productionApiUrl = configuredApiUrl || localApiUrl;
 const defaultApiUrl =
   process.env.NODE_ENV === "development" ? localApiUrl : productionApiUrl;
 

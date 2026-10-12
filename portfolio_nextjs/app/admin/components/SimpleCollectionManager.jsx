@@ -175,7 +175,7 @@ export default function SimpleCollectionManager({
           ) : (
             result.records.map((record) => (
               <article key={record._id} className="surface-card p-5">
-                <div className="mb-3"><AdminContentIcon kind={title === "Diller" ? "languages" : "hobbies"} /></div>
+                <div className="mb-3"><AdminContentIcon kind={title === "Diller" ? "languages" : "hobbies"} iconName={record.icon} /></div>
                 <h2 className="text-xl font-bold">
                   {typeof record.name === "string"
                     ? record.name

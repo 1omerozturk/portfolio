@@ -5,8 +5,8 @@ import Link from "next/link";
 import { BLOG_CATEGORY_STYLES as categoryStyles } from "../blogConstants";
 
 import { fetchPublicCollection } from "../api/publicData";
-import { isSafeHttpUrl } from "../api/urlSafety";
-import PublicImage from "./PublicImage";
+
+import ContentMark from "./ContentMark";
 import { normalizeBlogs } from "../api/blogPayload";
 
 
@@ -33,12 +33,8 @@ export default async function RelatedBlogs({ category, currentId }: { category: 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {blogs.map((blog) => (
           <Link key={blog._id} href={localizedPath(`/blog/${encodeURIComponent(blog._id ?? "")}`, locale)} className="surface-card related-blog-card group overflow-hidden">
-            {isSafeHttpUrl(blog.featuredImage) && (
-              <div className="blog-card__image-wrap">
-                <PublicImage src={blog.featuredImage} alt={blog.title} width={640} height={360} sizes="(max-width: 767px) 100vw, 33vw" className="related-blog-card__image h-full w-full object-cover" />
-              </div>
-            )}
-            <div className="p-4">
+            
+            <div className="p-4"><div className="mb-3"><ContentMark kind="blogs" image={blog.featuredImage} /></div>
               <span className={`content-tag mb-2 ${categoryStyles[blog.category] || categoryStyles.diğer}`}>{blogCategoryLabel(blog.category, locale)}</span>
               <h3 className="line-clamp-2 font-bold text-ink group-hover:text-brand">{blog.title}</h3>
               <time className="mt-2 block text-sm text-quiet" dateTime={blog.createdAt}>{formatDate(blog.createdAt, en)}</time>
@@ -49,6 +45,7 @@ export default async function RelatedBlogs({ category, currentId }: { category: 
     </section>
   );
 }
+
 
 
 

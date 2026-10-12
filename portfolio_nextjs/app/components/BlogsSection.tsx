@@ -6,10 +6,10 @@ import { BLOG_CATEGORY_STYLES as categoryStyles } from "../blogConstants";
 import { FaComment } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
 import { fetchPublicBlogPage } from "../api/publicData";
-import { isSafeHttpUrl } from "../api/urlSafety";
+
 import PageHeader from "./PageHeader";
 import SeeMore from "./SeeMore";
-import PublicImage from "./PublicImage";
+import ContentMark from "./ContentMark";
 
 
 
@@ -28,12 +28,8 @@ export default async function BlogsSection() {
           <div className="grid gap-5 md:grid-cols-3">
             {blogs.map((blog) => (
               <Link href={localizedPath(`/blog/${encodeURIComponent(blog._id!)}`, locale)} key={blog._id} className="surface-card blog-card group overflow-hidden">
-                {isSafeHttpUrl(blog.featuredImage) ? (
-                  <PublicImage src={blog.featuredImage} alt={blog.title} width={640} height={360} sizes="(max-width: 767px) 100vw, 33vw" className="blog-card__image" />
-                ) : (
-                  <div className="blog-card__image-placeholder" aria-hidden="true">Aa</div>
-                )}
-                <div className="flex h-full flex-col p-5">
+                
+                <div className="flex flex-col p-5"><div className="mb-3"><ContentMark kind="blogs" image={blog.featuredImage} /></div>
                   <span className={`mb-3 inline-flex w-fit rounded-full px-3 py-1 text-xs font-bold ${categoryStyles[blog.category] || categoryStyles.diğer}`}>
                     {blogCategoryLabel(blog.category, locale)}
                   </span>
@@ -58,5 +54,6 @@ export default async function BlogsSection() {
     </section>
   );
 }
+
 
 

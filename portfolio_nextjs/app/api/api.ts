@@ -2,14 +2,12 @@ import axios from "axios";
 import { API_BASE_URL, PUBLIC_API_TIMEOUT_MS } from "./config";
 
 const api = API_BASE_URL;
+export const getDriveCertificates = () => http.get(`${api}/admin/certification-drive`, { ...getAdminConfig(), timeout: 45000 });
+export const selectDriveCertificate = (id: string, isVisible: boolean) => http.post(`${api}/admin/certification-drive/${encodeURIComponent(id)}`, { isVisible }, { ...getAdminConfig(), timeout: 45000 });
+export const getAdminCertifications = () => http.get(`${api}/admin/certifications`, { ...getAdminConfig() });
+export const getAdminCertification = (id: string) => http.get(`${api}/admin/certifications/${encodeURIComponent(id)}`, { ...getAdminConfig() });
 const http = axios.create({ timeout: PUBLIC_API_TIMEOUT_MS, headers: { Accept: "application/json" } });
 
-export async function uploadCertificationPdf(file: File) {
-  return http.post<{ url: string; size: number }>(`${api}/admin/certification-pdf`, file, {
-    ...getAdminConfig(), timeout: 45000,
-    headers: { ...getAdminConfig()?.headers, "Content-Type": "application/pdf" },
-  });
-}
 
 // User Log check function
 export const getToken = () => {
@@ -373,3 +371,4 @@ export const deleteBlog = async (id: string) => {
 
 
 export const getLanguages = async () => http.get(api + "/user/languages");
+

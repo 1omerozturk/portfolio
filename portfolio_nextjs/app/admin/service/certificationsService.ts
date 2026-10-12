@@ -1,7 +1,7 @@
-import { createCertifications, deleteCertifications, getCertifications as fetchCertifications, getOneCertifications, updateCertifications } from "../../api/api";
+import { createCertifications, deleteCertifications, getAdminCertifications as fetchCertifications, getAdminCertification as getOneCertifications, updateCertifications } from "../../api/api";
 import { normalizeApiRecord, normalizeApiRecords, unwrapApiData } from "../../api/payload";
 
-export type CertificationInput = { name: string; nameEn?: string; issuingOrganizationEn?: string; issuingOrganization?: string; issueDate?: string; certificateLink?: string; certificateImage?: string; certificatePdf?: string; type?: string };
+export type CertificationInput = { name: string; isVisible?: boolean; nameEn?: string; issuingOrganizationEn?: string; issuingOrganization?: string; issueDate?: string; certificateLink?: string; certificateImage?: string; certificatePdf?: string; type?: string };
 
 export class CertificationService {
   static async getCertifications() {
@@ -21,4 +21,5 @@ export class CertificationService {
   static async updateCertification(id: string, data: Partial<CertificationInput>) { return updateCertifications(id, data); }
   static async deleteCertification(id: string) { return deleteCertifications(id); }
 }
+
 

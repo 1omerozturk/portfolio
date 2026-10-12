@@ -8,6 +8,7 @@ import ScrollToTopButton from "./ScrollToTopButton";
 import dynamic from "next/dynamic";
 import { localeFromPath } from "../i18n/config";
 import { getDictionary } from "../i18n/dictionaries";
+import InteractiveBackdrop from "./InteractiveBackdrop";
 
 const WebVitalsReporter = dynamic(() => import("./WebVitalsReporter"), { ssr: false });
 
@@ -27,6 +28,7 @@ export default function AppProviders({
       {isAdminRoute ? children : <div id="page-content" tabIndex={-1}>{children}</div>}
       {!isAdminRoute && publicFooter}
       {!isAdminRoute && <ScrollToTopButton />}
+      {!isAdminRoute && <InteractiveBackdrop />}
     </ThemeProvider>
   );
 }
