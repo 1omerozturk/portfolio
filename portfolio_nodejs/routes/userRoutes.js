@@ -61,6 +61,9 @@ router.get('/blogs', getBlogs)
 router.get('/search/blogs', searchBlogs)
 router.get('/blogs/category/:category', getBlogsByCategory)
 router.get('/blogs/:id', getBlogById)
+const blogLikes = require('../service/blogLikes')
+router.post('/blogs/:id/likes/status', rateLimit({ limit: 120, windowMs: 60000 }), blogLikes.status)
+router.put('/blogs/:id/likes', rateLimit({ limit: 30, windowMs: 60000 }), blogLikes.set)
 
 // message posting
 router.post('/messages', rateLimit({ limit: 5, windowMs: 60 * 1000 }), postMessage)

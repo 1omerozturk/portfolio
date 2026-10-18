@@ -18,6 +18,7 @@ production-http-metrics.json
 dependency-audit.json
 lint-report.json
 
+*.md
 
 # next.js
 /.next/

@@ -1,5 +1,8 @@
+import { prepareBlogMarkdown } from "../blogMarkdown";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { Components } from "react-markdown";
+import PublicImage from "./PublicImage";
 import { isSafeHttpUrl, normalizeImageSource } from "../api/urlSafety";
 
 const components: Components = {
@@ -11,11 +14,12 @@ const components: Components = {
   },
   img: ({ src, alt }) => {
     const source = normalizeImageSource(src);
-    return source ? <img src={source} alt={alt || ""} loading="lazy" decoding="async" /> : null;
+    return source ? <PublicImage src={source} alt={alt || ""} width={1200} height={800} sizes="(max-width: 895px) 100vw, 768px" className="article-inline-image" /> : null;
   },
   pre: ({ children }) => <div className="article-code"><pre tabIndex={0} aria-label="Kod örneği">{children}</pre></div>,
+  table: ({ children }) => <div className="article-table" role="region" aria-label="Table / Tablo" tabIndex={0}><table>{children}</table></div>,
 };
 
 export default function ArticleBody({ content }: { content: string }) {
-  return <div className="article-body"><Markdown skipHtml components={components}>{content}</Markdown></div>;
+  return <div className="article-body"><Markdown remarkPlugins={[remarkGfm]} skipHtml components={components}>{prepareBlogMarkdown(content)}</Markdown></div>;
 }

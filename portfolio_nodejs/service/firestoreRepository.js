@@ -64,7 +64,9 @@ async function updateDoc(collectionName, id, payload) {
 }
 
 async function deleteDoc(collectionName, id) {
-  await db.collection(collectionName).doc(id).delete()
+  const ref = db.collection(collectionName).doc(id)
+  await ref.delete()
+  if (collectionName === 'blogs') await db.recursiveDelete(ref.collection('likes'))
   return true
 }
 

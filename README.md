@@ -6,7 +6,7 @@
 
 #### portfolio_nodejs/.env
 ```
-MONGO_URI=YOUR MONGO URI
+
 JWT_SECRET_KEY=YOUR JWT SECRET KEY
 PORT=3030
 

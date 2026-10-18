@@ -4,3 +4,4 @@ serviceAccountKey.json
 .service/
 node_modules/
 *.json
+*.md

@@ -6,7 +6,8 @@ import { BLOG_CATEGORY_STYLES as categoryStyles } from "../../blogConstants";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { MdArrowBack, MdAccessTime, MdVisibility, MdCalendarToday, MdPerson } from "react-icons/md";
-import CopyLinkButton from "../../components/CopyLinkButton";
+import ArticleEngagement from "../../components/ArticleEngagement";
+import ReadingProgress from "../../components/ReadingProgress";
 import ArticleBody from "../../components/ArticleBody";
 import PublicImage from "../../components/PublicImage";
 import JsonLd from "../../components/JsonLd";
@@ -83,6 +84,7 @@ export default async function BlogDetailPage({ params }: RouteProps) {
 
   return (
     <main className="surface-page min-h-screen">
+      <ReadingProgress targetId="blog-article" en={en} />
       <JsonLd value={schema} />
       <JsonLd value={breadcrumb} />
       <header className="blog-hero py-8">
@@ -111,7 +113,7 @@ export default async function BlogDetailPage({ params }: RouteProps) {
           </div>
         </section>
 
-        <article className="prose prose-lg mb-8 max-w-none" aria-label={blog.title}>
+        <article id="blog-article" className="blog-reading mb-8" aria-label={blog.title}>
           <div className="surface-card rounded-lg p-6 leading-relaxed sm:p-8">
             <ArticleBody content={content} />
           </div>
@@ -126,15 +128,7 @@ export default async function BlogDetailPage({ params }: RouteProps) {
           </section>
         )}
 
-        <section className="surface-card mb-12 rounded-lg p-6" aria-label={en ? "Share article" : "Yazıyı paylaş"}>
-          <p className="mb-4 text-sm font-semibold text-ink">{en ? "Share:" : "Paylaş:"}</p>
-          <div className="flex flex-wrap gap-3">
-            <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(articleUrl)}&text=${encodeURIComponent(blog.title)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">Twitter</a>
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">Facebook</a>
-            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`} target="_blank" rel="noopener noreferrer" className="button-secondary">LinkedIn</a>
-            <CopyLinkButton url={articleUrl} />
-          </div>
-        </section>
+        <ArticleEngagement key={id} blogId={id} url={articleUrl} title={blog.title} en={en} />
 
         <Suspense fallback={<div className="mt-12 min-h-48" aria-hidden="true" />}>
           <RelatedBlogs category={category} currentId={id} />
