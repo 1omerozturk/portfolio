@@ -4,7 +4,7 @@ export const siteConfig = {
   title: "Ömer Öztürk | Yazılım Mühendisi",
   locale: "tr_TR",
   language: "tr-TR",
-  defaultImage: "/ozturkomer.webp",
+  defaultImage: "/ozturkomer.jpg",
   jobTitle: "Yazılım Mühendisi · Full-stack ve mobil",
   biography: "Web ve mobil uygulamalar geliştiriyorum. Öğrendiklerimi paylaşmayı ve teknolojiyi daha çok kişinin keşfetmesine yardımcı olacak projeler üretmeyi seviyorum.",
 } as const;

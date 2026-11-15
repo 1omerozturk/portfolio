@@ -37,14 +37,14 @@ const baseMetadata: Metadata = {
     title: "Ömer Öztürk | Yazılım Mühendisi",
     description:
       "Yazılım projeleri, deneyimler, yetkinlikler ve teknik yazılar.",
-    images: [{ url: "/ozturkomer.webp", alt: "Ömer Öztürk" }],
+    images: [{ url: "/ozturkomer.jpg", alt: "Ömer Öztürk" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ömer Öztürk | Yazılım Mühendisi",
     description:
       "Yazılım projeleri, deneyimler, yetkinlikler ve teknik yazılar.",
-    images: ["/ozturkomer.webp"],
+    images: ["/ozturkomer.jpg"],
   },
   icons: {
     icon: [
@@ -85,7 +85,7 @@ const structuredData = {
       "@type": "Person",
       name: "Ömer Öztürk",
       url: siteUrl,
-      image: `${siteUrl}/ozturkomer.webp`,
+      image: `${siteUrl}/ozturkomer.jpg`,
       jobTitle: "Yazılım Mühendisi",
     },
     {

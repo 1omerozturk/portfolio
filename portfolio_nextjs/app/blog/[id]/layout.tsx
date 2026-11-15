@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
     const image =
       "featuredImage" in data && data.featuredImage
         ? String(data.featuredImage)
-        : "/ozturkomer.webp";
+        : "/ozturkomer.jpg";
 
     return createLocalizedPageMetadata(
       title,

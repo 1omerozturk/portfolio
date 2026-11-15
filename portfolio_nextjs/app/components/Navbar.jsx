@@ -87,7 +87,7 @@ export default function Navbar() {
           onClick={() => setIsOpen(false)}
         >
           <Image
-            src="/ozturkomer.webp"
+            src="/ozturkomer.jpg"
             alt=""
             width={40}
             height={40}

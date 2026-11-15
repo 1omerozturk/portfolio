@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
     const image =
       "images" in data && Array.isArray(data.images) && data.images[0]
         ? String(data.images[0])
-        : "/ozturkomer.webp";
+        : "/ozturkomer.jpg";
 
     return createLocalizedPageMetadata(
       title,
